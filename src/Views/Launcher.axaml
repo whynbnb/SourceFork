@@ -19,7 +19,15 @@
     </Grid.RowDefinitions>
 
     <!-- Custom TitleBar -->
-    <Grid Grid.Row="0" ColumnDefinitions="Auto,32,*,Auto,Auto">
+    <Grid Grid.Row="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarWidth, Mode=OneWay}" MinWidth="180" MaxWidth="420"/>
+        <ColumnDefinition Width="3"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+
       <!-- Bottom border -->
       <Border Grid.Column="0" Grid.ColumnSpan="5"
               BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}"
@@ -27,14 +35,16 @@
               DoubleTapped="MaximizeOrRestoreWindow"
               PointerPressed="BeginMoveWindow"/>
 
+      <!-- Left: window controls and pages switcher, aligned above the sidebar -->
+      <StackPanel Grid.Column="0" Orientation="Horizontal">
       <!-- Caption Buttons (macOS) -->
-      <v:MacOSTrafficLightsSpacer Grid.Column="0"
+      <v:MacOSTrafficLightsSpacer
                                   Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
                                   IsFullScreen="{Binding #ThisControl.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.FullScreen}}"
                                   IsVisible="{OnPlatform False, macOS=True}"/>
 
       <!-- Menu (Windows/Linux) -->
-      <Button Grid.Column="0" Classes="icon_button" VerticalAlignment="Bottom" Margin="6,0,0,3" IsVisible="{OnPlatform True, macOS=False}">
+      <Button Classes="icon_button" VerticalAlignment="Bottom" Margin="6,0,0,3" IsVisible="{OnPlatform True, macOS=False}">
         <Button.Flyout>
           <MenuFlyout Placement="BottomEdgeAlignedLeft" VerticalOffset="-6">
             <MenuItem Header="{DynamicResource Text.Preferences}" Command="{x:Static s:App.OpenPreferencesCommand}" InputGesture="Ctrl+,">
@@ -88,7 +98,7 @@
       </Button>
 
       <!-- Pages Switcher Toggle Button -->
-      <Button Grid.Column="1" Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenPagesCommandPalette" HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
+      <Button Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenPagesCommandPalette" HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
         <ToolTip.Tip>
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{DynamicResource Text.Launcher.Pages}"
@@ -102,6 +112,29 @@
         </ToolTip.Tip>
         <Path Width="13" Height="13" Margin="0,2,0,0" Data="{StaticResource Icons.Tabs}"/>
       </Button>
+      </StackPanel>
+
+      <!-- Vertical separator between sidebar and content -->
+      <Border Grid.Column="1"
+              BorderThickness="0,0,1,0"
+              BorderBrush="{DynamicResource Brush.Border2}"
+              IsHitTestVisible="False"/>
+
+      <!-- Active Page Toolbar -->
+      <ContentControl Grid.Column="2"
+                      Margin="4,0,0,0"
+                      VerticalAlignment="Stretch"
+                      Content="{Binding ActivePage.Data}">
+        <ContentControl.DataTemplates>
+          <DataTemplate DataType="vm:Welcome">
+            <v:WelcomeToolbar/>
+          </DataTemplate>
+
+          <DataTemplate DataType="vm:Repository">
+            <v:RepositoryToolbar/>
+          </DataTemplate>
+        </ContentControl.DataTemplates>
+      </ContentControl>
 
       <!-- Update Available Button -->
       <Button Grid.Column="3"
@@ -140,7 +173,7 @@
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     Background="Transparent"
                     BorderThickness="0,0,1,0"
-                    BorderBrush="{DynamicResource Brush.Border0}"
+                    BorderBrush="{DynamicResource Brush.Border2}"
                     Focusable="False"/>
 
       <!-- Active Page -->

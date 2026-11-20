@@ -17,9 +17,11 @@
 
 - 左侧工作区侧边栏：`src/Views/WorkspaceSidebar.axaml`，把所有打开的仓库平铺显示，替代顶部 tab。
 - 工作区切换移到侧边栏顶部；`src/Views/Launcher.axaml` 中已移除 `LauncherTabBar`。
+- 仓库工具栏（`RepositoryToolbar` / `WelcomeToolbar`）已并入顶部标题栏，`LauncherPage` 不再有独立的 36px 工具栏行。
+- 顶部标题栏按侧边栏宽度切分：左侧只放窗口控件和页面按钮，仓库工具栏从右侧内容区开始，不跨越左侧栏边界。
 - 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`，可拖动分隔线调整。
 - 旧的 `LauncherTabBar` 文件保留但不再引用，方便对照上游。
-- 移植上游 `Launcher.axaml`、`LauncherTabBar`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏结构。
+- 移植上游 `Launcher.axaml`、`LauncherPage.axaml`、`RepositoryToolbar.axaml`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏和统一顶栏结构。
 
 ## 上游关系
 
