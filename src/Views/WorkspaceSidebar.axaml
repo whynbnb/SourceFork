@@ -9,54 +9,71 @@
              mc:Ignorable="d" d:DesignWidth="240" d:DesignHeight="600"
              x:Class="SourceGit.Views.WorkspaceSidebar"
              x:DataType="vm:Launcher">
+  <UserControl.Styles>
+    <Style Selector="Border.search_box">
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border2}"/>
+    </Style>
+    <Style Selector="Border.search_box:focus-within">
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
+    </Style>
+  </UserControl.Styles>
+
   <Grid RowDefinitions="Auto,*,Auto">
-    <!-- Workspace Switcher -->
-    <Button Grid.Row="0"
-            Height="34"
-            Margin="8,10,8,6"
-            Padding="8,0"
-            Classes="flat"
-            HorizontalContentAlignment="Stretch"
-            Click="OnWorkspaceMenu"
-            HotKey="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}">
-      <Grid ColumnDefinitions="Auto,*,Auto">
-        <Path Grid.Column="0"
-              Width="14" Height="14"
+    <!-- Repository Search and Workspace Switcher -->
+    <Grid Grid.Row="0" Height="34" Margin="8,10,8,6" ColumnDefinitions="*,Auto">
+      <Border Grid.Column="0"
+              Classes="search_box"
+              Height="30"
               VerticalAlignment="Center"
-              Data="{StaticResource Icons.Workspace}"
-              Fill="{Binding ActiveWorkspace.Brush}"/>
-        <TextBlock Grid.Column="1"
-                   Margin="8,0"
+              Background="{DynamicResource Brush.Contents}"
+              BorderThickness="1"
+              CornerRadius="6">
+        <Grid ColumnDefinitions="Auto,*">
+          <Path Grid.Column="0"
+                Width="12" Height="12"
+                Margin="8,0,0,0"
+                VerticalAlignment="Center"
+                Data="{StaticResource Icons.Search}"
+                Fill="{DynamicResource Brush.FG2}"/>
+          <TextBox Grid.Column="1"
+                   Margin="4,0,6,0"
+                   Padding="0"
                    VerticalAlignment="Center"
-                   FontWeight="SemiBold"
-                   Text="{Binding ActiveWorkspace.Name}"
-                   TextTrimming="CharacterEllipsis"/>
-        <Path Grid.Column="2"
-              Width="12" Height="12"
+                   Classes="no_border no_background"
+                   Watermark="{DynamicResource Text.Welcome.Search}"
+                   Text="{Binding RepositoryFilter, Mode=TwoWay}"/>
+        </Grid>
+      </Border>
+
+      <Button Grid.Column="1"
+              Classes="icon_button"
+              Width="30" Height="30"
+              Margin="4,0,0,0"
               VerticalAlignment="Center"
-              Data="{StaticResource Icons.More}"
-              Fill="{DynamicResource Brush.FG2}"/>
-      </Grid>
-      <ToolTip.Tip>
-        <StackPanel Orientation="Horizontal">
-          <TextBlock Text="{DynamicResource Text.Workspace}" FontWeight="Bold"/>
-          <TextBlock Text="{Binding ActiveWorkspace.Name}"/>
-          <TextBlock Margin="16,0,0,0"
-                     Text="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}"
-                     FontSize="11"
-                     Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
-        </StackPanel>
-      </ToolTip.Tip>
-    </Button>
+              Click="OnWorkspaceMenu"
+              HotKey="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}">
+        <ToolTip.Tip>
+          <StackPanel Orientation="Horizontal">
+            <TextBlock Text="{DynamicResource Text.Workspace}" FontWeight="Bold"/>
+            <TextBlock Text="{Binding ActiveWorkspace.Name}"/>
+            <TextBlock Margin="16,0,0,0"
+                       Text="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}"
+                       FontSize="11"
+                       Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+          </StackPanel>
+        </ToolTip.Tip>
+        <Path Width="14" Height="14" Data="{StaticResource Icons.Workspace}" Fill="{Binding ActiveWorkspace.Brush}"/>
+      </Button>
+    </Grid>
 
     <!-- Repositories -->
     <ListBox x:Name="PagesList"
              Grid.Row="1"
              Margin="6,0"
              Background="Transparent"
-             ItemsSource="{Binding Pages}"
+             ItemsSource="{Binding VisiblePages}"
              SelectedItem="{Binding ActivePage, Mode=TwoWay}"
-             SelectionMode="AlwaysSelected"
+             SelectionMode="Single"
              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
              ScrollViewer.VerticalScrollBarVisibility="Auto">
       <ListBox.Styles>

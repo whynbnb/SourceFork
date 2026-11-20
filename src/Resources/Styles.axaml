@@ -597,12 +597,15 @@
   </Style>
   <Style Selector="TextBox.no_border">
     <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
   </Style>
   <Style Selector="TextBox.no_border:pointerover /template/ Border#PART_BorderElement">
     <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
   </Style>
   <Style Selector="TextBox.no_border:focus /template/ Border#PART_BorderElement">
     <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
   </Style>
 
   <Style Selector="DataValidationErrors">

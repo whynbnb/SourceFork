@@ -97,21 +97,6 @@
         <Path Width="12" Height="12" Data="{StaticResource Icons.Menu}"/>
       </Button>
 
-      <!-- Pages Switcher Toggle Button -->
-      <Button Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenPagesCommandPalette" HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
-        <ToolTip.Tip>
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{DynamicResource Text.Launcher.Pages}"
-                       VerticalAlignment="Center"/>
-            <TextBlock Margin="8,0,0,0"
-                       Text="{OnPlatform Ctrl+P, macOS=⌘+P}"
-                       FontSize="11"
-                       Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"
-                       VerticalAlignment="Center"/>
-          </StackPanel>
-        </ToolTip.Tip>
-        <Path Width="13" Height="13" Margin="0,2,0,0" Data="{StaticResource Icons.Tabs}"/>
-      </Button>
       </StackPanel>
 
       <!-- Vertical separator between sidebar and content -->

@@ -235,6 +235,13 @@ namespace SourceGit.Views
                     return;
                 }
 
+                if (e.Key == Key.P && e.KeyModifiers == cmdKey)
+                {
+                    vm.CommandPalette = new ViewModels.LauncherPagesCommandPalette(vm);
+                    e.Handled = true;
+                    return;
+                }
+
                 if ((isMacOS && e.KeyModifiers.HasFlag(KeyModifiers.Alt) && e.Key == Key.Right) ||
                     (!isMacOS && !e.KeyModifiers.HasFlag(KeyModifiers.Shift) && e.Key == Key.Tab))
                 {
@@ -419,13 +426,6 @@ namespace SourceGit.Views
             };
             menu.Items.Add(configure);
             menu.Open(button);
-        }
-
-        private void OnOpenPagesCommandPalette(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.Launcher vm)
-                vm.CommandPalette = new ViewModels.LauncherPagesCommandPalette(vm);
-            e.Handled = true;
         }
 
         private void OnCloseCommandPalette(object sender, PointerPressedEventArgs e)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using System.IO;
 using System.Text;
 
@@ -23,6 +24,11 @@ namespace SourceGit.ViewModels
             private set;
         }
 
+        public AvaloniaList<LauncherPage> VisiblePages
+        {
+            get;
+        } = new();
+
         public Workspace ActiveWorkspace
         {
             get => _activeWorkspace;
@@ -34,8 +40,21 @@ namespace SourceGit.ViewModels
             get => _activePage;
             set
             {
+                if (value == null)
+                    return;
+
                 if (SetProperty(ref _activePage, value))
                     PostActivePageChanged();
+            }
+        }
+
+        public string RepositoryFilter
+        {
+            get => _repositoryFilter;
+            set
+            {
+                if (SetProperty(ref _repositoryFilter, value))
+                    RefreshVisiblePages();
             }
         }
 
@@ -58,6 +77,7 @@ namespace SourceGit.ViewModels
 
             ActiveWorkspace = Preferences.Instance.GetActiveWorkspace();
             Pages = new AvaloniaList<LauncherPage>();
+            AttachPagesEvents();
             AddNewTab();
 
             var repos = ActiveWorkspace.Repositories.ToArray();
@@ -76,6 +96,7 @@ namespace SourceGit.ViewModels
             }
 
             PostActivePageChanged();
+            RefreshVisiblePages();
         }
 
         public bool TryOpenRepositoryFromPath(string repo)
@@ -127,6 +148,7 @@ namespace SourceGit.ViewModels
             if (to == null || to.IsActive)
                 return;
 
+            RepositoryFilter = string.Empty;
             _ignoreIndexChange = true;
 
             var pref = Preferences.Instance;
@@ -263,6 +285,8 @@ namespace SourceGit.ViewModels
 
             Pages = new AvaloniaList<LauncherPage> { ActivePage };
             OnPropertyChanged(nameof(Pages));
+            AttachPagesEvents();
+            RefreshVisiblePages();
 
             _activeWorkspace.ActiveIdx = 0;
             _ignoreIndexChange = false;
@@ -439,6 +463,35 @@ namespace SourceGit.ViewModels
             ActivePage = page;
         }
 
+        private void AttachPagesEvents()
+        {
+            Pages.CollectionChanged -= OnPagesCollectionChanged;
+            Pages.CollectionChanged += OnPagesCollectionChanged;
+        }
+
+        private void OnPagesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RefreshVisiblePages();
+        }
+
+        private void RefreshVisiblePages()
+        {
+            var filter = _repositoryFilter?.Trim();
+            VisiblePages.Clear();
+
+            foreach (var page in Pages)
+            {
+                if (string.IsNullOrEmpty(filter) ||
+                    (page.Node.IsRepository &&
+                     (page.Node.Name?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true ||
+                      page.Node.Id?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true)))
+                    VisiblePages.Add(page);
+            }
+
+            if (_activePage != null && VisiblePages.Contains(_activePage))
+                OnPropertyChanged(nameof(ActivePage));
+        }
+
         private void DispatchNotification(Models.Notification notification)
         {
             if (!Dispatcher.UIThread.CheckAccess())
@@ -537,6 +590,7 @@ namespace SourceGit.ViewModels
         private Workspace _activeWorkspace;
         private LauncherPage _activePage;
         private bool _ignoreIndexChange;
+        private string _repositoryFilter = string.Empty;
         private string _title = string.Empty;
         private ICommandPalette _commandPalette;
         private Models.Version _newVersion = null;
