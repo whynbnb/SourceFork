@@ -14,8 +14,9 @@
                     x:Name="ThisControl"
                     Icon="/App.ico"
                     Title="{DynamicResource Text.Preferences}"
-                    Width="860" Height="460"
-                    CanResize="False"
+                    Width="860" Height="520"
+                    MinWidth="760" MinHeight="460"
+                    CanResize="True"
                     WindowStartupLocation="CenterScreen">
   <v:ChromelessWindow.Resources>
     <ControlTheme x:Key="SettingsTabItemTheme" TargetType="TabItem">
@@ -78,7 +79,7 @@
     <!-- Body -->
     <Border Grid.Row="1">
       <Grid>
-        <TabControl Classes="settings" TabStripPlacement="Left">
+        <TabControl x:Name="Tabs" Classes="settings" TabStripPlacement="Left">
         <TabItem>
           <TabItem.Header>
             <TextBlock Classes="tab_header" Text="{DynamicResource Text.Preferences.General}"/>
@@ -218,6 +219,13 @@
                       IsVisible="{x:Static s:App.IsCheckForUpdateCommandVisible}"
                       IsChecked="{Binding Check4UpdatesOnStartup, Mode=TwoWay}"/>
           </Grid>
+        </TabItem>
+
+        <TabItem>
+          <TabItem.Header>
+            <TextBlock Classes="tab_header" Text="{DynamicResource Text.ConfigureWorkspace}"/>
+          </TabItem.Header>
+          <v:WorkspaceManagement x:Name="WorkspaceManagementView"/>
         </TabItem>
 
         <TabItem>

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls.ApplicationLifetimes;
 
@@ -37,14 +38,16 @@ namespace SourceGit
             }
         }
 
-        public static readonly Command OpenPreferencesCommand = new Command(async _ =>
+        public static async Task OpenPreferencesAsync(int tabIndex = 0)
         {
             if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
             {
-                var dialog = new Views.Preferences();
+                var dialog = new Views.Preferences(tabIndex);
                 await dialog.ShowDialog(owner);
             }
-        });
+        }
+
+        public static readonly Command OpenPreferencesCommand = new Command(async _ => await OpenPreferencesAsync());
 
         public static readonly Command OpenHotkeysCommand = new Command(async _ =>
         {

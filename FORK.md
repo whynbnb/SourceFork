@@ -24,6 +24,11 @@
 - 侧边栏可折叠/展开，状态保存在 `LayoutInfo.WorkspaceSidebarCollapsed`。折叠后 macOS 红绿灯/Windows 菜单会移到内容区顶栏最左侧，工具栏按钮紧随其后。
 - 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`；拖动分隔线结束、折叠/展开时会立即保存偏好，避免异常退出丢失宽度。
 - 顶部菜单按钮抽成了 `LauncherMenuButton` 控件，方便侧边栏展开和折叠两种位置复用。
+- 偏好设置新增 `Workspaces` 页，工作区管理 UI 抽成 `WorkspaceManagement` 控件；工作区菜单里的“配置工作区”改为直接打开该页。
+- 偏好设置窗口可自由调整宽高，初始尺寸 860×520。
+- `WorkspaceManagement` 支持导入/导出工作区 JSON（全部或当前选中），导入时自动处理重名。
+- 工作区支持 `Hidden` 状态：隐藏后不出现在主界面的工作区切换菜单，但数据保留；管理页用“隐藏”徽标、灰斜体名称和眼睛关闭图标标记，可随时取消隐藏。
+- 旧的 `ConfigureWorkspace` 窗口保留为同一控件的轻量宿主，避免重复维护管理界面。
 - 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`，可拖动分隔线调整。
 - 旧的 `LauncherTabBar` 文件保留但不再引用，方便对照上游。
 - 移植上游 `Launcher.axaml`、`LauncherPage.axaml`、`RepositoryToolbar.axaml`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏和统一顶栏结构。

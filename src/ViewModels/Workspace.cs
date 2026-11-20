@@ -46,6 +46,12 @@ namespace SourceGit.ViewModels
             set => SetProperty(ref _restoreOnStartup, value);
         }
 
+        public bool IsHidden
+        {
+            get => _isHidden;
+            set => SetProperty(ref _isHidden, value);
+        }
+
         public string DefaultCloneDir
         {
             get => _defaultCloneDir;
@@ -61,6 +67,7 @@ namespace SourceGit.ViewModels
         private uint _color = 4278221015;
         private bool _isActive = false;
         private bool _restoreOnStartup = true;
+        private bool _isHidden = false;
         private string _defaultCloneDir = string.Empty;
     }
 }

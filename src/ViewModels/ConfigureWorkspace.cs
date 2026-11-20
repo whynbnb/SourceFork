@@ -30,6 +30,16 @@ namespace SourceGit.ViewModels
         public ConfigureWorkspace()
         {
             Workspaces = new(Preferences.Instance.Workspaces);
+            foreach (var workspace in Workspaces)
+            {
+                if (workspace.IsActive)
+                {
+                    Selected = workspace;
+                    break;
+                }
+            }
+
+            Selected ??= Workspaces.Count > 0 ? Workspaces[0] : null;
         }
 
         public void Add()

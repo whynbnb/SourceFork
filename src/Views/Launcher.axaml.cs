@@ -397,6 +397,8 @@ namespace SourceGit.Views
             for (var i = 0; i < pref.Workspaces.Count; i++)
             {
                 var workspace = pref.Workspaces[i];
+                if (workspace.IsHidden)
+                    continue;
 
                 var icon = this.CreateMenuIcon(workspace.IsActive ? "Icons.Check" : "Icons.Workspace");
                 icon.Fill = workspace.Brush;
@@ -421,7 +423,7 @@ namespace SourceGit.Views
             configure.Header = App.Text("Workspace.Configure");
             configure.Click += async (_, ev) =>
             {
-                await this.ShowDialogAsync(new ViewModels.ConfigureWorkspace());
+                await App.OpenPreferencesAsync(Views.Preferences.WorkspacesTabIndex);
                 ev.Handled = true;
             };
             menu.Items.Add(configure);

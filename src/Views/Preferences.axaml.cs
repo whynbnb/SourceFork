@@ -11,6 +11,8 @@ namespace SourceGit.Views
 {
     public partial class Preferences : ChromelessWindow
     {
+        public const int WorkspacesTabIndex = 1;
+
         public static readonly DirectProperty<Preferences, string> GitVersionProperty =
             AvaloniaProperty.RegisterDirect<Preferences, string>(
                 nameof(GitVersion),
@@ -105,6 +107,11 @@ namespace SourceGit.Views
             set;
         } = false;
 
+        public ViewModels.ConfigureWorkspace WorkspaceManager
+        {
+            get;
+        } = new();
+
         public static readonly DirectProperty<Preferences, AI.Service> SelectedOpenAIServiceProperty =
             AvaloniaProperty.RegisterDirect<Preferences, AI.Service>(
                 nameof(SelectedOpenAIService),
@@ -130,6 +137,11 @@ namespace SourceGit.Views
         }
 
         public Preferences()
+            : this(0)
+        {
+        }
+
+        public Preferences(int initialTab)
         {
             var pref = ViewModels.Preferences.Instance;
             DataContext = pref;
@@ -169,6 +181,10 @@ namespace SourceGit.Views
 
             UpdateGitVersion();
             InitializeComponent();
+
+            WorkspaceManagementView.DataContext = WorkspaceManager;
+            if (initialTab >= 0 && initialTab < Tabs.ItemCount)
+                Tabs.SelectedIndex = initialTab;
         }
 
         protected override async void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

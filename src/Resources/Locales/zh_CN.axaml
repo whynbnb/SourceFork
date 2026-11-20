@@ -1055,6 +1055,11 @@
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">模板：${0}$</x:String>
   <x:String x:Key="Text.Workspace" xml:space="preserve">工作区：</x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">配置工作区...</x:String>
+  <x:String x:Key="Text.Workspace.ExportAll" xml:space="preserve">导出全部工作区</x:String>
+  <x:String x:Key="Text.Workspace.ExportSelected" xml:space="preserve">导出当前工作区</x:String>
+  <x:String x:Key="Text.Workspace.Hidden" xml:space="preserve">隐藏此工作区</x:String>
+  <x:String x:Key="Text.Workspace.HiddenBadge" xml:space="preserve">隐藏</x:String>
+  <x:String x:Key="Text.Workspace.Import" xml:space="preserve">导入工作区</x:String>
   <x:String x:Key="Text.WorkspaceSidebar.Collapse" xml:space="preserve">隐藏侧边栏</x:String>
   <x:String x:Key="Text.WorkspaceSidebar.Expand" xml:space="preserve">显示侧边栏</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">本地工作树</x:String>

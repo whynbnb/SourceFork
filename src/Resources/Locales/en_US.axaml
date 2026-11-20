@@ -1051,6 +1051,11 @@
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Template: ${0}$</x:String>
   <x:String x:Key="Text.Workspace" xml:space="preserve">WORKSPACE: </x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Configure Workspaces...</x:String>
+  <x:String x:Key="Text.Workspace.ExportAll" xml:space="preserve">Export All Workspaces</x:String>
+  <x:String x:Key="Text.Workspace.ExportSelected" xml:space="preserve">Export Selected Workspace</x:String>
+  <x:String x:Key="Text.Workspace.Hidden" xml:space="preserve">Hidden</x:String>
+  <x:String x:Key="Text.Workspace.HiddenBadge" xml:space="preserve">Hidden</x:String>
+  <x:String x:Key="Text.Workspace.Import" xml:space="preserve">Import Workspaces</x:String>
   <x:String x:Key="Text.WorkspaceSidebar.Collapse" xml:space="preserve">Hide Sidebar</x:String>
   <x:String x:Key="Text.WorkspaceSidebar.Expand" xml:space="preserve">Show Sidebar</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
