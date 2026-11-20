@@ -15,18 +15,23 @@
 
 ## 上游关系
 
-当前 `origin` 仍指向官方仓库：
+已配置为标准 fork 布局：
 
 ```
-origin  https://github.com/sourcegit-org/sourcegit.git
+origin    https://github.com/whynbnb/SourceFork          # 自己的仓库，日常 push
+upstream  https://github.com/sourcegit-org/sourcegit.git # 官方仓库，只读
 ```
 
-建议后续改成标准的 fork 布局（需要先创建自己的远程仓库）：
+首次推送分支（需要先登录 GitHub）：
 
 ```sh
-git remote rename origin upstream          # 官方仓库，只读
-git remote add origin <你的 fork 地址>     # 自己的仓库，日常 push
 git push -u origin fork/2026.19
+```
+
+拉取上游更新：
+
+```sh
+git fetch upstream --tags
 ```
 
 ## 本地构建 / 运行
