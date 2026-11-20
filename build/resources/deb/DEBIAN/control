@@ -1,8 +1,8 @@
-Package: sourcegit
+Package: sourcefork
 Version: 2025.10
 Priority: optional
 Depends: libx11-6, libice6, libsm6, @ICU_DEPS@, xdg-utils
 Architecture: amd64
 Installed-Size: 60440
-Maintainer: longshuang@msn.cn
+Maintainer: whynbnb
 Description: Open-source & Free Git GUI Client

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public enum FilterType
     {

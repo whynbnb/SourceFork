@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public class RepositoryCommandPaletteTextBox : TextBox
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls.ApplicationLifetimes;
 
-namespace SourceGit
+namespace SourceFork
 {
     public partial class App
     {

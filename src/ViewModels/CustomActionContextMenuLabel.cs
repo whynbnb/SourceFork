@@ -1,4 +1,4 @@
-﻿namespace SourceGit.ViewModels
+﻿namespace SourceFork.ViewModels
 {
     public class CustomActionContextMenuLabel(string name, bool isGlobal)
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public static class NumericSort
     {

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public class IssueTracker : ObservableObject
     {

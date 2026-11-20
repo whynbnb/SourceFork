@@ -40,8 +40,8 @@ SourceFork 保留 SourceGit 的 Git 客户端能力，并围绕常驻的工作�
 ```sh
 mise install
 git submodule update --init --recursive
-dotnet build src/SourceGit.csproj -c Debug
-dotnet run --project src/SourceGit.csproj
+dotnet build src/SourceFork.csproj -c Debug
+dotnet run --project src/SourceFork.csproj
 ```
 
 ## 说明

@@ -40,8 +40,8 @@ Requires `git` and the .NET 10 SDK. The repository pins the SDK with `mise`:
 ```sh
 mise install
 git submodule update --init --recursive
-dotnet build src/SourceGit.csproj -c Debug
-dotnet run --project src/SourceGit.csproj
+dotnet build src/SourceFork.csproj -c Debug
+dotnet run --project src/SourceFork.csproj
 ```
 
 ## Notes

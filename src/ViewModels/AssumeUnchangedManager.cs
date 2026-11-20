@@ -2,7 +2,7 @@
 using Avalonia.Collections;
 using Avalonia.Threading;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class AssumeUnchangedManager
     {

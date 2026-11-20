@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class SSHKeyHelper : ChromelessWindow
     {

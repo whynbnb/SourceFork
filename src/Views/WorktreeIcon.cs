@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public class WorktreeIcon : Path
     {

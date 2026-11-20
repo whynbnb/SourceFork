@@ -5,7 +5,7 @@ using System.Text;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class Askpass : ChromelessWindow
     {

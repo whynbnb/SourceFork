@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public partial class SSHKeyGenerator : ObservableValidator
     {

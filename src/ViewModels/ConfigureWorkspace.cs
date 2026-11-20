@@ -2,7 +2,7 @@
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class ConfigureWorkspace : ObservableObject
     {

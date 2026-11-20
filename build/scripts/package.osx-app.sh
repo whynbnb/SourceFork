@@ -7,12 +7,12 @@ set pipefail
 
 cd build
 
-mkdir -p SourceGit.app/Contents/Resources
-mv SourceGit SourceGit.app/Contents/MacOS
-cp resources/app/App.icns SourceGit.app/Contents/Resources/App.icns
-sed "s/SOURCE_GIT_VERSION/$VERSION/g" resources/app/App.plist > SourceGit.app/Contents/Info.plist
-rm -rf SourceGit.app/Contents/MacOS/SourceGit.dsym
-rm -f SourceGit.app/Contents/MacOS/*.pdb
-clang ../tools/setsid-macos/setsid.c -o SourceGit.app/Contents/MacOS/setsid -mmacosx-version-min=13.0
+mkdir -p SourceFork.app/Contents/Resources
+mv SourceFork SourceFork.app/Contents/MacOS
+cp resources/app/App.icns SourceFork.app/Contents/Resources/App.icns
+sed "s/SOURCE_FORK_VERSION/$VERSION/g" resources/app/App.plist > SourceFork.app/Contents/Info.plist
+rm -rf SourceFork.app/Contents/MacOS/SourceFork.dsym
+rm -f SourceFork.app/Contents/MacOS/*.pdb
+clang ../tools/setsid-macos/setsid.c -o SourceFork.app/Contents/MacOS/setsid -mmacosx-version-min=13.0
 
-zip "sourcegit_$VERSION.$RUNTIME.zip" -r SourceGit.app
+zip "sourcefork_$VERSION.$RUNTIME.zip" -r SourceFork.app

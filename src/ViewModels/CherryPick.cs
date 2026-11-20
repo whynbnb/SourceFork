@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class CherryPick : Popup
     {

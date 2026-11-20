@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class Alert : ChromelessWindow
     {

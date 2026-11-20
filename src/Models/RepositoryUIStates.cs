@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using Avalonia.Collections;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public class RepositoryUIStates
     {
@@ -245,7 +245,7 @@ namespace SourceGit.Models
 
         public static RepositoryUIStates Load(string gitDir)
         {
-            var fileInfo = new FileInfo(Path.Combine(gitDir, "sourcegit.uistates"));
+            var fileInfo = new FileInfo(Path.Combine(gitDir, "sourcefork.uistates"));
             var fullpath = fileInfo.FullName;
 
             RepositoryUIStates states;

@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=SourceGit
+Name=SourceFork
 Comment=Open-source & Free Git GUI Client
-Exec=sourcegit.sh
-Icon=io.github.sourcegit_scm.sourcegit
+Exec=/opt/sourcefork/sourcefork %u
+Icon=/usr/share/icons/sourcefork.png
 Terminal=false
 Type=Application
 Categories=Development

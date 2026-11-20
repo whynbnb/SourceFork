@@ -10,7 +10,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 
-namespace SourceGit.Native
+namespace SourceFork.Native
 {
     [SupportedOSPlatform("macOS")]
     internal class MacOS : OS.IBackend
@@ -60,7 +60,7 @@ namespace SourceGit.Native
             var dirs = new OS.Directories();
             var appDataDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SourceGit");
+                "SourceFork");
 
             if (!Directory.Exists(appDataDir))
                 Directory.CreateDirectory(appDataDir);

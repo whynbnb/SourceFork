@@ -1,4 +1,4 @@
-﻿namespace SourceGit.Commands
+﻿namespace SourceFork.Commands
 {
     public class Bisect : Command
     {

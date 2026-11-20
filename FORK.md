@@ -4,7 +4,7 @@
 
 - 上游 tag：`v2026.19`（`5c53601a`，2026-08-31）
 - 维护分支：`fork/2026.19`
-- 版本：`2026.19`（定义在 `src/SourceGit.csproj`）
+- 版本：`2026.19`（定义在 `src/SourceFork.csproj`）
 - 子模块：`depends/AvaloniaEdit` 固定在 `11bf2b6a`（v2026.19 对应的版本）
 
 选择 2026.19 的原因：侧边栏/仓库页布局重构从 `02799ba6 ux: repository page layout (#2660)` 开始，
@@ -15,6 +15,7 @@
 
 ## 本 Fork 的定制
 
+- 品牌与标识整体改为 `SourceFork`：命名空间、程序集/可执行文件、项目文件、资源 URI、UI 文案、macOS bundle id、配置目录和打包元数据均使用 SourceFork；仅保留上游链接与版权归属中的 SourceGit。
 - 左侧工作区侧边栏：`src/Views/WorkspaceSidebar.axaml`，把所有打开的仓库平铺显示，替代顶部 tab。
 - 工作区切换移到侧边栏顶部；`src/Views/Launcher.axaml` 中已移除 `LauncherTabBar`。
 - 仓库工具栏（`RepositoryToolbar` / `WelcomeToolbar`）已并入顶部标题栏，`LauncherPage` 不再有独立的 36px 工具栏行。
@@ -76,14 +77,14 @@ dotnet --list-runtimes  # 应包含 Microsoft.NETCore.App 10.0.x
 
 ```sh
 git submodule update --init --recursive
-dotnet build src/SourceGit.csproj -c Debug
-dotnet run --project src/SourceGit.csproj
+dotnet build src/SourceFork.csproj -c Debug
+dotnet run --project src/SourceFork.csproj
 ```
 
 发布 macOS arm64 版本（推荐 self-contained，最终用户无需安装 .NET）：
 
 ```sh
-dotnet publish src/SourceGit.csproj \
+dotnet publish src/SourceFork.csproj \
   -c Release -r osx-arm64 \
   --self-contained true -p:PublishAot=false \
   -o ./dist

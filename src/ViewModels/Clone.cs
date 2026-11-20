@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class Clone : Popup
     {

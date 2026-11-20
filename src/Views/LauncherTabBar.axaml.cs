@@ -8,7 +8,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Styling;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public class LauncherTabSizeBox : Border
     {
@@ -416,6 +416,6 @@ namespace SourceGit.Views
         private readonly Vector _scrollStep = new(64, 0);
         private PointerPressedEventArgs _pressedTabEvent = null;
         private bool _startDragTab = false;
-        private readonly DataFormat<string> _dndMainTabFormat = DataFormat.CreateStringApplicationFormat("sourcegit-dnd-main-tab");
+        private readonly DataFormat<string> _dndMainTabFormat = DataFormat.CreateStringApplicationFormat("sourcefork-dnd-main-tab");
     }
 }

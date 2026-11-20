@@ -3,21 +3,16 @@
 		<File Path=".github/workflows/build.yml"/>
 		<File Path=".github/workflows/ci.yml"/>
 		<File Path=".github/workflows/format-check.yml"/>
-		<File Path=".github/workflows/localization-check.yml"/>
 		<File Path=".github/workflows/package.yml"/>
 		<File Path=".github/workflows/release.yml"/>
 	</Folder>
 
 	<Folder Name="/build/resources/_common/applications/">
-		<File Path="build/resources/_common/applications/sourcegit.desktop"/>
+		<File Path="build/resources/_common/applications/sourcefork.desktop"/>
 	</Folder>
 
 	<Folder Name="/build/resources/_common/icons/">
-		<File Path="build/resources/_common/icons/sourcegit.png"/>
-	</Folder>
-
-	<Folder Name="/build/resources/_common/">
-		<File Path="build/resources/_common/sourcegit"/>
+		<File Path="build/resources/_common/icons/sourcefork.png"/>
 	</Folder>
 
 	<Folder Name="/build/resources/app/">
@@ -26,8 +21,7 @@
 	</Folder>
 
 	<Folder Name="/build/resources/appimage/">
-		<File Path="build/resources/appimage/sourcegit"/>
-		<File Path="build/resources/appimage/sourcegit.appdata.xml"/>
+		<File Path="build/resources/appimage/sourcefork.appdata.xml"/>
 	</Folder>
 
 	<Folder Name="/build/resources/deb/DEBIAN/">
@@ -41,7 +35,6 @@
 	</Folder>
 
 	<Folder Name="/build/scripts/">
-		<File Path="build/scripts/localization-check.js"/>
 		<File Path="build/scripts/package.linux.sh"/>
 		<File Path="build/scripts/package.osx-app.sh"/>
 		<File Path="build/scripts/package.win.ps1"/>
@@ -57,7 +50,7 @@
 	</Folder>
 
 	<Folder Name="/src/">
-		<Project Path="src/SourceGit.csproj" />
+		<Project Path="src/SourceFork.csproj" />
 	</Folder>
 
 	<Folder Name="/files/">

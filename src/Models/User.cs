@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public class User
     {

@@ -13,7 +13,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public class BranchTreeNodeIcon : UserControl
     {

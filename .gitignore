@@ -34,14 +34,14 @@ package-lock.json
 !build/resources/flatpak
 
 build/resources/
-build/SourceGit/
-build/SourceGit.app/
+build/SourceFork/
+build/SourceFork.app/
 build/*.zip
 build/*.tar.gz
 build/*.deb
 build/*.rpm
 build/*.AppImage
-SourceGit.app/
+SourceFork.app/
 build.command
 src/Properties/launchSettings.json
 *.lscache

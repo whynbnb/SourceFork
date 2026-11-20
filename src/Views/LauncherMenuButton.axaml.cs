@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class LauncherMenuButton : UserControl
     {

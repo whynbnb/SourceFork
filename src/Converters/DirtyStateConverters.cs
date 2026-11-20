@@ -1,7 +1,7 @@
 ﻿using Avalonia.Data.Converters;
 using Avalonia.Media;
 
-namespace SourceGit.Converters
+namespace SourceFork.Converters
 {
     public static class DirtyStateConverters
     {

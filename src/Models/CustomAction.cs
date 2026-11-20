@@ -1,7 +1,7 @@
 ﻿using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public enum CustomActionScope
     {

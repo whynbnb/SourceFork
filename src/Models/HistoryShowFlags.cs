@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     [Flags]
     public enum HistoryShowFlags

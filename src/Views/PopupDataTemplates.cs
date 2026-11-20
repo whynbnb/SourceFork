@@ -3,7 +3,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public class PopupDataTemplates : IDataTemplate
     {

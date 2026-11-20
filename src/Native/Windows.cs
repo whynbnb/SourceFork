@@ -12,7 +12,7 @@ using Avalonia.Controls;
 using Avalonia.Platform;
 using Avalonia.Threading;
 
-namespace SourceGit.Native
+namespace SourceFork.Native
 {
     [SupportedOSPlatform("windows")]
     internal class Windows : OS.IBackend
@@ -68,7 +68,7 @@ namespace SourceGit.Native
             {
                 var appDataDir = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "SourceGit");
+                    "SourceFork");
 
                 if (!Directory.Exists(appDataDir))
                     Directory.CreateDirectory(appDataDir);

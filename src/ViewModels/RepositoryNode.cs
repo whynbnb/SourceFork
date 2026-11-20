@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class RepositoryNodeMinimalInfo
     {
@@ -185,7 +185,7 @@ namespace SourceGit.ViewModels
 
         public void LoadMinimalInfo(string gitDir)
         {
-            var savedTo = Path.Combine(gitDir, "sourcegit.node");
+            var savedTo = Path.Combine(gitDir, "sourcefork.node");
             if (!File.Exists(savedTo))
                 return;
 
@@ -207,7 +207,7 @@ namespace SourceGit.ViewModels
             if (!Directory.Exists(gitDir))
                 return;
 
-            var savedTo = Path.Combine(gitDir, "sourcegit.node");
+            var savedTo = Path.Combine(gitDir, "sourcefork.node");
             var minimalInfo = new RepositoryNodeMinimalInfo
             {
                 FriendlyName = Name,

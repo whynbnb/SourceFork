@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SourceGit.Commands
+namespace SourceFork.Commands
 {
     public partial class Diff : Command
     {

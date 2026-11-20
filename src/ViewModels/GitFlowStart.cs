@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class GitFlowStart : Popup
     {

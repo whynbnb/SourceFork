@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class RepositoryToolbar : UserControl
     {

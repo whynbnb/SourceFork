@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SourceGit.AI
+namespace SourceFork.AI
 {
     public static class Options
     {

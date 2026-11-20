@@ -3,7 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class LauncherPage : UserControl
     {

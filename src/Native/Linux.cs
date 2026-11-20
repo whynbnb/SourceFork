@@ -9,7 +9,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 
-namespace SourceGit.Native
+namespace SourceFork.Native
 {
     [SupportedOSPlatform("linux")]
     internal class Linux : OS.IBackend
@@ -58,8 +58,8 @@ namespace SourceGit.Native
             }
 
             // XDG Base Directory Specification: https://specifications.freedesktop.org/basedir/latest/
-            dirs.ConfigDir = GetXdgDirectory("XDG_CONFIG_HOME", Path.Combine(home, ".config"), "SourceGit");
-            dirs.CacheDir = GetXdgDirectory("XDG_CACHE_HOME", Path.Combine(home, ".cache"), "SourceGit");
+            dirs.ConfigDir = GetXdgDirectory("XDG_CONFIG_HOME", Path.Combine(home, ".config"), "SourceFork");
+            dirs.CacheDir = GetXdgDirectory("XDG_CACHE_HOME", Path.Combine(home, ".cache"), "SourceFork");
 
             // If the app basic dirs already exist, we can skip the migration step
             if (Directory.Exists(dirs.ConfigDir) && Directory.Exists(dirs.CacheDir))
@@ -70,22 +70,6 @@ namespace SourceGit.Native
                 Directory.CreateDirectory(dirs.ConfigDir);
             if (!Directory.Exists(dirs.CacheDir))
                 Directory.CreateDirectory(dirs.CacheDir);
-
-            // Migrate legacy data dir: ~/.sourcegit to XDG standard directories
-            var legacyDir = Path.Combine(home, ".sourcegit");
-            if (Directory.Exists(legacyDir))
-            {
-                try
-                {
-                    File.Copy(Path.Combine(legacyDir, "preference.json"), Path.Combine(dirs.ConfigDir, "preference.json"), true);
-                    Directory.Move(Path.Combine(legacyDir, "avatars"), Path.Combine(dirs.CacheDir, "avatars"));
-                    Directory.Delete(legacyDir, true);
-                }
-                catch
-                {
-                    // Ignore any errors during migration
-                }
-            }
 
             return dirs;
         }

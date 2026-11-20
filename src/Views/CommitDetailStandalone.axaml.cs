@@ -1,4 +1,4 @@
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class CommitDetailStandalone : ChromelessWindow
     {

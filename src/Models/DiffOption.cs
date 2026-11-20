@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public class DiffOption
     {

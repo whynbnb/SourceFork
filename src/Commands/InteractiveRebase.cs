@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SourceGit.Commands
+namespace SourceFork.Commands
 {
     public class InteractiveRebase : Command
     {

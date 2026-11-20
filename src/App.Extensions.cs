@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using Avalonia.Media;
 
-namespace SourceGit
+namespace SourceFork
 {
     public static class StringExtensions
     {

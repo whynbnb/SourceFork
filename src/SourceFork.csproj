@@ -8,14 +8,15 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
     <InvariantGlobalization>false</InvariantGlobalization>
+    <DisableUpdateDetection>true</DisableUpdateDetection>
 
-    <Product>SourceGit</Product>
+    <Product>SourceFork</Product>
     <Description>OpenSource GIT client</Description>
-    <Company>sourcegit-scm</Company>
-    <Copyright>Copyright © $([System.DateTime]::Now.Year) sourcegit-scm.</Copyright>
+    <Company>whynbnb</Company>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) whynbnb.</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/sourcegit-scm/sourcegit.git</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/sourcegit-scm/sourcegit.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/whynbnb/SourceFork</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/whynbnb/SourceFork.git</RepositoryUrl>
     <RepositoryType>Public</RepositoryType>
   </PropertyGroup>
 
@@ -65,7 +66,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TrimmerRootAssembly Include="SourceGit" />
+    <TrimmerRootAssembly Include="SourceFork" />
     <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
   </ItemGroup>
 

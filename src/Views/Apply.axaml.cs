@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class Apply : UserControl
     {

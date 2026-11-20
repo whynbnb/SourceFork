@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class EditRemote : Popup
     {

@@ -8,7 +8,7 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
 using AvaloniaEdit.TextMate;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public class UpdateInfoView : TextEditor
     {
@@ -77,7 +77,7 @@ namespace SourceGit.Views
 
         private void GotoDownload(object _, RoutedEventArgs e)
         {
-            Native.OS.OpenBrowser("https://github.com/sourcegit-scm/sourcegit/releases/latest");
+            Native.OS.OpenBrowser("https://github.com/whynbnb/SourceFork/releases/latest");
             e.Handled = true;
         }
 

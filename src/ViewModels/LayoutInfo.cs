@@ -3,7 +3,7 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace SourceFork.ViewModels
 {
     public class LayoutInfo : ObservableObject
     {

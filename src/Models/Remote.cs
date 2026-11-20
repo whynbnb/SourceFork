@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace SourceGit.Models
+namespace SourceFork.Models
 {
     public partial class Remote
     {

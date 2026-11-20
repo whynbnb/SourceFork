@@ -35,30 +35,30 @@ if [[ ! -f "appimagetool" ]]; then
     chmod +x appimagetool
 fi
 
-rm -f SourceGit/*.dbg
-rm -f SourceGit/*.pdb
+rm -f SourceFork/*.dbg
+rm -f SourceFork/*.pdb
 
-mkdir -p SourceGit.AppDir/opt
-mkdir -p SourceGit.AppDir/usr/share/metainfo
-mkdir -p SourceGit.AppDir/usr/share/applications
+mkdir -p SourceFork.AppDir/opt
+mkdir -p SourceFork.AppDir/usr/share/metainfo
+mkdir -p SourceFork.AppDir/usr/share/applications
 
-cp -r SourceGit SourceGit.AppDir/opt/sourcegit
-desktop-file-install resources/_common/applications/sourcegit.desktop --dir SourceGit.AppDir/usr/share/applications \
-    --set-icon com.sourcegit_scm.SourceGit --set-key=Exec --set-value=AppRun
-mv SourceGit.AppDir/usr/share/applications/{sourcegit,com.sourcegit_scm.SourceGit}.desktop
-cp resources/_common/icons/sourcegit.png SourceGit.AppDir/com.sourcegit_scm.SourceGit.png
-ln -rsf SourceGit.AppDir/opt/sourcegit/sourcegit SourceGit.AppDir/AppRun
-ln -rsf SourceGit.AppDir/usr/share/applications/com.sourcegit_scm.SourceGit.desktop SourceGit.AppDir
-cp resources/appimage/sourcegit.appdata.xml SourceGit.AppDir/usr/share/metainfo/com.sourcegit_scm.SourceGit.appdata.xml
+cp -r SourceFork SourceFork.AppDir/opt/sourcefork
+desktop-file-install resources/_common/applications/sourcefork.desktop --dir SourceFork.AppDir/usr/share/applications \
+    --set-icon com.whynbnb.sourcefork --set-key=Exec --set-value=AppRun
+mv SourceFork.AppDir/usr/share/applications/{sourcefork,com.whynbnb.sourcefork}.desktop
+cp resources/_common/icons/sourcefork.png SourceFork.AppDir/com.whynbnb.sourcefork.png
+ln -rsf SourceFork.AppDir/opt/sourcefork/sourcefork SourceFork.AppDir/AppRun
+ln -rsf SourceFork.AppDir/usr/share/applications/com.whynbnb.sourcefork.desktop SourceFork.AppDir
+cp resources/appimage/sourcefork.appdata.xml SourceFork.AppDir/usr/share/metainfo/com.whynbnb.sourcefork.appdata.xml
 
-ARCH="$appimage_arch" ./appimagetool -v SourceGit.AppDir "sourcegit-$VERSION.linux.$arch.AppImage"
+ARCH="$appimage_arch" ./appimagetool -v SourceFork.AppDir "sourcefork-$VERSION.linux.$arch.AppImage"
 
-mkdir -p resources/deb/opt/sourcegit/
+mkdir -p resources/deb/opt/sourcefork/
 mkdir -p resources/deb/usr/bin
 mkdir -p resources/deb/usr/share/applications
 mkdir -p resources/deb/usr/share/icons
-cp -f SourceGit/* resources/deb/opt/sourcegit
-ln -rsf resources/deb/opt/sourcegit/sourcegit resources/deb/usr/bin
+cp -f SourceFork/* resources/deb/opt/sourcefork
+ln -rsf resources/deb/opt/sourcefork/sourcefork resources/deb/usr/bin
 cp -r resources/_common/applications resources/deb/usr/share
 cp -r resources/_common/icons resources/deb/usr/share
 
@@ -80,7 +80,7 @@ sed -i -e "s/^Version:.*/Version: $VERSION/" \
     resources/deb/DEBIAN/control
 
 # Build deb package with gzip compression
-dpkg-deb -Zgzip --root-owner-group --build resources/deb "sourcegit_$VERSION-1_$arch.deb"
+dpkg-deb -Zgzip --root-owner-group --build resources/deb "sourcefork_$VERSION-1_$arch.deb"
 
 rpmbuild -bb --target="$target" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version $VERSION"
-mv "resources/rpm/RPMS/$target/sourcegit-$VERSION-1.$target.rpm" ./
+mv "resources/rpm/RPMS/$target/sourcefork-$VERSION-1.$target.rpm" ./

@@ -6,7 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 
-namespace SourceGit.Views
+namespace SourceFork.Views
 {
     public partial class Launcher : ChromelessWindow
     {

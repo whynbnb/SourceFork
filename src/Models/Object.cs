@@ -1,4 +1,4 @@
-﻿namespace SourceGit.Models
+﻿namespace SourceFork.Models
 {
     public enum ObjectType
     {
