@@ -148,7 +148,7 @@
       </Grid.ColumnDefinitions>
 
       <!-- Workspace Sidebar -->
-      <Border Grid.Column="0" Background="{DynamicResource Brush.ToolBar}">
+      <Border Grid.Column="0" Background="{DynamicResource Brush.Window}">
         <v:WorkspaceSidebar/>
       </Border>
 

@@ -16,6 +16,13 @@
     <Style Selector="Border.search_box:focus-within">
       <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
     </Style>
+    <Style Selector="Button.sidebar_action">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style Selector="Button.sidebar_action:pointerover /template/ Border#PART_Border">
+      <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
+    </Style>
   </UserControl.Styles>
 
   <Grid RowDefinitions="Auto,*,Auto">
@@ -99,12 +106,12 @@
           </Setter>
         </Style>
         <Style Selector="ListBoxItem:pointerover /template/ Border#PART_Background">
-          <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
-          <Setter Property="Opacity" Value=".5"/>
+          <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
+          <Setter Property="Opacity" Value=".08"/>
         </Style>
         <Style Selector="ListBoxItem:selected /template/ Border#PART_Background">
-          <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
-          <Setter Property="Opacity" Value="1"/>
+          <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
+          <Setter Property="Opacity" Value=".2"/>
         </Style>
         <Style Selector="ListBoxItem Button.page_close">
           <Setter Property="Opacity" Value="0"/>
@@ -193,7 +200,7 @@
             Padding="8,4,8,8"
             BorderThickness="0,1,0,0"
             BorderBrush="{DynamicResource Brush.Border0}">
-      <Button Classes="flat"
+      <Button Classes="flat sidebar_action"
               Height="30"
               HorizontalAlignment="Stretch"
               HorizontalContentAlignment="Left"
