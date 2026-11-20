@@ -14,10 +14,45 @@
                     x:Name="ThisControl"
                     Icon="/App.ico"
                     Title="{DynamicResource Text.Preferences}"
-                    SizeToContent="WidthAndHeight"
+                    Width="860" Height="460"
                     CanResize="False"
                     WindowStartupLocation="CenterScreen">
-  <Grid RowDefinitions="Auto,Auto" MinWidth="600">
+  <v:ChromelessWindow.Resources>
+    <ControlTheme x:Key="SettingsTabItemTheme" TargetType="TabItem">
+      <Setter Property="Width" Value="200"/>
+      <Setter Property="Height" Value="40"/>
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Grid>
+            <Border Name="PART_Background"
+                    Background="{DynamicResource Brush.Accent}"
+                    Opacity="0"
+                    CornerRadius="6"
+                    Margin="8,2"/>
+            <ContentPresenter Content="{TemplateBinding Header}"
+                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                              Margin="20,0"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"/>
+          </Grid>
+        </ControlTemplate>
+      </Setter>
+      <Style Selector="^:pointerover /template/ Border#PART_Background">
+        <Setter Property="Opacity" Value=".08"/>
+      </Style>
+      <Style Selector="^:selected /template/ Border#PART_Background">
+        <Setter Property="Opacity" Value=".18"/>
+      </Style>
+    </ControlTheme>
+  </v:ChromelessWindow.Resources>
+
+  <v:ChromelessWindow.Styles>
+    <Style Selector="TabControl.settings > TabItem">
+      <Setter Property="Theme" Value="{StaticResource SettingsTabItemTheme}"/>
+    </Style>
+  </v:ChromelessWindow.Styles>
+
+  <Grid RowDefinitions="Auto,*" MinWidth="860">
     <!-- TitleBar -->
     <Grid Grid.Row="0" Height="28" IsVisible="{Binding !#ThisControl.UseSystemWindowFrame}">
       <Border Background="{DynamicResource Brush.TitleBar}"
@@ -42,7 +77,8 @@
 
     <!-- Body -->
     <Border Grid.Row="1">
-      <TabControl>
+      <Grid>
+        <TabControl Classes="settings" TabStripPlacement="Left">
         <TabItem>
           <TabItem.Header>
             <TextBlock Classes="tab_header" Text="{DynamicResource Text.Preferences.General}"/>
@@ -938,7 +974,14 @@
             </ContentControl>
           </Grid>
         </TabItem>
-      </TabControl>
+        </TabControl>
+
+        <Rectangle Width="1"
+                   HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                   Margin="200,0,0,0"
+                   Fill="{DynamicResource Brush.Border2}"
+                   IsHitTestVisible="False"/>
+      </Grid>
     </Border>
   </Grid>
 </v:ChromelessWindow>
