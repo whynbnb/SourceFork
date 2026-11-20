@@ -13,6 +13,14 @@
 
 `master` 保持跟踪上游，未做改动，可随时用来查看/对比新版本。
 
+## 本 Fork 的定制
+
+- 左侧工作区侧边栏：`src/Views/WorkspaceSidebar.axaml`，把所有打开的仓库平铺显示，替代顶部 tab。
+- 工作区切换移到侧边栏顶部；`src/Views/Launcher.axaml` 中已移除 `LauncherTabBar`。
+- 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`，可拖动分隔线调整。
+- 旧的 `LauncherTabBar` 文件保留但不再引用，方便对照上游。
+- 移植上游 `Launcher.axaml`、`LauncherTabBar`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏结构。
+
 ## 上游关系
 
 已配置为标准 fork 布局：

@@ -363,64 +363,62 @@ namespace SourceGit.Views
             }
         }
 
-        private void OnOpenWorkspaceMenu(object sender, RoutedEventArgs e)
+        public void ShowWorkspaceMenu(Button button)
         {
-            if (sender is Button btn && DataContext is ViewModels.Launcher launcher)
+            if (DataContext is not ViewModels.Launcher launcher)
+                return;
+
+            if (launcher.CommandPalette != null)
+                launcher.CommandPalette = null;
+
+            var pref = ViewModels.Preferences.Instance;
+            var menu = new ContextMenu();
+            menu.Placement = PlacementMode.BottomEdgeAlignedLeft;
+            menu.VerticalOffset = -6;
+
+            var groupHeader = new TextBlock()
             {
-                if (launcher.CommandPalette != null)
-                    launcher.CommandPalette = null;
+                Text = App.Text("Launcher.Workspaces"),
+                FontWeight = FontWeight.Bold,
+            };
 
-                var pref = ViewModels.Preferences.Instance;
-                var menu = new ContextMenu();
-                menu.Placement = PlacementMode.BottomEdgeAlignedLeft;
-                menu.VerticalOffset = -6;
+            var workspaces = new MenuItem();
+            workspaces.Header = groupHeader;
+            workspaces.IsEnabled = false;
+            menu.Items.Add(workspaces);
 
-                var groupHeader = new TextBlock()
+            for (var i = 0; i < pref.Workspaces.Count; i++)
+            {
+                var workspace = pref.Workspaces[i];
+
+                var icon = this.CreateMenuIcon(workspace.IsActive ? "Icons.Check" : "Icons.Workspace");
+                icon.Fill = workspace.Brush;
+
+                var item = new MenuItem();
+                item.Header = workspace.Name;
+                item.Icon = icon;
+                item.Click += (_, ev) =>
                 {
-                    Text = App.Text("Launcher.Workspaces"),
-                    FontWeight = FontWeight.Bold,
-                };
+                    if (!workspace.IsActive)
+                        launcher.SwitchWorkspace(workspace);
 
-                var workspaces = new MenuItem();
-                workspaces.Header = groupHeader;
-                workspaces.IsEnabled = false;
-                menu.Items.Add(workspaces);
-
-                for (var i = 0; i < pref.Workspaces.Count; i++)
-                {
-                    var workspace = pref.Workspaces[i];
-
-                    var icon = this.CreateMenuIcon(workspace.IsActive ? "Icons.Check" : "Icons.Workspace");
-                    icon.Fill = workspace.Brush;
-
-                    var item = new MenuItem();
-                    item.Header = workspace.Name;
-                    item.Icon = icon;
-                    item.Click += (_, ev) =>
-                    {
-                        if (!workspace.IsActive)
-                            launcher.SwitchWorkspace(workspace);
-
-                        ev.Handled = true;
-                    };
-
-                    menu.Items.Add(item);
-                }
-
-                menu.Items.Add(new MenuItem() { Header = "-" });
-
-                var configure = new MenuItem();
-                configure.Header = App.Text("Workspace.Configure");
-                configure.Click += async (_, ev) =>
-                {
-                    await this.ShowDialogAsync(new ViewModels.ConfigureWorkspace());
                     ev.Handled = true;
                 };
-                menu.Items.Add(configure);
-                menu.Open(btn);
+
+                menu.Items.Add(item);
             }
 
-            e.Handled = true;
+            menu.Items.Add(new MenuItem() { Header = "-" });
+
+            var configure = new MenuItem();
+            configure.Header = App.Text("Workspace.Configure");
+            configure.Click += async (_, ev) =>
+            {
+                await this.ShowDialogAsync(new ViewModels.ConfigureWorkspace());
+                ev.Handled = true;
+            };
+            menu.Items.Add(configure);
+            menu.Open(button);
         }
 
         private void OnOpenPagesCommandPalette(object sender, RoutedEventArgs e)

@@ -35,6 +35,12 @@ namespace SourceGit.ViewModels
             set;
         } = WindowState.Normal;
 
+        public GridLength WorkspaceSidebarWidth
+        {
+            get => _workspaceSidebarWidth;
+            set => SetProperty(ref _workspaceSidebarWidth, value);
+        }
+
         public GridLength RepositorySidebarWidth
         {
             get => _repositorySidebarWidth;
@@ -65,6 +71,7 @@ namespace SourceGit.ViewModels
             set => SetProperty(ref _commitDetailFilesLeftWidth, value);
         }
 
+        private GridLength _workspaceSidebarWidth = new GridLength(230, GridUnitType.Pixel);
         private GridLength _repositorySidebarWidth = new GridLength(250, GridUnitType.Pixel);
         private GridLength _workingCopyLeftWidth = new GridLength(300, GridUnitType.Pixel);
         private GridLength _stashesLeftWidth = new GridLength(300, GridUnitType.Pixel);

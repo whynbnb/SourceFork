@@ -19,9 +19,9 @@
     </Grid.RowDefinitions>
 
     <!-- Custom TitleBar -->
-    <Grid Grid.Row="0" ColumnDefinitions="Auto,32,32,*,Auto,Auto">
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,32,*,Auto,Auto">
       <!-- Bottom border -->
-      <Border Grid.Column="0" Grid.ColumnSpan="6"
+      <Border Grid.Column="0" Grid.ColumnSpan="5"
               BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}"
               Background="{DynamicResource Brush.TitleBar}"
               DoubleTapped="MaximizeOrRestoreWindow"
@@ -87,26 +87,8 @@
         <Path Width="12" Height="12" Data="{StaticResource Icons.Menu}"/>
       </Button>
 
-      <!-- Workspace Dropdown Menu -->
-      <Button Grid.Column="1" Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenWorkspaceMenu" HotKey="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}">
-        <ToolTip.Tip>
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{DynamicResource Text.Workspace}" FontWeight="Bold" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
-            <TextBlock Text="{Binding ActiveWorkspace.Name}"/>
-            <TextBlock Margin="16,0,0,0"
-                       Text="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}"
-                       FontSize="11"
-                       Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"
-                       VerticalAlignment="Center"/>
-          </StackPanel>
-        </ToolTip.Tip>
-        <Path Width="14" Height="14"
-              Data="{StaticResource Icons.Workspace}"
-              Fill="{Binding ActiveWorkspace.Brush}"/>
-      </Button>
-
       <!-- Pages Switcher Toggle Button -->
-      <Button Grid.Column="2" Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenPagesCommandPalette" HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
+      <Button Grid.Column="1" Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenPagesCommandPalette" HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
         <ToolTip.Tip>
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{DynamicResource Text.Launcher.Pages}"
@@ -121,11 +103,8 @@
         <Path Width="13" Height="13" Margin="0,2,0,0" Data="{StaticResource Icons.Tabs}"/>
       </Button>
 
-      <!-- Pages Tabs -->
-      <v:LauncherTabBar Grid.Column="3" Height="30" Margin="0,0,16,0" VerticalAlignment="Bottom"/>
-
       <!-- Update Available Button -->
-      <Button Grid.Column="4"
+      <Button Grid.Column="3"
               Classes="icon_button"
               Height="30"
               Margin="0,0,4,0"
@@ -137,19 +116,42 @@
       </Button>
 
       <!-- Caption Buttons (Windows/Linux) -->
-      <Border Grid.Column="5" IsVisible="{Binding #ThisControl.HasRightCaptionButton}">
+      <Border Grid.Column="4" IsVisible="{Binding #ThisControl.HasRightCaptionButton}">
         <v:CaptionButtons Height="30" VerticalAlignment="Top"/>
       </Border>
     </Grid>
 
     <!-- Page -->
-    <ContentControl Grid.Row="1" Content="{Binding ActivePage}" Background="{DynamicResource Brush.Window}">
-      <ContentControl.DataTemplates>
-        <DataTemplate DataType="vm:LauncherPage">
-          <v:LauncherPage/>
-        </DataTemplate>
-      </ContentControl.DataTemplates>
-    </ContentControl>
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarWidth, Mode=TwoWay}" MinWidth="180" MaxWidth="420"/>
+        <ColumnDefinition Width="3"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- Workspace Sidebar -->
+      <Border Grid.Column="0" Background="{DynamicResource Brush.ToolBar}">
+        <v:WorkspaceSidebar/>
+      </Border>
+
+      <!-- Splitter -->
+      <GridSplitter Grid.Column="1"
+                    MinWidth="1"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    Background="Transparent"
+                    BorderThickness="0,0,1,0"
+                    BorderBrush="{DynamicResource Brush.Border0}"
+                    Focusable="False"/>
+
+      <!-- Active Page -->
+      <ContentControl Grid.Column="2" Content="{Binding ActivePage}" Background="{DynamicResource Brush.Window}">
+        <ContentControl.DataTemplates>
+          <DataTemplate DataType="vm:LauncherPage">
+            <v:LauncherPage/>
+          </DataTemplate>
+        </ContentControl.DataTemplates>
+      </ContentControl>
+    </Grid>
 
     <!-- Command Palette -->
     <Border Grid.Row="0" Grid.RowSpan="2"
