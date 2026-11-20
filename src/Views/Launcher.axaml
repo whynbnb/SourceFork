@@ -21,8 +21,8 @@
     <!-- Custom TitleBar -->
     <Grid Grid.Row="0">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarWidth, Mode=OneWay}" MinWidth="180" MaxWidth="420"/>
-        <ColumnDefinition Width="3"/>
+        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.VisibleWorkspaceSidebarWidth, Mode=OneWay}"/>
+        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarSplitterWidth, Mode=OneWay}"/>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
@@ -35,68 +35,15 @@
               DoubleTapped="MaximizeOrRestoreWindow"
               PointerPressed="BeginMoveWindow"/>
 
-      <!-- Left: window controls and pages switcher, aligned above the sidebar -->
-      <StackPanel Grid.Column="0" Orientation="Horizontal">
-      <!-- Caption Buttons (macOS) -->
-      <v:MacOSTrafficLightsSpacer
-                                  Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
-                                  IsFullScreen="{Binding #ThisControl.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.FullScreen}}"
-                                  IsVisible="{OnPlatform False, macOS=True}"/>
-
-      <!-- Menu (Windows/Linux) -->
-      <Button Classes="icon_button" VerticalAlignment="Bottom" Margin="6,0,0,3" IsVisible="{OnPlatform True, macOS=False}">
-        <Button.Flyout>
-          <MenuFlyout Placement="BottomEdgeAlignedLeft" VerticalOffset="-6">
-            <MenuItem Header="{DynamicResource Text.Preferences}" Command="{x:Static s:App.OpenPreferencesCommand}" InputGesture="Ctrl+,">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Settings}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{DynamicResource Text.Hotkeys}" Command="{x:Static s:App.OpenHotkeysCommand}" InputGesture="F1">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Hotkeys}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{DynamicResource Text.SSHKeyHelper}" Command="{x:Static s:App.OpenSSHKeyHelperCommand}">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Tool}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{DynamicResource Text.OpenAppDataDir}" Command="{x:Static s:App.OpenAppDataDirCommand}" IsVisible="{OnPlatform True, Linux=False}">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Explore}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{DynamicResource Text.OpenAppDataDir}" IsVisible="{OnPlatform False, Linux=True}">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Explore}"/>
-              </MenuItem.Icon>
-
-              <MenuItem Header="{DynamicResource Text.OpenAppDataDir.Config}" Command="{x:Static s:App.OpenAppConfigDirCommand}"/>
-              <MenuItem Header="{DynamicResource Text.OpenAppDataDir.Cache}" Command="{x:Static s:App.OpenAppDataDirCommand}"/>
-            </MenuItem>
-            <MenuItem Header="-"/>
-            <MenuItem Header="{DynamicResource Text.SelfUpdate}" Command="{x:Static s:App.CheckForUpdateCommand}" IsVisible="{x:Static s:App.IsCheckForUpdateCommandVisible}">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.SoftwareUpdate}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="-" IsVisible="{x:Static s:App.IsCheckForUpdateCommandVisible}"/>
-            <MenuItem Header="{DynamicResource Text.About}" Command="{x:Static s:App.OpenAboutCommand}">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Info}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="{DynamicResource Text.Quit}" Command="{x:Static s:App.QuitCommand}" InputGesture="Ctrl+Q">
-              <MenuItem.Icon>
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Quit}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-          </MenuFlyout>
-        </Button.Flyout>
-        <Path Width="12" Height="12" Data="{StaticResource Icons.Menu}"/>
-      </Button>
-
+      <!-- Left: window controls, aligned above the sidebar -->
+      <StackPanel Grid.Column="0"
+                  Orientation="Horizontal"
+                  IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}">
+        <v:MacOSTrafficLightsSpacer
+            Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
+            IsFullScreen="{Binding #ThisControl.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.FullScreen}}"
+            IsVisible="{OnPlatform False, macOS=True}"/>
+        <v:LauncherMenuButton/>
       </StackPanel>
 
       <!-- Vertical separator between sidebar and content -->
@@ -106,20 +53,60 @@
               IsHitTestVisible="False"/>
 
       <!-- Active Page Toolbar -->
-      <ContentControl Grid.Column="2"
-                      Margin="4,0,0,0"
-                      VerticalAlignment="Stretch"
-                      Content="{Binding ActivePage.Data}">
-        <ContentControl.DataTemplates>
-          <DataTemplate DataType="vm:Welcome">
-            <v:WelcomeToolbar/>
-          </DataTemplate>
+      <Grid Grid.Column="2" ColumnDefinitions="Auto,Auto,*">
+        <!-- macOS traffic lights when the sidebar is collapsed -->
+        <Panel Grid.Column="0" IsVisible="{OnPlatform False, macOS=True}">
+          <v:MacOSTrafficLightsSpacer
+              IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"
+              Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
+              IsFullScreen="{Binding #ThisControl.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.FullScreen}}"/>
+        </Panel>
 
-          <DataTemplate DataType="vm:Repository">
-            <v:RepositoryToolbar/>
-          </DataTemplate>
-        </ContentControl.DataTemplates>
-      </ContentControl>
+        <!-- Windows/Linux menu when the sidebar is collapsed -->
+        <Panel Grid.Column="0" IsVisible="{OnPlatform True, macOS=False}">
+          <v:LauncherMenuButton IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"/>
+        </Panel>
+
+        <!-- Collapse/expand the workspace sidebar -->
+        <Button Grid.Column="1"
+                Classes="icon_button"
+                Width="32" Height="32"
+                VerticalAlignment="Center"
+                Click="OnToggleWorkspaceSidebar">
+          <Panel>
+            <Path Width="14" Height="14"
+                  Data="{StaticResource Icons.Sidebar.Expanded}"
+                  IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}"/>
+            <Path Width="14" Height="14"
+                  Data="{StaticResource Icons.Sidebar.Collapsed}"
+                  IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"/>
+          </Panel>
+          <ToolTip.Tip>
+            <Panel>
+              <TextBlock Text="{DynamicResource Text.WorkspaceSidebar.Collapse}"
+                         IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}"/>
+              <TextBlock Text="{DynamicResource Text.WorkspaceSidebar.Expand}"
+                         IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"/>
+            </Panel>
+          </ToolTip.Tip>
+        </Button>
+
+        <!-- Page toolbar -->
+        <ContentControl Grid.Column="2"
+                        Margin="4,0,0,0"
+                        VerticalAlignment="Stretch"
+                        Content="{Binding ActivePage.Data}">
+          <ContentControl.DataTemplates>
+            <DataTemplate DataType="vm:Welcome">
+              <v:WelcomeToolbar/>
+            </DataTemplate>
+
+            <DataTemplate DataType="vm:Repository">
+              <v:RepositoryToolbar/>
+            </DataTemplate>
+          </ContentControl.DataTemplates>
+        </ContentControl>
+      </Grid>
 
       <!-- Update Available Button -->
       <Button Grid.Column="3"
@@ -142,13 +129,17 @@
     <!-- Page -->
     <Grid Grid.Row="1">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarWidth, Mode=TwoWay}" MinWidth="180" MaxWidth="420"/>
-        <ColumnDefinition Width="3"/>
+        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.VisibleWorkspaceSidebarWidth, Mode=TwoWay}"
+                          MinWidth="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarMinWidth}"
+                          MaxWidth="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarMaxWidth}"/>
+        <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarSplitterWidth, Mode=OneWay}"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
       <!-- Workspace Sidebar -->
-      <Border Grid.Column="0" Background="{DynamicResource Brush.Window}">
+      <Border Grid.Column="0"
+              Background="{DynamicResource Brush.Window}"
+              IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}">
         <v:WorkspaceSidebar/>
       </Border>
 
@@ -159,6 +150,7 @@
                     Background="Transparent"
                     BorderThickness="0,0,1,0"
                     BorderBrush="{DynamicResource Brush.Border2}"
+                    IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}"
                     Focusable="False"/>
 
       <!-- Active Page -->

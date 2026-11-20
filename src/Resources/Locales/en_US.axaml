@@ -1051,6 +1051,8 @@
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Template: ${0}$</x:String>
   <x:String x:Key="Text.Workspace" xml:space="preserve">WORKSPACE: </x:String>
   <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Configure Workspaces...</x:String>
+  <x:String x:Key="Text.WorkspaceSidebar.Collapse" xml:space="preserve">Hide Sidebar</x:String>
+  <x:String x:Key="Text.WorkspaceSidebar.Expand" xml:space="preserve">Show Sidebar</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
   <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Copy Path</x:String>

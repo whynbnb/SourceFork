@@ -21,6 +21,8 @@
 - 顶部标题栏按侧边栏宽度切分：左侧只放窗口控件，仓库工具栏从右侧内容区开始，不跨越左侧栏边界。
 - 顶栏原本的页面列表按钮已移除；`Ctrl+P` / `⌘+P` 仍可打开页面列表。
 - 侧边栏顶部是仓库搜索框（按名称或路径过滤），最右侧按钮用于切换工作区。
+- 侧边栏可折叠/展开，状态保存在 `LayoutInfo.WorkspaceSidebarCollapsed`。折叠后 macOS 红绿灯/Windows 菜单会移到内容区顶栏最左侧，工具栏按钮紧随其后。
+- 顶部菜单按钮抽成了 `LauncherMenuButton` 控件，方便侧边栏展开和折叠两种位置复用。
 - 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`，可拖动分隔线调整。
 - 旧的 `LauncherTabBar` 文件保留但不再引用，方便对照上游。
 - 移植上游 `Launcher.axaml`、`LauncherPage.axaml`、`RepositoryToolbar.axaml`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏和统一顶栏结构。

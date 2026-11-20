@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Text.Json.Serialization;
+
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SourceGit.ViewModels
@@ -38,7 +40,55 @@ namespace SourceGit.ViewModels
         public GridLength WorkspaceSidebarWidth
         {
             get => _workspaceSidebarWidth;
-            set => SetProperty(ref _workspaceSidebarWidth, value);
+            set
+            {
+                if (SetProperty(ref _workspaceSidebarWidth, value))
+                    OnPropertyChanged(nameof(VisibleWorkspaceSidebarWidth));
+            }
+        }
+
+        public bool WorkspaceSidebarCollapsed
+        {
+            get => _workspaceSidebarCollapsed;
+            set
+            {
+                if (SetProperty(ref _workspaceSidebarCollapsed, value))
+                {
+                    OnPropertyChanged(nameof(VisibleWorkspaceSidebarWidth));
+                    OnPropertyChanged(nameof(WorkspaceSidebarSplitterWidth));
+                    OnPropertyChanged(nameof(WorkspaceSidebarMinWidth));
+                    OnPropertyChanged(nameof(WorkspaceSidebarMaxWidth));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public GridLength VisibleWorkspaceSidebarWidth
+        {
+            get => WorkspaceSidebarCollapsed ? new GridLength(0) : _workspaceSidebarWidth;
+            set
+            {
+                if (!WorkspaceSidebarCollapsed)
+                    WorkspaceSidebarWidth = value;
+            }
+        }
+
+        [JsonIgnore]
+        public GridLength WorkspaceSidebarSplitterWidth
+        {
+            get => WorkspaceSidebarCollapsed ? new GridLength(0) : new GridLength(3);
+        }
+
+        [JsonIgnore]
+        public double WorkspaceSidebarMinWidth
+        {
+            get => WorkspaceSidebarCollapsed ? 0 : 180;
+        }
+
+        [JsonIgnore]
+        public double WorkspaceSidebarMaxWidth
+        {
+            get => WorkspaceSidebarCollapsed ? 0 : 420;
         }
 
         public GridLength RepositorySidebarWidth
@@ -72,6 +122,7 @@ namespace SourceGit.ViewModels
         }
 
         private GridLength _workspaceSidebarWidth = new GridLength(230, GridUnitType.Pixel);
+        private bool _workspaceSidebarCollapsed = false;
         private GridLength _repositorySidebarWidth = new GridLength(250, GridUnitType.Pixel);
         private GridLength _workingCopyLeftWidth = new GridLength(300, GridUnitType.Pixel);
         private GridLength _stashesLeftWidth = new GridLength(300, GridUnitType.Pixel);

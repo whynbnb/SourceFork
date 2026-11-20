@@ -428,6 +428,13 @@ namespace SourceGit.Views
             menu.Open(button);
         }
 
+        private void OnToggleWorkspaceSidebar(object sender, RoutedEventArgs e)
+        {
+            var layout = ViewModels.Preferences.Instance.Layout;
+            layout.WorkspaceSidebarCollapsed = !layout.WorkspaceSidebarCollapsed;
+            e.Handled = true;
+        }
+
         private void OnCloseCommandPalette(object sender, PointerPressedEventArgs e)
         {
             if (e.Source == sender && DataContext is ViewModels.Launcher vm)
