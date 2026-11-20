@@ -4,7 +4,7 @@
 
 - 上游 tag：`v2026.19`（`5c53601a`，2026-08-31）
 - 维护分支：`fork/2026.19`
-- `VERSION`：`2026.19`
+- 版本：`2026.19`（定义在 `src/SourceGit.csproj`）
 - 子模块：`depends/AvaloniaEdit` 固定在 `11bf2b6a`（v2026.19 对应的版本）
 
 选择 2026.19 的原因：侧边栏/仓库页布局重构从 `02799ba6 ux: repository page layout (#2660)` 开始，
