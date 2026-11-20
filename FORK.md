@@ -34,6 +34,24 @@ git push -u origin fork/2026.19
 git fetch upstream --tags
 ```
 
+## 本地工具链（mise）
+
+本仓库通过根目录的 `mise.toml` 固定 .NET SDK `10.0.404`，与全局 Homebrew 的 .NET 11 隔离：
+
+```sh
+mise install
+dotnet --version        # 应为 10.0.404
+dotnet --list-runtimes  # 应包含 Microsoft.NETCore.App 10.0.x
+```
+
+如果 `dotnet --version` 仍然是 11：
+
+- 确认 `~/.zshrc` 里有 `eval "$(mise activate zsh)"`
+- `which -a dotnet` 的第一项应该是 `~/.local/share/mise/shims/dotnet`
+- 或者显式用 `mise exec -- dotnet ...`
+
+`global.json` 也固定到 `10.0.404`（`latestFeature`），避免以后机器上出现 .NET 11 时被自动选中。
+
 ## 本地构建 / 运行
 
 ```sh
@@ -42,10 +60,13 @@ dotnet build src/SourceGit.csproj -c Debug
 dotnet run --project src/SourceGit.csproj
 ```
 
-发布 macOS arm64 版本：
+发布 macOS arm64 版本（推荐 self-contained，最终用户无需安装 .NET）：
 
 ```sh
-dotnet publish -c Release -r osx-arm64 -o ./dist src/SourceGit.csproj
+dotnet publish src/SourceGit.csproj \
+  -c Release -r osx-arm64 \
+  --self-contained true -p:PublishAot=false \
+  -o ./dist
 ```
 
 ## 后续 port 上游更新的流程（不急，按需做）
