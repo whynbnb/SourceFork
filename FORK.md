@@ -1,0 +1,93 @@
+# 自维护 Fork 说明
+
+## 基线
+
+- 上游 tag：`v2026.19`（`5c53601a`，2026-08-31）
+- 维护分支：`fork/2026.19`
+- `VERSION`：`2026.19`
+- 子模块：`depends/AvaloniaEdit` 固定在 `11bf2b6a`（v2026.19 对应的版本）
+
+选择 2026.19 的原因：侧边栏/仓库页布局重构从 `02799ba6 ux: repository page layout (#2660)` 开始，
+在 2026.19 之后才合入。2026.20 ~ 2026.24 包含大量 `ux`/`style`/布局类提交，
+因此把 2026.19 作为长期基线，后续只选择性向前移植功能与修复。
+
+`master` 保持跟踪上游，未做改动，可随时用来查看/对比新版本。
+
+## 上游关系
+
+当前 `origin` 仍指向官方仓库：
+
+```
+origin  https://github.com/sourcegit-org/sourcegit.git
+```
+
+建议后续改成标准的 fork 布局（需要先创建自己的远程仓库）：
+
+```sh
+git remote rename origin upstream          # 官方仓库，只读
+git remote add origin <你的 fork 地址>     # 自己的仓库，日常 push
+git push -u origin fork/2026.19
+```
+
+## 本地构建 / 运行
+
+```sh
+git submodule update --init --recursive
+dotnet build src/SourceGit.csproj -c Debug
+dotnet run --project src/SourceGit.csproj
+```
+
+发布 macOS arm64 版本：
+
+```sh
+dotnet publish -c Release -r osx-arm64 -o ./dist src/SourceGit.csproj
+```
+
+## 后续 port 上游更新的流程（不急，按需做）
+
+原则：**不合并上游的 UI/布局重构，只按提交选择性移植。**
+
+1. 拉取新版本：
+   ```sh
+   git fetch upstream --tags
+   ```
+2. 查看新 tag 相对上一个已移植版本的提交：
+   ```sh
+   git log --oneline v2026.19..v2026.24
+   ```
+3. 从 `fork/2026.19` 建一个集成分支，例如：
+   ```sh
+   git switch -c port/2026.24 fork/2026.19
+   ```
+4. 按类别 cherry-pick，优先级从高到低：
+   - `fix:` —— 优先移植，尤其是崩溃、数据错误、diff 计算错误
+   - `project:` —— 依赖/安全升级
+   - `enhance:` / `feature:` —— 逐个评估；和布局无关的可以移植
+   - `localization:` —— 可整体取，但注意与旧 UI 的 key 差异
+   - 跳过：`ux:`、`style:`、`refactor:` 中涉及仓库页布局、侧边栏、页面切换器的提交
+5. 冲突高发文件（说明该提交和布局强相关，优先放弃或手工拆分）：
+   - `src/Views/Repository.axaml`
+   - `src/Views/WorkingCopy.axaml`
+   - `src/ViewModels/Repository.cs`
+   - `src/Resources/Styles.axaml`
+6. 每批移植完成后编译、自测，再合并回 `fork/2026.19`，并在下方记录。
+
+### 已知需要避开的布局/侧边栏提交（2026.19 之后）
+
+```
+02799ba6 ux: repository page layout (#2660)
+bec580eb feature: supports to collapse/expand the left-sidebar of repository page (#2368)
+a7dbf6c4 ux: re-design layout for repository page
+db1143a9 ux: re-design repository page
+90d9e2dd ux: re-design repository's page
+d7a5586b ux: re-design `Local Changes` page
+104ed5be ux: repository page main layout
+e29a7802 refactor: repository sidebar
+060c05cb style: always show repository sidebar
+```
+
+## Port 记录
+
+| 日期 | 目标版本 | 集成分支 | 已移植提交 | 跳过/备注 |
+| --- | --- | --- | --- | --- |
+| 2026-11-20 | v2026.19 | `fork/2026.19` | 基线 | 初始 fork |
