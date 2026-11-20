@@ -151,6 +151,8 @@
                     BorderThickness="0,0,1,0"
                     BorderBrush="{DynamicResource Brush.Border2}"
                     IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}"
+                    PointerReleased="OnWorkspaceSidebarSplitterReleased"
+                    PointerCaptureLost="OnWorkspaceSidebarSplitterCaptureLost"
                     Focusable="False"/>
 
       <!-- Active Page -->

@@ -432,7 +432,18 @@ namespace SourceGit.Views
         {
             var layout = ViewModels.Preferences.Instance.Layout;
             layout.WorkspaceSidebarCollapsed = !layout.WorkspaceSidebarCollapsed;
+            ViewModels.Preferences.Instance.Save();
             e.Handled = true;
+        }
+
+        private void OnWorkspaceSidebarSplitterReleased(object sender, PointerReleasedEventArgs e)
+        {
+            ViewModels.Preferences.Instance.Save();
+        }
+
+        private void OnWorkspaceSidebarSplitterCaptureLost(object sender, PointerCaptureLostEventArgs e)
+        {
+            ViewModels.Preferences.Instance.Save();
         }
 
         private void OnCloseCommandPalette(object sender, PointerPressedEventArgs e)
