@@ -730,6 +730,17 @@
   <x:String x:Key="Text.Preferences.GPG.UserKey" xml:space="preserve">用户签名KEY</x:String>
   <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">输入签名提交所使用的KEY</x:String>
   <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">集成与操作</x:String>
+  <x:String x:Key="Text.Preferences.Integration.Terminal" xml:space="preserve">终端</x:String>
+  <x:String x:Key="Text.Preferences.Integration.ExternalTools" xml:space="preserve">外部工具</x:String>
+  <x:String x:Key="Text.Preferences.Integration.DiffMerge" xml:space="preserve">对比 / 合并</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Scan" xml:space="preserve">重新扫描</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Scan.Tip" xml:space="preserve">自动扫描本机工具；取消勾选后不会出现在“打开方式”菜单中。</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Name.Placeholder" xml:space="preserve">工具名称</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Path.Placeholder" xml:space="preserve">可执行文件路径</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Add" xml:space="preserve">添加</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Remove" xml:space="preserve">移除</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Add.Failed" xml:space="preserve">添加外部工具失败，请检查名称和可执行文件路径。</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Add.Tip" xml:space="preserve">可添加未自动扫描到的可执行文件。</x:String>
   <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">终端/SHELL</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">启动参数</x:String>
   <x:String x:Key="Text.Preferences.Shell.Scan" xml:space="preserve">重新扫描</x:String>

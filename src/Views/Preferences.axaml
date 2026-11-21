@@ -532,8 +532,13 @@
             <TextBlock Classes="tab_header" Text="{DynamicResource Text.Preferences.Integration}"/>
           </TabItem.Header>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-          <StackPanel Margin="8" Orientation="Vertical" Grid.IsSharedSizeScope="True">
+          <TabControl Margin="0,8,0,0">
+            <TabItem>
+              <TabItem.Header>
+                <TextBlock Text="{DynamicResource Text.Preferences.Integration.Terminal}"/>
+              </TabItem.Header>
+              <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="8" Orientation="Vertical" Grid.IsSharedSizeScope="True">
             <StackPanel Orientation="Horizontal">
               <Path Width="12" Height="12" Data="{StaticResource Icons.Terminal}"/>
               <TextBlock Classes="bold" Margin="4,0,0,0" Text="{DynamicResource Text.Preferences.Shell}"/>
@@ -616,6 +621,105 @@
               </TextBox>
             </Grid>
 
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+
+            <TabItem>
+              <TabItem.Header>
+                <TextBlock Text="{DynamicResource Text.Preferences.Integration.ExternalTools}"/>
+              </TabItem.Header>
+              <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="8" Orientation="Vertical">
+                  <Grid ColumnDefinitions="*,8,Auto" Margin="0,0,0,8">
+                    <TextBlock VerticalAlignment="Center"
+                               Foreground="{DynamicResource Brush.FG2}"
+                               TextWrapping="Wrap"
+                               Text="{DynamicResource Text.Preferences.ExternalTools.Scan.Tip}"/>
+                    <Button Grid.Column="2"
+                            Classes="icon_button"
+                            Width="28" Height="28"
+                            Click="RescanExternalTools"
+                            ToolTip.Tip="{DynamicResource Text.Preferences.ExternalTools.Scan}">
+                      <Path Width="14" Height="14" Data="{StaticResource Icons.Scan}" Fill="{DynamicResource Brush.FG1}"/>
+                    </Button>
+                  </Grid>
+
+                  <Border BorderThickness="1" BorderBrush="{DynamicResource Brush.Border2}"
+                          Background="{DynamicResource Brush.Contents}"
+                          MaxHeight="300">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                      <ItemsControl ItemsSource="{Binding ExternalTools}">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate x:DataType="m:ExternalTool">
+                            <Grid ColumnDefinitions="Auto,Auto,*,Auto" Margin="8,4">
+                              <CheckBox Grid.Column="0"
+                                        IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                        Click="OnToggleExternalTool"
+                                        VerticalAlignment="Center"/>
+                              <Image Grid.Column="1"
+                                     Width="18" Height="18"
+                                     Margin="4,0,8,0"
+                                     Source="{Binding IconImage}"
+                                     RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                              <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding ExecFile}"
+                                           FontSize="11"
+                                           Foreground="{DynamicResource Brush.FG2}"
+                                           TextTrimming="CharacterEllipsis"/>
+                              </StackPanel>
+                              <Button Grid.Column="3"
+                                      Classes="icon_button"
+                                      Width="24" Height="24"
+                                      IsVisible="{Binding IsCustom}"
+                                      Click="RemoveExternalTool"
+                                      ToolTip.Tip="{DynamicResource Text.Preferences.ExternalTools.Remove}">
+                                <Path Width="12" Height="12" Data="{StaticResource Icons.Minus}" Fill="{DynamicResource Brush.FG1}"/>
+                              </Button>
+                            </Grid>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </ScrollViewer>
+                  </Border>
+
+                  <Grid ColumnDefinitions="*,8,*,8,Auto" Margin="0,8,0,0">
+                    <TextBox Grid.Column="0"
+                             Height="28" CornerRadius="3"
+                             Text="{Binding NewExternalToolName, Mode=TwoWay}"
+                             Watermark="{DynamicResource Text.Preferences.ExternalTools.Name.Placeholder}"/>
+                    <TextBox Grid.Column="2"
+                             Height="28" CornerRadius="3"
+                             Text="{Binding NewExternalToolPath, Mode=TwoWay}"
+                             Watermark="{DynamicResource Text.Preferences.ExternalTools.Path.Placeholder}">
+                      <TextBox.InnerRightContent>
+                        <Button Classes="icon_button" Width="28" Height="28" Click="SelectExternalToolExecutable">
+                          <Path Width="14" Height="14" Data="{StaticResource Icons.Folder.Open}" Fill="{DynamicResource Brush.FG1}"/>
+                        </Button>
+                      </TextBox.InnerRightContent>
+                    </TextBox>
+                    <Button Grid.Column="4" Classes="flat" Height="28" Click="AddExternalTool">
+                      <StackPanel Orientation="Horizontal">
+                        <Path Width="12" Height="12" Data="{StaticResource Icons.Plus}" Fill="{DynamicResource Brush.FG1}"/>
+                        <TextBlock Margin="4,0,0,0" Text="{DynamicResource Text.Preferences.ExternalTools.Add}"/>
+                      </StackPanel>
+                    </Button>
+                  </Grid>
+                  <TextBlock Margin="0,4,0,0"
+                             FontSize="11"
+                             Foreground="{DynamicResource Brush.FG2}"
+                             TextWrapping="Wrap"
+                             Text="{DynamicResource Text.Preferences.ExternalTools.Add.Tip}"/>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+            <TabItem>
+              <TabItem.Header>
+                <TextBlock Text="{DynamicResource Text.Preferences.Integration.DiffMerge}"/>
+              </TabItem.Header>
+              <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="8" Orientation="Vertical" Grid.IsSharedSizeScope="True">
             <StackPanel Orientation="Horizontal" Margin="0,24,0,0">
               <Path Width="12" Height="12" Data="{StaticResource Icons.Diff}"/>
               <TextBlock Classes="bold" Margin="4,0,0,0" Text="{DynamicResource Text.Preferences.DiffMerge}"/>
@@ -708,11 +812,14 @@
                 </TextBox.InnerRightContent>
               </TextBox>
             </Grid>
-            <StackPanel Orientation="Horizontal" Margin="0,24,0,0">
-              <Path Width="12" Height="12" Data="{StaticResource Icons.Action}"/>
-              <TextBlock Classes="bold" Margin="4,0,0,0" Text="{DynamicResource Text.Configure.CustomAction}"/>
-            </StackPanel>
-            <Rectangle Margin="0,8" Fill="{DynamicResource Brush.Border2}" Height=".6" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+
+            <TabItem>
+              <TabItem.Header>
+                <TextBlock Text="{DynamicResource Text.Configure.CustomAction}"/>
+              </TabItem.Header>
           <Grid MinHeight="360" Margin="0,8,0,16">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="200"/>
@@ -850,8 +957,8 @@
             </ContentControl>
           </Grid>
 
-          </StackPanel>
-        </ScrollViewer>
+            </TabItem>
+          </TabControl>
         </TabItem>
 
 

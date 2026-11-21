@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -28,6 +29,8 @@ namespace SourceFork.Models
         public string ExecFile { get; }
         public Bitmap IconImage { get; }
         public bool SupportOpenFolder { get; }
+        public bool IsEnabled { get; set; } = true;
+        public bool IsCustom { get; set; } = false;
 
         public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator, bool supportOpenFolder)
         {
@@ -120,13 +123,20 @@ namespace SourceFork.Models
 
         public ExternalToolsFinder()
         {
-            var customPathsConfig = Path.Combine(Native.OS.BasicDirectories.ConfigDir, "external_editors.json");
+            _customization = LoadCustomization();
+        }
+
+        public static string CustomizationFile => Path.Combine(Native.OS.BasicDirectories.ConfigDir, "external_editors.json");
+
+        public static ExternalToolCustomization LoadCustomization()
+        {
             try
             {
-                if (File.Exists(customPathsConfig))
+                if (File.Exists(CustomizationFile))
                 {
-                    using var stream = File.OpenRead(customPathsConfig);
-                    _customization = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ExternalToolCustomization);
+                    using var stream = File.OpenRead(CustomizationFile);
+                    return JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ExternalToolCustomization) ??
+                           new ExternalToolCustomization();
                 }
             }
             catch
@@ -134,23 +144,47 @@ namespace SourceFork.Models
                 // Ignore
             }
 
-            _customization ??= new ExternalToolCustomization();
+            return new ExternalToolCustomization();
+        }
+
+        public static void SaveCustomization(ExternalToolCustomization customization)
+        {
+            using var stream = File.Create(CustomizationFile);
+            JsonSerializer.Serialize(stream, customization, JsonCodeGen.Default.ExternalToolCustomization);
         }
 
         public void TryAdd(string name, string icon, Func<string> finder, Func<string, List<ExternalTool.LaunchOption>> optionsGenerator = null, bool supportOpenFolder = true)
         {
-            if (_customization.Excludes.Contains(name))
-                return;
-
+            string path = null;
             if (_customization.Tools.TryGetValue(name, out var customPath) && File.Exists(customPath))
-            {
-                Tools.Add(new ExternalTool(name, icon, customPath, optionsGenerator, supportOpenFolder));
-            }
+                path = customPath;
             else
+                path = finder();
+
+            if (!string.IsNullOrEmpty(path) && File.Exists(path))
             {
-                var path = finder();
-                if (!string.IsNullOrEmpty(path) && File.Exists(path))
-                    Tools.Add(new ExternalTool(name, icon, path, optionsGenerator, supportOpenFolder));
+                var tool = new ExternalTool(name, icon, path, optionsGenerator, supportOpenFolder);
+                tool.IsEnabled = !_customization.Excludes.Contains(name);
+                Tools.Add(tool);
+            }
+        }
+
+        public void AddCustomTools()
+        {
+            foreach (var kv in _customization.Tools)
+            {
+                if (Tools.Any(x => x.Name.Equals(kv.Key, StringComparison.Ordinal)))
+                    continue;
+
+                if (!File.Exists(kv.Value))
+                    continue;
+
+                var tool = new ExternalTool(kv.Key, "custom", kv.Value, null, true)
+                {
+                    IsCustom = true,
+                    IsEnabled = !_customization.Excludes.Contains(kv.Key),
+                };
+                Tools.Add(tool);
             }
         }
 

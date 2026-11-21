@@ -323,6 +323,51 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
+        private void RescanExternalTools(object _, RoutedEventArgs e)
+        {
+            ViewModels.Preferences.Instance.RescanExternalTools();
+            e.Handled = true;
+        }
+
+        private void OnToggleExternalTool(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox { DataContext: Models.ExternalTool tool } checkBox)
+                ViewModels.Preferences.Instance.SetExternalToolEnabled(tool, checkBox.IsChecked == true);
+        }
+
+        private async void SelectExternalToolExecutable(object _, RoutedEventArgs e)
+        {
+            var options = new FilePickerOpenOptions() { AllowMultiple = false };
+            try
+            {
+                var selected = await StorageProvider.OpenFilePickerAsync(options);
+                if (selected is { Count: 1 })
+                    ViewModels.Preferences.Instance.NewExternalToolPath = selected[0].Path.LocalPath;
+            }
+            catch (Exception ex)
+            {
+                await new Alert().ShowAsync(this, $"Failed to select executable: {ex.Message}", true);
+            }
+
+            e.Handled = true;
+        }
+
+        private async void AddExternalTool(object _, RoutedEventArgs e)
+        {
+            if (!ViewModels.Preferences.Instance.AddExternalTool())
+                await new Alert().ShowAsync(this, App.Text("Preferences.ExternalTools.Add.Failed"), true);
+
+            e.Handled = true;
+        }
+
+        private void RemoveExternalTool(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button { DataContext: Models.ExternalTool tool })
+                ViewModels.Preferences.Instance.RemoveExternalTool(tool);
+
+            e.Handled = true;
+        }
+
         private async void SelectShellOrTerminal(object _, RoutedEventArgs e)
         {
             var shell = ViewModels.Preferences.Instance.SelectedShellOrTerminal;

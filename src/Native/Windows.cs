@@ -158,6 +158,7 @@ namespace SourceFork.Native
             finder.FindJetBrainsFromToolbox(() => Path.Combine(localAppDataDir, @"JetBrains\Toolbox"));
             finder.SublimeText(FindSublimeText);
             finder.Zed(FindZed);
+            finder.AddCustomTools();
             return finder.Tools;
         }
 

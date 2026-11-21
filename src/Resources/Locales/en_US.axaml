@@ -726,6 +726,17 @@
   <x:String x:Key="Text.Preferences.GPG.UserKey" xml:space="preserve">User Signing Key</x:String>
   <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">User's gpg signing key</x:String>
   <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">INTEGRATIONS</x:String>
+  <x:String x:Key="Text.Preferences.Integration.Terminal" xml:space="preserve">Terminal</x:String>
+  <x:String x:Key="Text.Preferences.Integration.ExternalTools" xml:space="preserve">External Tools</x:String>
+  <x:String x:Key="Text.Preferences.Integration.DiffMerge" xml:space="preserve">Diff / Merge</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Scan" xml:space="preserve">Scan again</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Scan.Tip" xml:space="preserve">Tools are detected automatically. Uncheck an item to hide it from the open-with menus.</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Name.Placeholder" xml:space="preserve">Tool name</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Path.Placeholder" xml:space="preserve">Path to executable</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Add" xml:space="preserve">Add</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Remove" xml:space="preserve">Remove</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Add.Failed" xml:space="preserve">Failed to add the external tool. Check the name and executable path.</x:String>
+  <x:String x:Key="Text.Preferences.ExternalTools.Add.Tip" xml:space="preserve">Add any executable that was not detected automatically.</x:String>
   <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">SHELL/TERMINAL</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">Arguments</x:String>
   <x:String x:Key="Text.Preferences.Shell.Scan" xml:space="preserve">Scan again</x:String>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -101,6 +102,12 @@ namespace SourceFork.Native
             set;
         } = [];
 
+        public static List<Models.ExternalTool> AllExternalTools
+        {
+            get;
+            set;
+        } = [];
+
         public static int ExternalMergerType
         {
             get;
@@ -155,7 +162,8 @@ namespace SourceFork.Native
 
         public static void SetupExternalTools()
         {
-            ExternalTools = _backend.FindExternalTools();
+            AllExternalTools = _backend.FindExternalTools();
+            ExternalTools = AllExternalTools.Where(x => x.IsEnabled).ToList();
         }
 
         public static void SetupForWindow(Window window)

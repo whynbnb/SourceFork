@@ -102,6 +102,7 @@ namespace SourceFork.Native
                 var exec = FindExecutable("zeditor");
                 return string.IsNullOrEmpty(exec) ? FindExecutable("zed") : exec;
             });
+            finder.AddCustomTools();
             return finder.Tools;
         }
 

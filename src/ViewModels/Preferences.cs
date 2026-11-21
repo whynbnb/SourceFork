@@ -25,6 +25,7 @@ namespace SourceFork.ViewModels
 
                 _instance.PrepareGit();
                 _instance.PrepareShellOrTerminal();
+                _instance.PrepareExternalTools();
                 _instance.PrepareExternalDiffMergeTool();
                 _instance.PrepareWorkspaces();
 
@@ -347,6 +348,27 @@ namespace SourceFork.ViewModels
                     OnPropertyChanged();
                 }
             }
+        }
+
+        [JsonIgnore]
+        public List<Models.ExternalTool> ExternalTools
+        {
+            get => _externalTools;
+            private set => SetProperty(ref _externalTools, value);
+        }
+
+        [JsonIgnore]
+        public string NewExternalToolName
+        {
+            get => _newExternalToolName;
+            set => SetProperty(ref _newExternalToolName, value);
+        }
+
+        [JsonIgnore]
+        public string NewExternalToolPath
+        {
+            get => _newExternalToolPath;
+            set => SetProperty(ref _newExternalToolPath, value);
         }
 
         [JsonIgnore]
@@ -690,6 +712,68 @@ namespace SourceFork.ViewModels
                 SelectedShellOrTerminal = preferred;
         }
 
+        public void RescanExternalTools()
+        {
+            Native.OS.SetupExternalTools();
+            RefreshExternalTools();
+        }
+
+        public void RefreshExternalTools()
+        {
+            ExternalTools = Native.OS.AllExternalTools.ToList();
+        }
+
+        public void SetExternalToolEnabled(Models.ExternalTool tool, bool enabled)
+        {
+            tool.IsEnabled = enabled;
+
+            var customization = Models.ExternalToolsFinder.LoadCustomization();
+            customization.Excludes.RemoveAll(x => x.Equals(tool.Name, StringComparison.Ordinal));
+            if (!enabled)
+                customization.Excludes.Add(tool.Name);
+
+            Models.ExternalToolsFinder.SaveCustomization(customization);
+            Native.OS.ExternalTools = Native.OS.AllExternalTools.Where(x => x.IsEnabled).ToList();
+        }
+
+        public bool AddExternalTool()
+        {
+            var name = NewExternalToolName?.Trim();
+            var path = NewExternalToolPath?.Trim();
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(path) || !File.Exists(path))
+                return false;
+
+            if (ExternalTools.Any(x => x.Name.Equals(name, StringComparison.Ordinal)))
+                return false;
+
+            var customization = Models.ExternalToolsFinder.LoadCustomization();
+            customization.Tools[name] = path;
+            customization.Excludes.RemoveAll(x => x.Equals(name, StringComparison.Ordinal));
+            Models.ExternalToolsFinder.SaveCustomization(customization);
+
+            NewExternalToolName = string.Empty;
+            NewExternalToolPath = string.Empty;
+            RescanExternalTools();
+            return true;
+        }
+
+        public void RemoveExternalTool(Models.ExternalTool tool)
+        {
+            if (tool == null || !tool.IsCustom)
+                return;
+
+            var customization = Models.ExternalToolsFinder.LoadCustomization();
+            customization.Tools.Remove(tool.Name);
+            customization.Excludes.RemoveAll(x => x.Equals(tool.Name, StringComparison.Ordinal));
+            Models.ExternalToolsFinder.SaveCustomization(customization);
+            RescanExternalTools();
+        }
+
+        private void PrepareExternalTools()
+        {
+            ExternalTools = Native.OS.AllExternalTools.ToList();
+        }
+
         public void RescanShellOrTerminals()
         {
             var available = new List<Models.ShellOrTerminal>();
@@ -858,6 +942,9 @@ namespace SourceFork.ViewModels
         private Models.ChangeViewMode _stashChangeViewMode = Models.ChangeViewMode.List;
 
         private string _gitDefaultCloneDir = string.Empty;
+        private List<Models.ExternalTool> _externalTools = [];
+        private string _newExternalToolName = string.Empty;
+        private string _newExternalToolPath = string.Empty;
         private List<Models.ShellOrTerminal> _availableShellOrTerminals = [];
         private Models.ShellOrTerminal _selectedShellOrTerminal = null;
     }

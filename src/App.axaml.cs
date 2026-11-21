@@ -437,6 +437,7 @@ namespace SourceFork
             }
 
             Native.OS.SetupExternalTools();
+            ViewModels.Preferences.Instance.RefreshExternalTools();
             Models.AvatarManager.Instance.Start();
 
             if (this.TryGetFeature<IActivatableLifetime>() is { } activatable)

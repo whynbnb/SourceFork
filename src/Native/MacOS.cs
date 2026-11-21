@@ -135,6 +135,7 @@ namespace SourceFork.Native
             finder.FindJetBrainsFromToolbox(() => Path.Combine(home, "Library/Application Support/JetBrains/Toolbox"));
             finder.SublimeText(() => "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl");
             finder.Zed(() => File.Exists("/usr/local/bin/zed") ? "/usr/local/bin/zed" : "/Applications/Zed.app/Contents/MacOS/cli");
+            finder.AddCustomTools();
             return finder.Tools;
         }
 
