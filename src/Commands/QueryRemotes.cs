@@ -66,6 +66,15 @@ namespace SourceFork.Commands
                     DisableAutoFetch = disableAutoFetchRemotes.Contains(name)
                 };
 
+                // Keep the host detection that upstream dropped in 582c1a22, otherwise `Open In Browser`
+                // falls back to HTTP for SSH remotes.
+                if (r.URL.StartsWith("git@", StringComparison.Ordinal))
+                {
+                    var hostEnd = r.URL.IndexOf(':', 4);
+                    if (hostEnd > 4)
+                        Models.HTTPSValidator.Add(r.URL.Substring(4, hostEnd - 4));
+                }
+
                 remotes.Add(r);
             }
 
