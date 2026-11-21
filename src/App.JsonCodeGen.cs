@@ -74,5 +74,6 @@ namespace SourceFork
     [JsonSerializable(typeof(List<ViewModels.Workspace>))]
     [JsonSerializable(typeof(ViewModels.Preferences))]
     [JsonSerializable(typeof(ViewModels.RepositoryNodeMinimalInfo))]
+    [JsonSerializable(typeof(List<AI.ApiKey>))]
     internal partial class JsonCodeGen : JsonSerializerContext { }
 }

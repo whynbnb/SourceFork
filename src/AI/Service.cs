@@ -20,21 +20,19 @@ namespace SourceFork.AI
 
         public string Server
         {
-            get;
-            set;
-        } = string.Empty;
+            get => _server;
+            set
+            {
+                if (SetProperty(ref _server, value))
+                    OnPropertyChanged(nameof(HasValidApiKey));
+            }
+        }
 
-        public string ApiKey
+        [JsonIgnore]
+        public bool HasValidApiKey
         {
-            get;
-            set;
-        } = string.Empty;
-
-        public bool ReadApiKeyFromEnv
-        {
-            get;
-            set;
-        } = false;
+            get => ApiKeyManager.Get(Server) != null;
+        }
 
         [JsonIgnore]
         public List<string> AvailableModels
@@ -42,6 +40,13 @@ namespace SourceFork.AI
             get;
             private set;
         } = [];
+
+        [JsonIgnore]
+        public string CachedApiKey
+        {
+            get;
+            set;
+        } = string.Empty;
 
         public string Model
         {
@@ -102,7 +107,7 @@ namespace SourceFork.AI
 
         private OpenAIClient GetOpenAIClient()
         {
-            var credential = new ApiKeyCredential(ReadApiKeyFromEnv ? Environment.GetEnvironmentVariable(ApiKey) : ApiKey);
+            var credential = GetCredential();
 
             if (Server.Contains("openai.azure.com/", StringComparison.Ordinal))
             {
@@ -121,7 +126,17 @@ namespace SourceFork.AI
             return new OpenAIClient(credential, options);
         }
 
+        private ApiKeyCredential GetCredential()
+        {
+            if (!string.IsNullOrEmpty(CachedApiKey))
+                return new ApiKeyCredential(CachedApiKey);
+
+            CachedApiKey = ApiKeyManager.Get(Server)?.GetRawApiKey() ?? string.Empty;
+            return new ApiKeyCredential(CachedApiKey);
+        }
+
         private string _name = string.Empty;
+        private string _server = string.Empty;
         private string _model = string.Empty;
         private string _reasoningEffortLevel = Options.IgnoredReasoningEffortLevel;
         private bool _autoFetchAvailableModels = true;
