@@ -674,6 +674,18 @@ namespace SourceFork.ViewModels
             return log;
         }
 
+        public string GetRecommandedWorktreeDir()
+        {
+            var commonDirFile = Path.Combine(GitDir, "commondir");
+            var isWorktree = GitDir.IndexOf("/worktrees/", StringComparison.Ordinal) > 0 && File.Exists(commonDirFile);
+            var parentFolder = Path.GetFullPath(Path.Combine(FullPath, ".."));
+            if (isWorktree)
+                return parentFolder;
+
+            var dirName = $"{Path.GetFileName(FullPath)}-worktrees";
+            return Path.Combine(parentFolder, dirName);
+        }
+
         public void RefreshAll()
         {
             RefreshCommits();

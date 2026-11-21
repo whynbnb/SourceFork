@@ -68,6 +68,7 @@
   <x:String x:Key="Text.Blame.IgnoreWhitespace">忽略空白符號變化</x:String>
   <x:String x:Key="Text.Blame.TypeNotSupported" xml:space="preserve">所選擇的檔案不支援該操作!</x:String>
   <x:String x:Key="Text.BranchCM.Checkout" xml:space="preserve">簽出 (checkout) ${0}$...</x:String>
+  <x:String x:Key="Text.BranchCM.CheckoutAsWorktree" xml:space="preserve">簽出 ${0}$ 為新工作樹...</x:String>
   <x:String x:Key="Text.BranchCM.CompareTwo" xml:space="preserve">比較所選的 2 個分支</x:String>
   <x:String x:Key="Text.BranchCM.CompareWith" xml:space="preserve">與其他分支或標籤比較...</x:String>
   <x:String x:Key="Text.BranchCM.CompareWithHead" xml:space="preserve">與目前 HEAD 比較</x:String>
