@@ -72,6 +72,11 @@ git push -u origin fork/2026.19
 git fetch upstream --tags
 ```
 
+## 上游同步
+
+`sync/` 保存每个上游版本的逐提交同步评估，规则、判断标记和状态见 `sync/README.md`。
+当前已评估到 `v2026.24`，尚未应用任何上游补丁；后续按提交选择性移植，不做整体 merge。
+
 ## 本地工具链（mise）
 
 本仓库通过根目录的 `mise.toml` 固定 .NET SDK `10.0.404`，与全局 Homebrew 的 .NET 11 隔离：
