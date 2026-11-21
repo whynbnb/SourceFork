@@ -3,7 +3,7 @@ name: release
 on:
   push:
     tags:
-      - "v*"
+      - "sf*"
 
 permissions:
   contents: write
@@ -32,7 +32,7 @@ jobs:
           chmod +x build/scripts/publish.sh build/scripts/package-linux.sh
           build/scripts/publish.sh framework linux-x64 "$RUNNER_TEMP/linux-framework"
           build/scripts/package-linux.sh tar "$RUNNER_TEMP/linux-framework" \
-            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-linux-x64-framework.tar.gz"
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#sf}-linux-x64-framework.tar.gz"
       - uses: actions/upload-artifact@v7
         with:
           name: linux-framework
@@ -60,7 +60,7 @@ jobs:
           chmod +x build/scripts/publish.sh build/scripts/package-linux.sh
           build/scripts/publish.sh aot linux-x64 "$RUNNER_TEMP/linux-aot-deb"
           build/scripts/package-linux.sh deb "$RUNNER_TEMP/linux-aot-deb" \
-            "${GITHUB_REF_NAME#v}" "$RUNNER_TEMP/sourcefork_${GITHUB_REF_NAME#v}_amd64.deb"
+            "${GITHUB_REF_NAME#sf}" "$RUNNER_TEMP/sourcefork_${GITHUB_REF_NAME#sf}_amd64.deb"
       - uses: actions/upload-artifact@v7
         with:
           name: linux-aot-deb
@@ -95,7 +95,7 @@ jobs:
           build/scripts/publish.sh aot linux-x64 "$RUNNER_TEMP/linux-aot-appimage"
           APPIMAGETOOL="$RUNNER_TEMP/appimagetool" \
             build/scripts/package-linux.sh appimage "$RUNNER_TEMP/linux-aot-appimage" \
-            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-linux-x64-aot.AppImage"
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#sf}-linux-x64-aot.AppImage"
       - uses: actions/upload-artifact@v7
         with:
           name: linux-aot-appimage
@@ -124,7 +124,7 @@ jobs:
           chmod +x build/scripts/publish.sh build/scripts/package-linux.sh
           build/scripts/publish.sh aot-static linux-x64 "$RUNNER_TEMP/linux-aot-static"
           build/scripts/package-linux.sh tar "$RUNNER_TEMP/linux-aot-static" \
-            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-linux-x64-aot-static.tar.gz"
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#sf}-linux-x64-aot-static.tar.gz"
       - uses: actions/upload-artifact@v7
         with:
           name: linux-aot-static
@@ -146,7 +146,7 @@ jobs:
       - name: Publish and package
         shell: pwsh
         run: |
-          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          $version = $env:GITHUB_REF_NAME -replace '^sf', ''
           $out = Join-Path $env:RUNNER_TEMP "win-framework"
           ./build/scripts/publish.ps1 -Mode framework -Rid win-x64 -Output $out
           ./build/scripts/package-windows.ps1 -Mode framework -Source $out `
@@ -175,7 +175,7 @@ jobs:
       - name: Publish and package
         shell: pwsh
         run: |
-          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          $version = $env:GITHUB_REF_NAME -replace '^sf', ''
           $out = Join-Path $env:RUNNER_TEMP "win-aot"
           ./build/scripts/publish.ps1 -Mode aot -Rid win-x64 -Output $out
           ./build/scripts/package-windows.ps1 -Mode aot -Source $out `
@@ -209,7 +209,7 @@ jobs:
       - name: Publish and package
         shell: pwsh
         run: |
-          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          $version = $env:GITHUB_REF_NAME -replace '^sf', ''
           $out = Join-Path $env:RUNNER_TEMP "win-aot-static"
           ./build/scripts/publish.ps1 -Mode aot-static -Rid win-x64 -Output $out
           ./build/scripts/package-windows.ps1 -Mode aot-static -Source $out `
@@ -237,7 +237,7 @@ jobs:
           chmod +x build/scripts/publish.sh build/scripts/package-macos.sh
           build/scripts/publish.sh framework osx-arm64 "$RUNNER_TEMP/macos-framework"
           build/scripts/package-macos.sh zip "$RUNNER_TEMP/macos-framework" \
-            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-macos-arm64-framework.zip"
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#sf}-macos-arm64-framework.zip"
       - uses: actions/upload-artifact@v7
         with:
           name: macos-framework
@@ -261,8 +261,8 @@ jobs:
           chmod +x build/scripts/publish.sh build/scripts/package-macos.sh
           build/scripts/publish.sh aot osx-arm64 "$RUNNER_TEMP/macos-aot"
           build/scripts/package-macos.sh dmg "$RUNNER_TEMP/macos-aot" \
-            "${GITHUB_REF_NAME#v}" \
-            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-macos-arm64-aot.dmg"
+            "${GITHUB_REF_NAME#sf}" \
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#sf}-macos-arm64-aot.dmg"
       - uses: actions/upload-artifact@v7
         with:
           name: macos-aot-dmg

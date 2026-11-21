@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ApplicationManifest>App.manifest</ApplicationManifest>
     <ApplicationIcon>App.ico</ApplicationIcon>
-    <Version>2026.19</Version>
+    <Version>1.0</Version>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
     <InvariantGlobalization>false</InvariantGlobalization>
@@ -77,15 +77,6 @@
     <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
   </ItemGroup>
 
-  <Target BeforeTargets="GetAssemblyAttributes" Name="GenVersionInfo">
-    <Exec Command="git describe --abbrev=8 --dirty" ConsoleToMsBuild="True" IgnoreExitCode="true">
-      <Output PropertyName="FriendlyVersion" TaskParameter="ConsoleOutput" />
-    </Exec>
-
-    <ItemGroup>
-      <AssemblyMetadata Include="FriendlyVersion" Value="$([System.String]::Copy('$(FriendlyVersion)').Replace('g', '').Trim())" />
-    </ItemGroup>
-  </Target>
 </Project>
 
 

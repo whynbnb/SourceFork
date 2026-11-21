@@ -106,17 +106,17 @@ package_appimage() {
     cp -a "$source/." "$appdir/usr/bin/"
     copy_license "$appdir/usr/share/doc/sourcefork"
     install -m 644 "$ROOT/build/resources/_common/icons/sourcefork.png" \
-        "$appdir/usr/share/icons/hicolor/256x256/apps/com.whynbnb.sourcefork.png"
-    cp "$appdir/usr/share/icons/hicolor/256x256/apps/com.whynbnb.sourcefork.png" \
-        "$appdir/com.whynbnb.sourcefork.png"
+        "$appdir/usr/share/icons/hicolor/256x256/apps/me.whynbnb.SourceFork.png"
+    cp "$appdir/usr/share/icons/hicolor/256x256/apps/me.whynbnb.SourceFork.png" \
+        "$appdir/me.whynbnb.SourceFork.png"
     install -m 644 "$ROOT/build/resources/appimage/sourcefork.appdata.xml" \
-        "$appdir/usr/share/metainfo/com.whynbnb.sourcefork.appdata.xml"
+        "$appdir/usr/share/metainfo/me.whynbnb.SourceFork.appdata.xml"
 
     sed -e 's|^Exec=.*|Exec=AppRun %u|' \
-        -e 's|^Icon=.*|Icon=com.whynbnb.sourcefork|' \
-        "$ROOT/build/resources/_common/applications/sourcefork.desktop" > "$appdir/com.whynbnb.sourcefork.desktop"
-    install -m 644 "$appdir/com.whynbnb.sourcefork.desktop" \
-        "$appdir/usr/share/applications/com.whynbnb.sourcefork.desktop"
+        -e 's|^Icon=.*|Icon=me.whynbnb.SourceFork|' \
+        "$ROOT/build/resources/_common/applications/sourcefork.desktop" > "$appdir/me.whynbnb.SourceFork.desktop"
+    install -m 644 "$appdir/me.whynbnb.SourceFork.desktop" \
+        "$appdir/usr/share/applications/me.whynbnb.SourceFork.desktop"
 
     cat > "$appdir/AppRun" <<'EOF'
 #!/bin/sh

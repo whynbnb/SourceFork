@@ -5,7 +5,7 @@
 	<key>CFBundleIconFile</key>
 	<string>App.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.whynbnb.sourcefork</string>
+	<string>me.whynbnb.SourceFork</string>
 	<key>CFBundleName</key>
 	<string>SourceFork</string>
 	<key>CFBundleVersion</key>

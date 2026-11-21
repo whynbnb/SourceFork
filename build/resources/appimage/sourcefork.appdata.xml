@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>com.whynbnb.sourcefork</id>
+    <id>me.whynbnb.SourceFork</id>
     <metadata_license>MIT</metadata_license>
     <project_license>MIT</project_license>
     <name>SourceFork</name>
@@ -50,8 +50,8 @@
     <url type="help">https://github.com/whynbnb/SourceFork/issues</url>
     <url type="homepage">https://github.com/whynbnb/SourceFork</url>
     <url type="vcs-browser">https://github.com/whynbnb/SourceFork</url>
-    <launchable type="desktop-id">com.whynbnb.sourcefork.desktop</launchable>
-    <developer id="io.github.whynbnb">
+    <launchable type="desktop-id">me.whynbnb.SourceFork.desktop</launchable>
+    <developer id="me.whynbnb">
         <name>whynbnb</name>
     </developer>
     <branding>
