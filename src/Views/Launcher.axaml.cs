@@ -275,7 +275,7 @@ namespace SourceFork.Views
                             e.Handled = true;
                             return;
                         case Key.F when e.KeyModifiers.HasFlag(KeyModifiers.Shift):
-                            repo.IsSearchingCommits = true;
+                            repo.IsSearchingCommits = !repo.IsSearchingCommits;
                             e.Handled = true;
                             return;
                         case Key.H when e.KeyModifiers.HasFlag(KeyModifiers.Shift):

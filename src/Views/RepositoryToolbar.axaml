@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:m="using:SourceFork.Models"
              xmlns:vm="using:SourceFork.ViewModels"
+             xmlns:c="using:SourceFork.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SourceFork.Views.RepositoryToolbar"
              x:DataType="vm:Repository">
@@ -46,7 +47,13 @@
           </StackPanel>
         </ToolTip.Tip>
 
-        <Path Width="14" Height="14" Data="{StaticResource Icons.Pull}"/>
+        <Grid Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Path Width="14" Height="14" Data="{StaticResource Icons.Pull}"/>
+          <Ellipse Width="8" Height="8"
+                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                   Fill="{DynamicResource Brush.Badge}"
+                   IsVisible="{Binding CurrentBranch?.Behind, Mode=OneWay, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"/>
+        </Grid>
       </Button>
 
       <Button Classes="icon_button" Width="32" Margin="16,0,0,0" Tapped="Push">
@@ -57,7 +64,13 @@
           </StackPanel>
         </ToolTip.Tip>
 
-        <Path Width="14" Height="14" Data="{StaticResource Icons.Push}"/>
+        <Grid Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
+          <Path Width="14" Height="14" Data="{StaticResource Icons.Push}"/>
+          <Ellipse Width="8" Height="8"
+                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                   Fill="{DynamicResource Brush.Badge}"
+                   IsVisible="{Binding CurrentBranch?.Ahead, Mode=OneWay, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"/>
+        </Grid>
       </Button>
 
       <Button Classes="icon_button" Width="32" Margin="16,0,0,0" Tapped="StashAll" IsVisible="{Binding !IsBare}">

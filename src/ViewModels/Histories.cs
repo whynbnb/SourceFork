@@ -485,7 +485,7 @@ namespace SourceFork.ViewModels
             if (_selectedCommits.Count == 0)
             {
                 _repo.SearchCommitContext.Selected = null;
-                DetailContext = new Models.Null();
+                DetailContext = Models.Null.Instance;
             }
             else if (_selectedCommits.Count == 1)
             {
@@ -541,7 +541,7 @@ namespace SourceFork.ViewModels
         private Models.CommitGraph _graph = null;
         private List<Models.Commit> _selectedCommits = [];
         private Models.Bisect _bisect = null;
-        private object _detailContext = new Models.Null();
+        private object _detailContext = Models.Null.Instance;
         private bool _ignoreSelectionChange = false;
 
         private GridLength _leftArea = new(1, GridUnitType.Star);

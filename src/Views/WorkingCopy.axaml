@@ -12,7 +12,7 @@
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkingCopyLeftWidth, Mode=TwoWay}" MinWidth="300"/>
       <ColumnDefinition Width="4"/>
-      <ColumnDefinition Width="*" MinWidth="300"/>
+      <ColumnDefinition Width="*" MinWidth="470"/>
     </Grid.ColumnDefinitions>
 
     <!-- Left -->
@@ -226,7 +226,7 @@
     <!-- Right -->
     <Grid Grid.Column="2" Margin="0,4,4,4">
       <Grid.RowDefinitions>
-        <RowDefinition Height="*" MinHeight="400"/>
+        <RowDefinition Height="*" MinHeight="100"/>
         <RowDefinition Height="4"/>
         <RowDefinition Height="128" MinHeight="100"/>
         <RowDefinition Height="36"/>

@@ -238,7 +238,6 @@ namespace SourceFork.Views
             }
 
             var preferences = ViewModels.Preferences.Instance;
-            preferences.UpdateAvailableAIModels();
             preferences.Save();
         }
 
