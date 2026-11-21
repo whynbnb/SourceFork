@@ -5,7 +5,7 @@ namespace SourceFork.Commands
 {
     public class Push : Command
     {
-        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool noVerify)
+        public Push(string repo, string local, string remote, string remoteBranch, bool withTags, bool checkSubmodules, bool track, bool force, bool noVerify, bool isRevision = false)
         {
             _remote = remote;
 
@@ -25,7 +25,13 @@ namespace SourceFork.Commands
             if (noVerify)
                 builder.Append("--no-verify ");
 
-            builder.Append(remote).Append(' ').Append(local).Append(':').Append(remoteBranch);
+            // Always use full refnames, otherwise a tag with the same name makes the source ambiguous.
+            builder.Append(remote).Append(' ');
+            if (isRevision)
+                builder.Append(local);
+            else
+                builder.Append("refs/heads/").Append(local);
+            builder.Append(":refs/heads/").Append(remoteBranch);
             Args = builder.ToString();
         }
 

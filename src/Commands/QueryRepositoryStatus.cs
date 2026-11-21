@@ -17,7 +17,7 @@ namespace SourceFork.Commands
 
         public async Task<Models.RepositoryStatus> GetResultAsync()
         {
-            Args = "status --porcelain=v2 -b";
+            Args = "status --porcelain=v2 -b -uall --ignore-submodules=dirty";
             var rs = await ReadToEndAsync().ConfigureAwait(false);
             if (!rs.IsSuccess)
                 return null;
@@ -36,13 +36,22 @@ namespace SourceFork.Commands
             else
                 status.CurrentBranch = head;
 
-            if (count == 4 && lines[3].StartsWith("# branch.ab ", StringComparison.Ordinal))
-                ParseTrackStatus(status, lines[3].Substring(12).Trim());
+            var localChanges = 0;
+            for (var i = 2; i < count; i++)
+            {
+                var line = lines[i];
+                if (line.StartsWith("# ", StringComparison.Ordinal))
+                {
+                    if (line.StartsWith("# branch.ab ", StringComparison.Ordinal))
+                        ParseTrackStatus(status, line.Substring(12).Trim());
+                }
+                else
+                {
+                    localChanges++;
+                }
+            }
 
-            status.LocalChanges = await new CountLocalChanges(WorkingDirectory, true) { RaiseError = false }
-                .GetResultAsync()
-                .ConfigureAwait(false);
-
+            status.LocalChanges = localChanges;
             return status;
         }
 

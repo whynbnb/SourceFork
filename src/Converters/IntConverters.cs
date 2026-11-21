@@ -22,5 +22,8 @@ namespace SourceFork.Converters
 
         public static readonly FuncValueConverter<int, string> ToUnsolvedDesc =
             new(v => v == 0 ? App.Text("MergeConflictEditor.AllResolved") : App.Text("MergeConflictEditor.ConflictsRemaining", v));
+
+        public static readonly FuncValueConverter<int, bool> IsMaxCountOfStatistics =
+            new(v => v >= 200000);
     }
 }

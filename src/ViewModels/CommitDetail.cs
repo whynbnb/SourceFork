@@ -713,12 +713,7 @@ namespace SourceFork.ViewModels
         private async Task SetViewingCommitAsync(Models.Object file)
         {
             var submoduleRoot = Path.Combine(_repo.FullPath, file.Path).Replace('\\', '/').TrimEnd('/');
-            var info = await new Commands.QuerySubmoduleRevision(submoduleRoot, file.SHA).GetResultAsync();
-            ViewRevisionFileContent = info ?? new Models.RevisionSubmodule()
-            {
-                Commit = new Models.Commit() { SHA = file.SHA },
-                FullMessage = new Models.CommitFullMessage()
-            };
+            ViewRevisionFileContent = await new Commands.QuerySubmoduleRevision(submoduleRoot, file.SHA).GetResultAsync();
         }
 
         [GeneratedRegex(@"\b(https?://|ftp://)[\w\d\._/\-~%@()+:?&=#!]*[\w\d/]")]

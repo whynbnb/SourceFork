@@ -505,7 +505,10 @@ namespace SourceFork.ViewModels
         {
             var commitMessage = _workingCopy.CommitMessage;
             if (!string.IsNullOrEmpty(commitMessage) && _workingCopy.InProgressContext != null)
+            {
                 File.WriteAllText(Path.Combine(GitDir, "MERGE_MSG"), commitMessage);
+                commitMessage = string.Empty; // Already saved in MERGE_MSG, do not persist it in ui-state.
+            }
 
             _uiStates.LastCommitMessage = commitMessage;
             _uiStates.Save();
@@ -805,7 +808,8 @@ namespace SourceFork.ViewModels
                 if (folderEndIdx > 10)
                     _uiStates.ExpandedBranchNodesInSideBar.Add(created.FullName.Substring(0, folderEndIdx));
 
-                if (_historyFilterMode == Models.FilterMode.Included)
+                if (_historyFilterMode == Models.FilterMode.Included &&
+                    !_uiStates.IsCoveredByFolderFilter(created.FullName, Models.FilterType.LocalBranchFolder))
                     SetBranchFilterMode(created, Models.FilterMode.Included, false, false);
 
                 CurrentBranch = created;
@@ -849,7 +853,8 @@ namespace SourceFork.ViewModels
 
             checkouted.IsCurrent = true;
             checkouted.WorktreePath = FullPath;
-            if (_historyFilterMode == Models.FilterMode.Included)
+            if (_historyFilterMode == Models.FilterMode.Included &&
+                !_uiStates.IsCoveredByFolderFilter(checkouted.FullName, Models.FilterType.LocalBranchFolder))
                 SetBranchFilterMode(checkouted, Models.FilterMode.Included, false, false);
 
             List<Models.Branch> locals = [];
@@ -862,6 +867,7 @@ namespace SourceFork.ViewModels
             var builder = BuildBranchTree(locals, [], false);
             LocalBranchTrees = builder.Locals;
             CurrentBranch = checkouted;
+            GetOwnerPage()?.ChangeDirtyState(Models.DirtyState.HasPendingPullOrPush, !checkouted.IsTrackStatusVisible);
 
             RefreshCommits();
             RefreshWorkingCopyChanges();

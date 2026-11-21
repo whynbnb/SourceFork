@@ -51,7 +51,8 @@ namespace SourceFork.ViewModels
                 false,
                 false,
                 Force,
-                false).WithCancellation(token).Use(log).RunAsync();
+                false,
+                isRevision: true).WithCancellation(token).Use(log).RunAsync();
 
             log.Complete();
 

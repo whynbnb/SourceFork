@@ -76,6 +76,7 @@ namespace SourceFork.Models
                     FileName = ExecFile,
                     Arguments = args,
                     UseShellExecute = false,
+                    CreateNoWindow = true,
                 });
             }
         }

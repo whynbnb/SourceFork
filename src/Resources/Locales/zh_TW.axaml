@@ -943,6 +943,7 @@
   <x:String x:Key="Text.Statistics.Overview" xml:space="preserve">總覽</x:String>
   <x:String x:Key="Text.Statistics.ThisMonth" xml:space="preserve">本月</x:String>
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">本週</x:String>
+  <x:String x:Key="Text.Statistics.Tips" xml:space="preserve">SourceFork 僅會依所選分支最多取出 200000 筆提交記錄進行分析</x:String>
   <x:String x:Key="Text.Statistics.TotalAuthors" xml:space="preserve">貢獻者人數:</x:String>
   <x:String x:Key="Text.Statistics.TotalCommits" xml:space="preserve">提交次數:</x:String>
   <x:String x:Key="Text.Submodule" xml:space="preserve">子模組</x:String>

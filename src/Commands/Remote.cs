@@ -28,8 +28,9 @@ namespace SourceFork.Commands
             return await ExecAsync();
         }
 
-        public async Task<bool> PruneAsync(string name)
+        public async Task<bool> PruneAsync(string name, string sshKey)
         {
+            SSHKey = sshKey;
             Args = $"remote prune {name}";
             return await ExecAsync();
         }

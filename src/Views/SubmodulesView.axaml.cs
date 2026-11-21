@@ -81,7 +81,7 @@ namespace SourceFork.Views
             {
                 Width = 12,
                 Height = 12,
-                HorizontalAlignment = HorizontalAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = margin,
                 Data = geo,

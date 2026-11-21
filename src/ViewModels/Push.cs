@@ -235,6 +235,9 @@ namespace SourceFork.ViewModels
             if (_selectedRemote == null || _selectedLocalBranch == null)
                 return;
 
+            // Turn on `Set as tracking branch` when the selected local branch has no upstream.
+            Tracking = string.IsNullOrEmpty(_selectedLocalBranch.Upstream);
+
             // Gather branches.
             var branches = new List<Models.Branch>();
             foreach (var branch in _repo.Branches)
