@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 using Avalonia;
@@ -238,7 +239,7 @@ namespace SourceFork.Views
 
                 openWith.Items.Add(defaultEditor);
 
-                var tools = Native.OS.ExternalTools;
+                var tools = Native.OS.ExternalTools.Where(x => x.SupportOpenFile).ToList();
                 if (tools.Count > 0)
                 {
                     openWith.Items.Add(new MenuItem() { Header = "-" });

@@ -29,16 +29,19 @@ namespace SourceFork.Models
         public string ExecFile { get; }
         public Bitmap IconImage { get; }
         public bool SupportOpenFolder { get; }
+        public bool SupportOpenFile { get; }
         public bool IsEnabled { get; set; } = true;
         public bool IsCustom { get; set; } = false;
 
-        public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator, bool supportOpenFolder)
+        public ExternalTool(string name, string icon, string execFile, Func<string, List<LaunchOption>> optionsGenerator, bool supportOpenFolder, bool supportOpenFile = true, Func<string, string, bool> launcher = null)
         {
             Name = name;
             ExecFile = execFile;
             SupportOpenFolder = supportOpenFolder;
+            SupportOpenFile = supportOpenFile;
 
             _optionsGenerator = optionsGenerator;
+            _launcher = launcher;
 
             try
             {
@@ -59,6 +62,13 @@ namespace SourceFork.Models
 
         public void Launch(string args)
         {
+            if (_launcher != null)
+            {
+                if (!_launcher(ExecFile, args))
+                    Models.Notification.Send("", $"Failed to launch {Name}.", true);
+                return;
+            }
+
             if (File.Exists(ExecFile))
             {
                 Process.Start(new ProcessStartInfo()
@@ -71,6 +81,7 @@ namespace SourceFork.Models
         }
 
         private Func<string, List<LaunchOption>> _optionsGenerator = null;
+        private Func<string, string, bool> _launcher = null;
     }
 
     public class VisualStudioInstance
@@ -167,6 +178,20 @@ namespace SourceFork.Models
                 tool.IsEnabled = !_customization.Excludes.Contains(name);
                 Tools.Add(tool);
             }
+        }
+
+        public void Herdr(Func<string> platformFinder)
+        {
+            var path = _customization.Tools.TryGetValue(Models.HerdrTool.Name, out var customPath) && File.Exists(customPath)
+                ? customPath
+                : platformFinder();
+
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                return;
+
+            var tool = new ExternalTool(Models.HerdrTool.Name, Models.HerdrTool.Name, path, null, true, false, Models.HerdrTool.Launch);
+            tool.IsEnabled = !_customization.Excludes.Contains(Models.HerdrTool.Name);
+            Tools.Add(tool);
         }
 
         public void AddCustomTools()
