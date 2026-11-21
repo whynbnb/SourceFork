@@ -30,17 +30,14 @@ package.json
 package-lock.json
 
 
-# Flatpak
-!build/resources/flatpak
-
 build/resources/
 build/SourceFork/
 build/SourceFork.app/
 build/*.zip
 build/*.tar.gz
 build/*.deb
-build/*.rpm
 build/*.AppImage
+build/*.dmg
 SourceFork.app/
 build.command
 src/Properties/launchSettings.json

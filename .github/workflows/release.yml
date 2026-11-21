@@ -1,52 +1,300 @@
-name: Release
+name: release
+
 on:
   push:
     tags:
-      - v*
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  DOTNET_VERSION: "10.0.x"
+  DOTNET_NOLOGO: "1"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
+
 jobs:
-  build:
-    name: Build
-    uses: ./.github/workflows/build.yml
-  version:
-    name: Prepare version string
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.version.outputs.version }}
+  linux-framework:
+    name: Linux x64 framework-dependent
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
-      - name: Output version string
-        id: version
-        env:
-          TAG: ${{ github.ref_name }}
-        run: echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
-  package:
-    needs: [build, version]
-    name: Package
-    uses: ./.github/workflows/package.yml
-    with:
-      version: ${{ needs.version.outputs.version }}
-  release:
-    needs: [package, version]
-    name: Release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v6
-      - name: Create release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.ref_name }}
-          VERSION: ${{ needs.version.outputs.version }}
-        run: gh release create "$TAG" -t "$VERSION" --notes-from-tag
-      - name: Download artifacts
-        uses: actions/download-artifact@v8
+      - uses: actions/checkout@v7
         with:
-          pattern: package.*
-          path: packages
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Publish and package
+        run: |
+          chmod +x build/scripts/publish.sh build/scripts/package-linux.sh
+          build/scripts/publish.sh framework linux-x64 "$RUNNER_TEMP/linux-framework"
+          build/scripts/package-linux.sh tar "$RUNNER_TEMP/linux-framework" \
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-linux-x64-framework.tar.gz"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-framework
+          path: ${{ runner.temp }}/sourcefork-*-linux-x64-framework.tar.gz
+          if-no-files-found: error
+
+  linux-aot-deb:
+    name: Linux x64 AOT deb
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install NativeAOT dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang lld zlib1g-dev
+      - name: Publish and package
+        run: |
+          chmod +x build/scripts/publish.sh build/scripts/package-linux.sh
+          build/scripts/publish.sh aot linux-x64 "$RUNNER_TEMP/linux-aot-deb"
+          build/scripts/package-linux.sh deb "$RUNNER_TEMP/linux-aot-deb" \
+            "${GITHUB_REF_NAME#v}" "$RUNNER_TEMP/sourcefork_${GITHUB_REF_NAME#v}_amd64.deb"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-aot-deb
+          path: ${{ runner.temp }}/sourcefork_*_amd64.deb
+          if-no-files-found: error
+
+  linux-aot-appimage:
+    name: Linux x64 AOT AppImage
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install NativeAOT and AppImage dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang lld zlib1g-dev squashfs-tools desktop-file-utils
+      - name: Download appimagetool
+        run: |
+          curl -L --fail --retry 3 \
+            -o "$RUNNER_TEMP/appimagetool" \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x "$RUNNER_TEMP/appimagetool"
+      - name: Publish and package
+        run: |
+          chmod +x build/scripts/publish.sh build/scripts/package-linux.sh
+          build/scripts/publish.sh aot linux-x64 "$RUNNER_TEMP/linux-aot-appimage"
+          APPIMAGETOOL="$RUNNER_TEMP/appimagetool" \
+            build/scripts/package-linux.sh appimage "$RUNNER_TEMP/linux-aot-appimage" \
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-linux-x64-aot.AppImage"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-aot-appimage
+          path: ${{ runner.temp }}/sourcefork-*-linux-x64-aot.AppImage
+          if-no-files-found: error
+
+  linux-aot-static:
+    name: Linux x64 AOT static
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install static-link dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang lld zlib1g-dev libfontconfig1-dev libfreetype6-dev \
+            libx11-dev libxext-dev libxcb1-dev libwayland-dev libffi-dev libgl1
+      - name: Publish and package
+        run: |
+          chmod +x build/scripts/publish.sh build/scripts/package-linux.sh
+          build/scripts/publish.sh aot-static linux-x64 "$RUNNER_TEMP/linux-aot-static"
+          build/scripts/package-linux.sh tar "$RUNNER_TEMP/linux-aot-static" \
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-linux-x64-aot-static.tar.gz"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-aot-static
+          path: ${{ runner.temp }}/sourcefork-*-linux-x64-aot-static.tar.gz
+          if-no-files-found: error
+
+  windows-framework:
+    name: Windows x64 framework-dependent
+    runs-on: windows-2025
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Publish and package
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          $out = Join-Path $env:RUNNER_TEMP "win-framework"
+          ./build/scripts/publish.ps1 -Mode framework -Rid win-x64 -Output $out
+          ./build/scripts/package-windows.ps1 -Mode framework -Source $out `
+            -Output (Join-Path $env:RUNNER_TEMP "sourcefork-$version-win-x64-framework.zip")
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-framework
+          path: ${{ runner.temp }}/sourcefork-*-win-x64-framework.zip
+          if-no-files-found: error
+
+  windows-aot:
+    name: Windows x64 AOT
+    runs-on: windows-2025
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: x64
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Publish and package
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          $out = Join-Path $env:RUNNER_TEMP "win-aot"
+          ./build/scripts/publish.ps1 -Mode aot -Rid win-x64 -Output $out
+          ./build/scripts/package-windows.ps1 -Mode aot -Source $out `
+            -Output (Join-Path $env:RUNNER_TEMP "sourcefork-$version-win-x64-aot.zip")
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-aot
+          path: ${{ runner.temp }}/sourcefork-*-win-x64-aot.zip
+          if-no-files-found: error
+
+  windows-aot-static:
+    name: Windows x64 AOT static
+    runs-on: windows-2025
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: x64
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Install LLVM for static linking
+        shell: pwsh
+        run: |
+          choco install llvm -y --no-progress
+          Add-Content -Path $env:GITHUB_PATH -Value "C:\Program Files\LLVM\bin"
+      - name: Publish and package
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME -replace '^v', ''
+          $out = Join-Path $env:RUNNER_TEMP "win-aot-static"
+          ./build/scripts/publish.ps1 -Mode aot-static -Rid win-x64 -Output $out
+          ./build/scripts/package-windows.ps1 -Mode aot-static -Source $out `
+            -Output (Join-Path $env:RUNNER_TEMP "sourcefork-$version-win-x64-aot-static.zip")
+      - uses: actions/upload-artifact@v7
+        with:
+          name: windows-aot-static
+          path: ${{ runner.temp }}/sourcefork-*-win-x64-aot-static.zip
+          if-no-files-found: error
+
+  macos-framework:
+    name: macOS arm64 framework-dependent
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Publish and package
+        run: |
+          chmod +x build/scripts/publish.sh build/scripts/package-macos.sh
+          build/scripts/publish.sh framework osx-arm64 "$RUNNER_TEMP/macos-framework"
+          build/scripts/package-macos.sh zip "$RUNNER_TEMP/macos-framework" \
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-macos-arm64-framework.zip"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: macos-framework
+          path: ${{ runner.temp }}/sourcefork-*-macos-arm64-framework.zip
+          if-no-files-found: error
+
+  macos-aot-dmg:
+    name: macOS arm64 AOT dmg
+    runs-on: macos-26
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Publish and package
+        run: |
+          chmod +x build/scripts/publish.sh build/scripts/package-macos.sh
+          build/scripts/publish.sh aot osx-arm64 "$RUNNER_TEMP/macos-aot"
+          build/scripts/package-macos.sh dmg "$RUNNER_TEMP/macos-aot" \
+            "${GITHUB_REF_NAME#v}" \
+            "$RUNNER_TEMP/sourcefork-${GITHUB_REF_NAME#v}-macos-arm64-aot.dmg"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: macos-aot-dmg
+          path: ${{ runner.temp }}/sourcefork-*-macos-arm64-aot.dmg
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub Release
+    needs:
+      - linux-framework
+      - linux-aot-deb
+      - linux-aot-appimage
+      - linux-aot-static
+      - windows-framework
+      - windows-aot
+      - windows-aot-static
+      - macos-framework
+      - macos-aot-dmg
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: release-assets
           merge-multiple: true
-      - name: Upload assets
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.ref_name }}
-        run: gh release upload "$TAG" packages/*
+      - name: Show release assets
+        run: ls -lh release-assets
+      - uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: SourceFork ${{ github.ref_name }}
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          fail_on_unmatched_files: true
+          files: release-assets/*

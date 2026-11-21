@@ -1,7 +1,7 @@
 Package: sourcefork
-Version: 2025.10
+Version: 2026.19
 Priority: optional
-Depends: libx11-6, libice6, libsm6, @ICU_DEPS@, xdg-utils
+Depends: libx11-6, libice6, libsm6, libfontconfig1, libfreetype6, zlib1g, libgl1, @ICU_DEPS@, xdg-utils
 Architecture: amd64
 Installed-Size: 60440
 Maintainer: whynbnb

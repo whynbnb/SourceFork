@@ -15,9 +15,9 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
-        if pgrep -f '/opt/sourcefork/sourcefork' > /dev/null; then
+        if pgrep -f '/opt/sourcefork/SourceFork' > /dev/null; then
             echo "Stopping running SourceFork instance..."
-            pkill -f '/opt/sourcefork/sourcefork' || true
+            pkill -f '/opt/sourcefork/SourceFork' || true
             # Give the process a moment to terminate
             sleep 1
         fi

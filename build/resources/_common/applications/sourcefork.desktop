@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=SourceFork
 Comment=Open-source & Free Git GUI Client
-Exec=/opt/sourcefork/sourcefork %u
-Icon=/usr/share/icons/sourcefork.png
+Exec=sourcefork %u
+Icon=sourcefork
 Terminal=false
 Type=Application
 Categories=Development
