@@ -729,9 +729,11 @@
   <x:String x:Key="Text.Preferences.GPG.TagEnabled" xml:space="preserve">启用标签签名</x:String>
   <x:String x:Key="Text.Preferences.GPG.UserKey" xml:space="preserve">用户签名KEY</x:String>
   <x:String x:Key="Text.Preferences.GPG.UserKey.Placeholder" xml:space="preserve">输入签名提交所使用的KEY</x:String>
-  <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">第三方工具集成</x:String>
+  <x:String x:Key="Text.Preferences.Integration" xml:space="preserve">集成与操作</x:String>
   <x:String x:Key="Text.Preferences.Shell" xml:space="preserve">终端/SHELL</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args" xml:space="preserve">启动参数</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Scan" xml:space="preserve">重新扫描</x:String>
+  <x:String x:Key="Text.Preferences.Shell.Scan.Tip" xml:space="preserve">仅显示已扫描到的终端；未检测到时请选择 Custom 并手动填写路径。</x:String>
   <x:String x:Key="Text.Preferences.Shell.Args.Tip" xml:space="preserve">请使用 '.' 来指定工作目录</x:String>
   <x:String x:Key="Text.Preferences.Shell.Path" xml:space="preserve">安装路径</x:String>
   <x:String x:Key="Text.Preferences.Shell.Type" xml:space="preserve">终端/SHELL</x:String>

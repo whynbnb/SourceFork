@@ -317,13 +317,18 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
+        private void RescanShellOrTerminals(object _, RoutedEventArgs e)
+        {
+            ViewModels.Preferences.Instance.RescanShellOrTerminals();
+            e.Handled = true;
+        }
+
         private async void SelectShellOrTerminal(object _, RoutedEventArgs e)
         {
-            var type = ViewModels.Preferences.Instance.ShellOrTerminalType;
-            if (type == -1)
+            var shell = ViewModels.Preferences.Instance.SelectedShellOrTerminal;
+            if (shell == null)
                 return;
 
-            var shell = Models.ShellOrTerminal.Supported[type];
             var options = new FilePickerOpenOptions() { AllowMultiple = false };
             if (shell.Type != "custom")
             {

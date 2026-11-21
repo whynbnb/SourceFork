@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -348,18 +349,22 @@ namespace SourceFork.ViewModels
             }
         }
 
-        public int ShellOrTerminalType
+        [JsonIgnore]
+        public List<Models.ShellOrTerminal> AvailableShellOrTerminals
         {
-            get => _shellOrTerminalType;
+            get => _availableShellOrTerminals;
+            private set => SetProperty(ref _availableShellOrTerminals, value);
+        }
+
+        [JsonIgnore]
+        public Models.ShellOrTerminal SelectedShellOrTerminal
+        {
+            get => _selectedShellOrTerminal;
             set
             {
-                if (SetProperty(ref _shellOrTerminalType, value) && !_isLoading)
+                if (SetProperty(ref _selectedShellOrTerminal, value) && !_isLoading && value != null)
                 {
-                    if (value >= 0 && value < Models.ShellOrTerminal.Supported.Count)
-                        Native.OS.SetShellOrTerminal(Models.ShellOrTerminal.Supported[value]);
-                    else
-                        Native.OS.SetShellOrTerminal(null);
-
+                    Native.OS.SetShellOrTerminal(value);
                     OnPropertyChanged(nameof(ShellOrTerminalPath));
                     OnPropertyChanged(nameof(ShellOrTerminalArgs));
                 }
@@ -646,15 +651,7 @@ namespace SourceFork.ViewModels
             try
             {
                 using var stream = File.OpenRead(path);
-                var pref = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences);
-                if (pref == null)
-                    return new Preferences();
-
-                if (string.IsNullOrEmpty(pref._theme) ||
-                    pref._theme.Equals("Default", StringComparison.OrdinalIgnoreCase))
-                    pref._theme = "System";
-
-                return pref;
+                return JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences) ?? new Preferences();
             }
             catch
             {
@@ -671,17 +668,49 @@ namespace SourceFork.ViewModels
 
         private void PrepareShellOrTerminal()
         {
-            if (_shellOrTerminalType >= 0)
-                return;
+            RescanShellOrTerminals();
 
-            for (int i = 0; i < Models.ShellOrTerminal.Supported.Count; i++)
+            var saved = Native.OS.ShellOrTerminal;
+            if (!string.IsNullOrEmpty(saved))
             {
-                var shell = Models.ShellOrTerminal.Supported[i];
-                if (Native.OS.TestShellOrTerminal(shell))
-                {
-                    ShellOrTerminalType = i;
-                    break;
-                }
+                var matched = AvailableShellOrTerminals.FirstOrDefault(x =>
+                    !x.Type.Equals("custom", StringComparison.Ordinal) &&
+                    string.Equals(Native.OS.GetShellOrTerminalPath(x), saved, StringComparison.Ordinal));
+
+                _selectedShellOrTerminal = matched ??
+                                           AvailableShellOrTerminals.FirstOrDefault(x => x.Type.Equals("custom", StringComparison.Ordinal));
+                OnPropertyChanged(nameof(SelectedShellOrTerminal));
+                return;
+            }
+
+            var preferred = AvailableShellOrTerminals.FirstOrDefault(x => x.Type == "wt") ??
+                            AvailableShellOrTerminals.FirstOrDefault(x => x.Type != "custom") ??
+                            AvailableShellOrTerminals.FirstOrDefault();
+            if (preferred != null)
+                SelectedShellOrTerminal = preferred;
+        }
+
+        public void RescanShellOrTerminals()
+        {
+            var available = new List<Models.ShellOrTerminal>();
+            foreach (var terminal in Models.ShellOrTerminal.Supported)
+            {
+                if (terminal.Type.Equals("custom", StringComparison.Ordinal) ||
+                    Native.OS.TestShellOrTerminal(terminal))
+                    available.Add(terminal);
+            }
+
+            var selected = _selectedShellOrTerminal;
+            AvailableShellOrTerminals = available;
+
+            if (selected != null && available.Contains(selected))
+            {
+                SelectedShellOrTerminal = selected;
+            }
+            else if (selected != null)
+            {
+                _selectedShellOrTerminal = available.FirstOrDefault(x => x.Type.Equals("custom", StringComparison.Ordinal));
+                OnPropertyChanged(nameof(SelectedShellOrTerminal));
             }
         }
 
@@ -829,6 +858,7 @@ namespace SourceFork.ViewModels
         private Models.ChangeViewMode _stashChangeViewMode = Models.ChangeViewMode.List;
 
         private string _gitDefaultCloneDir = string.Empty;
-        private int _shellOrTerminalType = -1;
+        private List<Models.ShellOrTerminal> _availableShellOrTerminals = [];
+        private Models.ShellOrTerminal _selectedShellOrTerminal = null;
     }
 }

@@ -33,7 +33,8 @@ namespace SourceFork.Models
                     new ShellOrTerminal("git-bash", "Git Bash", "bash.exe"),
                     new ShellOrTerminal("pwsh", "PowerShell", "pwsh.exe|powershell.exe"),
                     new ShellOrTerminal("cmd", "Command Prompt", "cmd.exe"),
-                    new ShellOrTerminal("wt", "Windows Terminal", "wt.exe", "-d .")
+                    new ShellOrTerminal("wt", "Windows Terminal", "wt.exe", "-d ."),
+                    new ShellOrTerminal("custom", "Custom", "")
                 };
             }
             else if (OperatingSystem.IsMacOS())
@@ -48,6 +49,7 @@ namespace SourceFork.Models
                     new ShellOrTerminal("otty", "Otty", "Otty"),
                     new ShellOrTerminal("cmux", "cmux", "cmux"),
                     new ShellOrTerminal("mux0", "mux0", "mux0"),
+                    new ShellOrTerminal("custom", "Custom", ""),
                 };
             }
             else

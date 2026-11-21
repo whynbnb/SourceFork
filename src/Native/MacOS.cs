@@ -88,7 +88,40 @@ namespace SourceFork.Native
 
         public string FindTerminal(Models.ShellOrTerminal shell)
         {
-            return shell.Exec;
+            if (shell.Type.Equals("custom", StringComparison.Ordinal))
+                return string.Empty;
+
+            var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var appDirectories = new string[]
+            {
+                "/Applications",
+                "/System/Applications",
+                "/System/Applications/Utilities",
+                Path.Combine(home, "Applications"),
+            };
+
+            foreach (var name in shell.Exec.Split('|', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                if (name.EndsWith(".app", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (Directory.Exists(name))
+                        return name;
+                    continue;
+                }
+
+                foreach (var dir in appDirectories)
+                {
+                    var app = Path.Combine(dir, $"{name}.app");
+                    if (Directory.Exists(app))
+                        return app;
+                }
+
+                var executable = FindExecutable(name);
+                if (!string.IsNullOrEmpty(executable))
+                    return executable;
+            }
+
+            return string.Empty;
         }
 
         public List<Models.ExternalTool> FindExternalTools()
@@ -118,11 +151,28 @@ namespace SourceFork.Native
                 Process.Start("open", $"{path.Quoted()} -R");
         }
 
-        public void OpenTerminal(string workdir, string _)
+        public void OpenTerminal(string workdir, string args)
         {
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var dir = string.IsNullOrEmpty(workdir) ? home : workdir;
-            Process.Start("open", $"-a {OS.ShellOrTerminal} {dir.Quoted()}");
+            var terminal = OS.ShellOrTerminal;
+
+            if (Directory.Exists(terminal) || terminal.EndsWith(".app", StringComparison.OrdinalIgnoreCase))
+            {
+                Process.Start("open", $"-a {terminal.Quoted()} {dir.Quoted()}");
+            }
+            else if (File.Exists(terminal))
+            {
+                var startInfo = new ProcessStartInfo();
+                startInfo.WorkingDirectory = dir;
+                startInfo.FileName = terminal;
+                startInfo.Arguments = args ?? string.Empty;
+                Process.Start(startInfo);
+            }
+            else
+            {
+                Models.Notification.Send(workdir, $"Terminal not found: {terminal}", true);
+            }
         }
 
         public void OpenWithDefaultEditor(string file)
@@ -138,6 +188,21 @@ namespace SourceFork.Native
         public string GetSetSidExecutable()
         {
             return _setsidExecutable;
+        }
+
+        private string FindExecutable(string filename)
+        {
+            var pathVariable = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            var paths = pathVariable.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var path in paths)
+            {
+                var test = Path.Combine(path, filename);
+                if (File.Exists(test))
+                    return test;
+            }
+
+            var local = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "bin", filename);
+            return File.Exists(local) ? local : string.Empty;
         }
 
         public void TerminateProcess(Process proc)

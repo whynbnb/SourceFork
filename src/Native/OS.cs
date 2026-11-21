@@ -202,6 +202,11 @@ namespace SourceFork.Native
             return !string.IsNullOrEmpty(_backend.FindTerminal(shell));
         }
 
+        public static string GetShellOrTerminalPath(Models.ShellOrTerminal shell)
+        {
+            return _backend.FindTerminal(shell);
+        }
+
         public static void SetShellOrTerminal(Models.ShellOrTerminal shell)
         {
             ShellOrTerminal = shell != null ? _backend.FindTerminal(shell) : string.Empty;
