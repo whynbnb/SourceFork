@@ -220,9 +220,9 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private async void OnStageAllButtonClicked(object _, RoutedEventArgs e)
+        private async void OnStageAllButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            if (DataContext is ViewModels.WorkingCopy vm && sender is Button { IsEffectivelyVisible: true })
                 await vm.StageChangesAsync(vm.VisibleUnstaged, null);
 
             e.Handled = true;
@@ -240,9 +240,9 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private async void OnUnstageAllButtonClicked(object _, RoutedEventArgs e)
+        private async void OnUnstageAllButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            if (DataContext is ViewModels.WorkingCopy vm && sender is Button { IsEffectivelyVisible: true })
                 await vm.UnstageChangesAsync(vm.VisibleStaged, null);
 
             e.Handled = true;
