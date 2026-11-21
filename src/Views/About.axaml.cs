@@ -47,7 +47,13 @@ namespace SourceFork.Views
             if (endOfTagIdx > 0)
                 ver = ver.Substring(0, endOfTagIdx);
 
-            Native.OS.OpenBrowser($"https://github.com/whynbnb/SourceFork/releases/tag/{ver}");
+            // SourceFork release tags use the "sf" prefix (sf1.0), not "v".
+            if (ver.StartsWith("sf", StringComparison.OrdinalIgnoreCase))
+                ver = ver.Substring(2);
+            else if (ver.StartsWith('v') || ver.StartsWith('V'))
+                ver = ver.Substring(1);
+
+            Native.OS.OpenBrowser($"https://github.com/whynbnb/SourceFork/releases/tag/sf{ver}");
             e.Handled = true;
         }
 
