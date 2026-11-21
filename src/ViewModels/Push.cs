@@ -21,7 +21,7 @@ namespace SourceFork.ViewModels
             set
             {
                 if (SetProperty(ref _selectedLocalBranch, value, true))
-                    AutoSelectBranchByRemote();
+                    PostLocalBranchChanged();
             }
         }
 
@@ -32,7 +32,8 @@ namespace SourceFork.ViewModels
 
         public List<Models.Remote> Remotes
         {
-            get => _repo.Remotes;
+            get => _remotes;
+            private set => SetProperty(ref _remotes, value);
         }
 
         [Required(ErrorMessage = "Remote is required!!!")]
@@ -42,7 +43,7 @@ namespace SourceFork.ViewModels
             set
             {
                 if (SetProperty(ref _selectedRemote, value, true))
-                    AutoSelectBranchByRemote();
+                    PostSelectedRemoteChanged();
             }
         }
 
@@ -126,46 +127,14 @@ namespace SourceFork.ViewModels
                 if (LocalBranches.Count == 0)
                     LocalBranches.Add(localBranch);
 
-                _selectedLocalBranch = localBranch;
                 HasSpecifiedLocalBranch = true;
+                SelectedLocalBranch = localBranch;
             }
             else
             {
-                _selectedLocalBranch = current;
                 HasSpecifiedLocalBranch = false;
+                SelectedLocalBranch = current;
             }
-
-            // Find preferred remote if selected local branch has upstream.
-            if (_selectedLocalBranch != null)
-            {
-                var upstream = _selectedLocalBranch.Upstream;
-                if (!string.IsNullOrEmpty(upstream) && !_selectedLocalBranch.IsUpstreamGone)
-                {
-                    _tracking = false;
-
-                    foreach (var branch in repo.Branches)
-                    {
-                        if (!branch.IsLocal && upstream.Equals(branch.FullName, StringComparison.Ordinal))
-                        {
-                            _selectedRemote = repo.Remotes.Find(x => x.Name == branch.Remote);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // Set default remote to the first if it has not been set.
-            if (_selectedRemote == null)
-            {
-                Models.Remote remote = null;
-                if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
-                    remote = repo.Remotes.Find(x => x.Name == _repo.Settings.DefaultRemote);
-
-                _selectedRemote = remote ?? repo.Remotes[0];
-            }
-
-            // Auto select preferred remote branch.
-            AutoSelectBranchByRemote();
         }
 
         public void PushToNewBranch(string name)
@@ -230,7 +199,80 @@ namespace SourceFork.ViewModels
             var _ = _cancellation?.CancelAsync();
         }
 
-        private void AutoSelectBranchByRemote()
+        private void PostLocalBranchChanged()
+        {
+            if (_selectedLocalBranch == null)
+                return;
+
+            var remotes = new List<Models.Remote>();
+            remotes.AddRange(_repo.Remotes);
+
+            // Respect the `branch.<name>.pushRemote` setting.
+            _preferredPushRemote = new Commands.Config(_repo.FullPath)
+                .Get($"branch.\"{_selectedLocalBranch.Name}\".pushRemote");
+
+            if (!string.IsNullOrEmpty(_preferredPushRemote))
+            {
+                var remote = remotes.Find(IsPreferredPushRemote);
+                Remotes = remotes;
+
+                if (remote == null)
+                {
+                    var extra = new Models.Remote() { Name = _preferredPushRemote };
+                    remotes.Add(extra);
+                    Remotes = remotes;
+                    ForceUpdateSelectedRemote(extra);
+                }
+                else
+                {
+                    ForceUpdateSelectedRemote(remote);
+                }
+
+                return;
+            }
+
+            Remotes = remotes;
+
+            // Try to select the remote by the upstream branch.
+            var upstream = _selectedLocalBranch.Upstream;
+            if (!string.IsNullOrEmpty(upstream) && !_selectedLocalBranch.IsUpstreamGone)
+            {
+                foreach (var branch in _repo.Branches)
+                {
+                    if (!branch.IsLocal && upstream.Equals(branch.FullName, StringComparison.Ordinal))
+                    {
+                        ForceUpdateSelectedRemote(Remotes.Find(x => x.Name == branch.Remote));
+                        return;
+                    }
+                }
+            }
+
+            // Fallback to the default remote or the first remote.
+            if (Remotes.Count > 0)
+            {
+                Models.Remote fallback = null;
+                if (!string.IsNullOrEmpty(_repo.Settings.DefaultRemote))
+                    fallback = Remotes.Find(x => x.Name.Equals(_repo.Settings.DefaultRemote, StringComparison.Ordinal));
+
+                ForceUpdateSelectedRemote(fallback ?? Remotes[0]);
+            }
+        }
+
+        private void ForceUpdateSelectedRemote(Models.Remote remote)
+        {
+            var old = _selectedRemote;
+            SelectedRemote = remote;
+            if (remote == old)
+                PostSelectedRemoteChanged();
+        }
+
+        private bool IsPreferredPushRemote(Models.Remote remote)
+        {
+            return remote.Name.Equals(_preferredPushRemote, StringComparison.Ordinal) ||
+                string.Equals(remote.URL, _preferredPushRemote, StringComparison.Ordinal);
+        }
+
+        private void PostSelectedRemoteChanged()
         {
             if (_selectedRemote == null || _selectedLocalBranch == null)
                 return;
@@ -246,7 +288,34 @@ namespace SourceFork.ViewModels
                     branches.Add(branch);
             }
 
-            // If selected local branch has upstream. Try to find it in current remote branches.
+            // If the remote comes from `branch.<name>.pushRemote`, use `branch.<name>.merge`
+            // to locate the target branch.
+            if (!string.IsNullOrEmpty(_preferredPushRemote) && IsPreferredPushRemote(_selectedRemote))
+            {
+                var mergeTarget = new Commands.Config(_repo.FullPath)
+                    .Get($"branch.\"{_selectedLocalBranch.Name}\".merge");
+
+                if (!string.IsNullOrEmpty(mergeTarget))
+                {
+                    var target = branches.Find(x => x.FullName.Equals(mergeTarget, StringComparison.Ordinal));
+                    if (target == null)
+                    {
+                        target = new Models.Branch()
+                        {
+                            Name = mergeTarget.StartsWith("refs/heads/", StringComparison.Ordinal) ? mergeTarget.Substring(11) : mergeTarget,
+                            Remote = _selectedRemote.Name,
+                            Head = "---", // Not used by `git push` command but used by Views
+                        };
+                        branches.Add(target);
+                    }
+
+                    RemoteBranches = branches;
+                    SelectedRemoteBranch = target;
+                    return;
+                }
+            }
+
+            // If the selected local branch has an upstream, try to find it in the current remote branches.
             if (!string.IsNullOrEmpty(_selectedLocalBranch.Upstream))
             {
                 foreach (var branch in branches)
@@ -260,7 +329,7 @@ namespace SourceFork.ViewModels
                 }
             }
 
-            // Try to find a remote branch with the same name of selected local branch.
+            // Try to find a remote branch with the same name as the selected local branch.
             foreach (var branch in branches)
             {
                 if (_selectedLocalBranch.Name.Equals(branch.Name, StringComparison.Ordinal))
@@ -283,8 +352,10 @@ namespace SourceFork.ViewModels
         }
 
         private readonly Repository _repo = null;
+        private List<Models.Remote> _remotes = [];
         private Models.Branch _selectedLocalBranch = null;
         private Models.Remote _selectedRemote = null;
+        private string _preferredPushRemote = null;
         private List<Models.Branch> _remoteBranches = [];
         private Models.Branch _selectedRemoteBranch = null;
         private bool _isSetTrackOptionVisible = false;
