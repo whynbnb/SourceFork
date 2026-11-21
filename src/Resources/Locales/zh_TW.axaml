@@ -30,6 +30,8 @@
   <x:String x:Key="Text.App.HideOthers" xml:space="preserve">隱藏其他</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">顯示全部</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">嘗試三向合併</x:String>
+  <x:String x:Key="Text.Apply.CommitChanges" xml:space="preserve">套用並提交修改</x:String>
+  <x:String x:Key="Text.Apply.CommitChanges.Tip" xml:space="preserve">執行 `git am` 命令而非 `git apply` 命令</x:String>
   <x:String x:Key="Text.Apply.File.Placeholder" xml:space="preserve">選擇修補檔</x:String>
   <x:String x:Key="Text.Apply.IgnoreWS" xml:space="preserve">忽略空白符號</x:String>
   <x:String x:Key="Text.Apply.Source" xml:space="preserve">修補檔來源:</x:String>
@@ -568,6 +570,7 @@
   <x:String x:Key="Text.Init.CommandTip" xml:space="preserve">您是否要在該路徑執行 `git init` 以初始化存放庫?</x:String>
   <x:String x:Key="Text.Init.ErrorMessageTip" xml:space="preserve">無法在指定路徑開啟本機存放庫。原因: </x:String>
   <x:String x:Key="Text.Init.Path" xml:space="preserve">路徑:</x:String>
+  <x:String x:Key="Text.InProgress.Am" xml:space="preserve">套用補丁操作進行中</x:String>
   <x:String x:Key="Text.InProgress.CherryPick" xml:space="preserve">揀選 (cherry-pick) 操作進行中。</x:String>
   <x:String x:Key="Text.InProgress.CherryPick.Head" xml:space="preserve">正在處理提交</x:String>
   <x:String x:Key="Text.InProgress.Merge" xml:space="preserve">合併操作進行中。</x:String>
@@ -842,6 +845,7 @@
   <x:String x:Key="Text.Repository.LocalBranches" xml:space="preserve">本機分支</x:String>
   <x:String x:Key="Text.Repository.MoreOptions" xml:space="preserve">更多選項...</x:String>
   <x:String x:Key="Text.Repository.NavigateToCurrentHead" xml:space="preserve">回到 HEAD</x:String>
+  <x:String x:Key="Text.Repository.FocusOnCurrentBranch" xml:space="preserve">僅檢視目前分支（會清除歷史篩選條件）</x:String>
   <x:String x:Key="Text.Repository.NewBranch" xml:space="preserve">新增分支</x:String>
   <x:String x:Key="Text.Repository.Notifications.Clear" xml:space="preserve">清除所有通知</x:String>
   <x:String x:Key="Text.Repository.OpenAsFolder" xml:space="preserve">此存放庫 (資料夾)</x:String>

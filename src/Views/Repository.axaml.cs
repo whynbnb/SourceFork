@@ -397,6 +397,7 @@ namespace SourceFork.Views
                 var reflog = new MenuItem();
                 reflog.Header = App.Text("Repository.ShowLostCommits");
                 reflog.Tag = "--reflog";
+                reflog.IsEnabled = !repo.UIStates.FocusOnCurrentBranch;
                 if (repo.HistoryShowFlags.HasFlag(Models.HistoryShowFlags.Reflog))
                     reflog.Icon = this.CreateMenuIcon("Icons.Check");
                 reflog.Click += (_, ev) =>

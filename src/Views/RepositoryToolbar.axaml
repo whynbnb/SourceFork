@@ -131,6 +131,14 @@
       <Button Classes="icon_button" Width="32" Click="NavigateToHead" ToolTip.Tip="{DynamicResource Text.Repository.NavigateToCurrentHead}">
         <Path Width="13" Height="13" Margin="0,2,0,0" Data="{StaticResource Icons.Target}" Fill="{DynamicResource Brush.FG1}"/>
       </Button>
+
+      <ToggleButton Classes="line_path"
+                    Width="28"
+                    Margin="2,0,0,0"
+                    IsChecked="{Binding FocusOnCurrentBranch, Mode=TwoWay}"
+                    ToolTip.Tip="{DynamicResource Text.Repository.FocusOnCurrentBranch}">
+        <Path Width="13" Height="13" Data="{StaticResource Icons.Magic}"/>
+      </ToggleButton>
     </StackPanel>
   </Grid>
 </UserControl>

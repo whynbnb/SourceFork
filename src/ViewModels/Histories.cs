@@ -44,6 +44,11 @@ namespace SourceFork.ViewModels
             }
         }
 
+        public bool CanToggleReflog
+        {
+            get => !_repo.UIStates.FocusOnCurrentBranch;
+        }
+
         public bool IsAuthorTimeColumnVisible
         {
             get => _repo.UIStates.IsAuthorTimeColumnVisibleInHistory;
