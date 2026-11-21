@@ -838,7 +838,7 @@
                 Content="{DynamicResource Text.Repository.Resolve}"
                 Padding="8,2" Margin="0,0,8,0"
                 Click="OnResolveInProgress"
-                IsVisible="{Binding SelectedViewIndex, Converter={x:Static c:IntConverters.IsNotOne}}"/>
+                IsVisible="{Binding !IsWorkingCopyVisible}"/>
 
         <Button Grid.Column="3"
                 Classes="flat"
