@@ -935,7 +935,7 @@ namespace SourceFork.Views
                     };
 
                     var copyFullPath = new MenuItem();
-                    copyFullPath.Header = App.Text("CopyPath");
+                    copyFullPath.Header = App.Text("CopyFullPath");
                     copyFullPath.Icon = this.CreateMenuIcon("Icons.Copy");
                     copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
                     copyFullPath.Click += async (_, e) =>
