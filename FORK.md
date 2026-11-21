@@ -49,6 +49,7 @@
   - 剪贴板 `SetTextAsync` 使用 `ClipboardExtensions`。
   - 代码中的反射绑定改为 `CompiledBinding`，保证 NativeAOT 下绑定可用。
   - `aot-static` 静态链接包切换为 `StaticLink.Avalonia 3.119.4.1` + `StaticLink.Avalonia.Native 12.1.6.1`（SkiaSharp 3.119.4）。
+- Linux 启用原生 Wayland：引入 `Avalonia.Wayland 12.1.6`，使用 `UseWaylandWithFallback()`；检测到可用的 Wayland 合成器时使用原生后端，否则自动回退 X11/XWayland。Wayland 的 `AppId` 设为 `me.whynbnb.SourceFork`。
 
 ## 上游关系
 

@@ -19,6 +19,8 @@ namespace SourceFork.Native
 
         public void SetupApp(AppBuilder builder)
         {
+            builder.With(new WaylandPlatformOptions() { AppId = "me.whynbnb.SourceFork" });
+            builder.UseWaylandWithFallback();
             builder.With(new X11PlatformOptions() { EnableIme = true });
         }
 
