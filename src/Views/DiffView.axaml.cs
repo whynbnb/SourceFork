@@ -46,6 +46,12 @@ namespace SourceFork.Views
             ToggleHotkeyBindings(IsEffectivelyVisible);
         }
 
+        protected override void OnUnloaded(RoutedEventArgs e)
+        {
+            base.OnUnloaded(e);
+            ToggleHotkeyBindings(false);
+        }
+
         private void OnGotoFirstChange(object _, RoutedEventArgs e)
         {
             this.FindDescendantOfType<ThemedTextDiffPresenter>()?.GotoChange(ViewModels.BlockNavigationDirection.First);

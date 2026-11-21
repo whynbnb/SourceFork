@@ -161,7 +161,10 @@ namespace SourceFork.Native
 
             if (Directory.Exists(terminal) || terminal.EndsWith(".app", StringComparison.OrdinalIgnoreCase))
             {
-                Process.Start("open", $"-a {terminal.Quoted()} {dir.Quoted()}");
+                if (string.IsNullOrEmpty(args))
+                    Process.Start("open", $"-a {terminal.Quoted()} {dir.Quoted()}");
+                else
+                    Process.Start("open", $"-a {terminal.Quoted()} --args {args} {dir.Quoted()}");
             }
             else if (File.Exists(terminal))
             {

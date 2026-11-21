@@ -55,10 +55,11 @@ namespace SourceFork.ViewModels
             Mode = new DiscardAllMode();
         }
 
-        public Discard(Repository repo, List<Models.Change> changes)
+        public Discard(Repository repo, List<Models.Change> changes, Models.Change next)
         {
             _repo = repo;
             _changes = changes;
+            _next = next;
 
             if (_changes == null)
                 Mode = new DiscardAllMode();
@@ -87,11 +88,14 @@ namespace SourceFork.ViewModels
             }
 
             log.Complete();
+
+            _repo.WorkingCopy.SelectedUnstaged = _next != null ? [_next] : [];
             _repo.MarkWorkingCopyDirtyManually();
             return true;
         }
 
         private readonly Repository _repo = null;
         private readonly List<Models.Change> _changes = null;
+        private readonly Models.Change _next = null;
     }
 }

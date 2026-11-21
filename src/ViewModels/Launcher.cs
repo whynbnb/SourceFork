@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Specialized;
 using System.IO;
-using System.Text;
 
 using Avalonia.Collections;
 using Avalonia.Threading;
@@ -12,12 +11,6 @@ namespace SourceFork.ViewModels
 {
     public class Launcher : ObservableObject
     {
-        public string Title
-        {
-            get => _title;
-            private set => SetProperty(ref _title, value);
-        }
-
         public AvaloniaList<LauncherPage> Pages
         {
             get;
@@ -576,14 +569,6 @@ namespace SourceFork.ViewModels
             if (_activePage is { Data: Repository repo })
                 _activeWorkspace.ActiveIdx = _activeWorkspace.Repositories.IndexOf(repo.FullPath);
 
-            var builder = new StringBuilder(512);
-            builder.Append(string.IsNullOrEmpty(_activePage.Node.Name) ? "Repositories" : _activePage.Node.Name);
-
-            var workspaces = Preferences.Instance.Workspaces;
-            if (workspaces.Count == 0 || workspaces.Count > 1 || workspaces[0] != _activeWorkspace)
-                builder.Append(" - ").Append(_activeWorkspace.Name);
-
-            Title = builder.ToString();
             CommandPalette = null;
         }
 
@@ -591,7 +576,6 @@ namespace SourceFork.ViewModels
         private LauncherPage _activePage;
         private bool _ignoreIndexChange;
         private string _repositoryFilter = string.Empty;
-        private string _title = string.Empty;
         private ICommandPalette _commandPalette;
         private Models.Version _newVersion = null;
     }

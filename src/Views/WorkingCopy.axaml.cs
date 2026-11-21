@@ -108,7 +108,7 @@ namespace SourceFork.Views
                 }
                 else if (e.Key is Key.Delete or Key.Back && vm.SelectedUnstaged is { Count: > 0 })
                 {
-                    vm.Discard(vm.SelectedUnstaged);
+                    vm.Discard(vm.SelectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
                     e.Handled = true;
                 }
                 else if (e.Key is Key.O && e.KeyModifiers == cmdKey && vm.SelectedUnstaged is { Count: 1 })
@@ -431,7 +431,7 @@ namespace SourceFork.Views
                     discard.Tag = "Back/Delete";
                     discard.Click += (_, e) =>
                     {
-                        vm.Discard(selectedUnstaged);
+                        vm.Discard(selectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
                         e.Handled = true;
                     };
 
@@ -851,7 +851,7 @@ namespace SourceFork.Views
                 discard.Tag = "Back/Delete";
                 discard.Click += (_, e) =>
                 {
-                    vm.Discard(selectedUnstaged);
+                    vm.Discard(selectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
                     e.Handled = true;
                 };
 
