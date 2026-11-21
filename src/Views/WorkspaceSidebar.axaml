@@ -47,7 +47,7 @@
                    Padding="0"
                    VerticalAlignment="Center"
                    Classes="no_border no_background"
-                   Watermark="{DynamicResource Text.Welcome.Search}"
+                   PlaceholderText="{DynamicResource Text.Welcome.Search}"
                    Text="{Binding RepositoryFilter, Mode=TwoWay}"/>
         </Grid>
       </Border>

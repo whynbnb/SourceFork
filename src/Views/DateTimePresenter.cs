@@ -60,19 +60,15 @@ namespace SourceFork.Views
 
         public DateTimePresenter()
         {
-            Bind(Use24HoursProperty, new Binding()
-            {
-                Mode = BindingMode.OneWay,
-                Source = ViewModels.Preferences.Instance,
-                Path = "Use24Hours"
-            });
+            Bind(Use24HoursProperty, CompiledBinding.Create(
+                (ViewModels.Preferences p) => p.Use24Hours,
+                ViewModels.Preferences.Instance,
+                mode: BindingMode.OneWay));
 
-            Bind(DateTimeFormatProperty, new Binding()
-            {
-                Mode = BindingMode.OneWay,
-                Source = ViewModels.Preferences.Instance,
-                Path = "DateTimeFormat"
-            });
+            Bind(DateTimeFormatProperty, CompiledBinding.Create(
+                (ViewModels.Preferences p) => p.DateTimeFormat,
+                ViewModels.Preferences.Instance,
+                mode: BindingMode.OneWay));
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

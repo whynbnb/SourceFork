@@ -1,0 +1,13 @@
+<Project>
+  <!--
+    AvaloniaEdit is a submodule and pins Microsoft.SourceLink.GitHub, which
+    brings in Microsoft.Build.Tasks.Git 10.0.201. NuGet reports that build-time
+    package as NU1902. Suppress just that advisory instead of disabling audit or
+    failing the whole app build (AvaloniaEdit enables TreatWarningsAsErrors).
+    The submodule has no Directory.Build.targets of its own, so this file is
+    also picked up by its projects.
+  -->
+  <ItemGroup>
+    <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-23fw-v26w-5fgq" />
+  </ItemGroup>
+</Project>

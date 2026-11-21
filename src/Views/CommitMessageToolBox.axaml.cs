@@ -332,7 +332,7 @@ namespace SourceFork.Views
             }
         }
 
-        protected override void OnLostFocus(RoutedEventArgs e)
+        protected override void OnLostFocus(FocusChangedEventArgs e)
         {
             base.OnLostFocus(e);
             Suggestions = null;

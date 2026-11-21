@@ -50,7 +50,7 @@ namespace SourceFork.Native
 
         public void SetupWindow(Window window)
         {
-            window.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.SystemChrome;
+            window.WindowDecorations = WindowDecorations.Full;
             window.ExtendClientAreaToDecorationsHint = true;
             window.BorderThickness = new Thickness(0);
         }

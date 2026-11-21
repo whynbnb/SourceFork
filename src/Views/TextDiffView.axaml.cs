@@ -1019,7 +1019,9 @@ namespace SourceFork.Views
             _scrollViewer = this.FindDescendantOfType<ScrollViewer>();
             if (_scrollViewer != null)
             {
-                _scrollViewer.Bind(ScrollViewer.OffsetProperty, new Binding("ScrollOffset", BindingMode.TwoWay));
+                _scrollViewer.Bind(ScrollViewer.OffsetProperty, CompiledBinding.Create(
+                    (ViewModels.TextDiffContext vm) => vm.ScrollOffset,
+                    mode: BindingMode.TwoWay));
                 _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
             }
         }
@@ -1207,7 +1209,9 @@ namespace SourceFork.Views
             if (_scrollViewer != null)
             {
                 _scrollViewer.ScrollChanged += OnTextViewScrollChanged;
-                _scrollViewer.Bind(ScrollViewer.OffsetProperty, new Binding("ScrollOffset", BindingMode.OneWay));
+                _scrollViewer.Bind(ScrollViewer.OffsetProperty, CompiledBinding.Create(
+                    (ViewModels.TextDiffContext vm) => vm.ScrollOffset,
+                    mode: BindingMode.OneWay));
             }
         }
 

@@ -11,7 +11,7 @@
 - 终端改为扫描本机可用终端，扫描不到时可用 Custom 手动填写路径。Windows Terminal 和 macOS Terminal 作为默认候选。
 - 外部工具改为自动扫描，可逐项勾选是否显示在“打开方式”菜单；支持手动添加和移除自定义工具。
 - `herdr` 特殊适配：检测到 herdr 后默认启用；打开仓库时优先聚焦已存在的 herdr workspace，没有则创建新的 workspace。herdr 不会出现在文件级“打开方式”菜单。
-- 子模块：`depends/AvaloniaEdit` 固定在 `11bf2b6a`（v2026.19 对应的版本）
+- 子模块：`depends/AvaloniaEdit` 固定在 `358f2c9e`（上游 `patch-on-12.x` 分支，Avalonia 12 适配版，已包含不把单个 `\r` 当换行的补丁）
 
 选择 2026.19 的原因：侧边栏/仓库页布局重构从 `02799ba6 ux: repository page layout (#2660)` 开始，
 在 2026.19 之后才合入。2026.20 ~ 2026.24 包含大量 `ux`/`style`/布局类提交，
@@ -41,6 +41,14 @@
 - 移植上游 `Launcher.axaml`、`LauncherPage.axaml`、`RepositoryToolbar.axaml`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏和统一顶栏结构。
 - 发布流程按 `framework` / `aot` / `aot-static` 三种模式构建；`aot-static` 通过 `StaticLink.Avalonia` 和 `StaticLink.libonigwrap` 静态链接 Avalonia/Skia/HarfBuzz/Oniguruma，输出单文件。
 - Release 暂只产出 Linux x64、Windows x64 和 macOS arm64，共 9 种资产；RPM、Flatpak 等暂不构建。
+- UI 框架升级到 Avalonia `12.1.6`（DataGrid `12.1.2`），同步完成 Avalonia 12 适配：
+  - 移除已废弃的 `Avalonia.Diagnostics`（12.x 起由 Avalonia Plus 的 DiagnosticsSupport 取代）。
+  - `ExtendClientAreaChromeHints` 改为 `Window.WindowDecorations`；`SystemDecorations` 改为 `WindowDecorations`。
+  - `ContextRequestedEventArgs` 迁移到 `Avalonia.Input`，`GotFocus/LostFocus` 使用 `FocusChangedEventArgs`。
+  - `TextBox.Watermark` 改用 `PlaceholderText`。
+  - 剪贴板 `SetTextAsync` 使用 `ClipboardExtensions`。
+  - 代码中的反射绑定改为 `CompiledBinding`，保证 NativeAOT 下绑定可用。
+  - `aot-static` 静态链接包切换为 `StaticLink.Avalonia 3.119.4.1` + `StaticLink.Avalonia.Native 12.1.6.1`（SkiaSharp 3.119.4）。
 
 ## 上游关系
 

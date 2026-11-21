@@ -132,11 +132,11 @@ namespace SourceFork.Views
 
             var ro = new RenderOptions()
             {
-                TextRenderingMode = TextRenderingMode.SubpixelAntialias,
                 EdgeMode = EdgeMode.Antialias
             };
 
             using (context.PushRenderOptions(ro))
+            using (context.PushTextOptions(new TextOptions() { TextRenderingMode = TextRenderingMode.SubpixelAntialias }))
             {
                 var height = Bounds.Height;
                 var width = Bounds.Width;

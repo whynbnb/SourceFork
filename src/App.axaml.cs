@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
@@ -214,8 +213,6 @@ namespace SourceFork
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                BindingPlugins.DataValidators.RemoveAt(0);
-
                 // Disable tooltip if window is not active.
                 ToolTip.ToolTipOpeningEvent.AddClassHandler<Control>((c, e) =>
                 {
