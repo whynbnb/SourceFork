@@ -166,9 +166,7 @@ namespace SourceFork.ViewModels
         public override async Task<bool> Sure()
         {
             using var lockWatcher = _repo.LockWatcher();
-
-            var remoteBranchName = _selectedRemoteBranch.Name;
-            ProgressDescription = $"Push {_selectedLocalBranch.Name} -> {_selectedRemote.Name}/{remoteBranchName} ...";
+            ProgressDescription = $"Push {_selectedLocalBranch.Name} -> {_selectedRemoteBranch.FriendlyName} ...";
 
             var log = _repo.CreateLog("Push");
             Use(log);
@@ -178,14 +176,14 @@ namespace SourceFork.ViewModels
 
             var succ = await new Commands.Push(
                 _repo.FullPath,
-                _selectedLocalBranch.Name,
-                _selectedRemote.Name,
-                remoteBranchName,
+                _selectedLocalBranch,
+                _selectedRemote,
+                _selectedRemoteBranch,
                 PushAllTags,
                 _repo.Submodules.Count > 0 && CheckSubmodules,
                 _isSetTrackOptionVisible && _tracking,
                 ForcePush,
-                NoVerify).WithCancellation(token).Use(log).RunAsync();
+                NoVerify).WithCancellation(token).Use(log).ExecAsync();
 
             log.Complete();
 
@@ -297,12 +295,13 @@ namespace SourceFork.ViewModels
 
                 if (!string.IsNullOrEmpty(mergeTarget))
                 {
-                    var target = branches.Find(x => x.FullName.Equals(mergeTarget, StringComparison.Ordinal));
+                    var cleanName = mergeTarget.StartsWith("refs/heads/", StringComparison.Ordinal) ? mergeTarget.Substring(11) : mergeTarget;
+                    var target = branches.Find(x => x.Name.Equals(cleanName, StringComparison.Ordinal));
                     if (target == null)
                     {
                         target = new Models.Branch()
                         {
-                            Name = mergeTarget.StartsWith("refs/heads/", StringComparison.Ordinal) ? mergeTarget.Substring(11) : mergeTarget,
+                            Name = cleanName,
                             Remote = _selectedRemote.Name,
                             Head = "---", // Not used by `git push` command but used by Views
                         };

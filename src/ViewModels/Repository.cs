@@ -2017,11 +2017,11 @@ namespace SourceFork.ViewModels
                 if (desire > now)
                     return;
 
-                var remotes = new List<string>();
+                var remotes = new List<Models.Remote>();
                 foreach (var r in _remotes)
                 {
                     if (!r.DisableAutoFetch)
-                        remotes.Add(r.Name);
+                        remotes.Add(r);
                 }
 
                 if (remotes.Count == 0)
@@ -2031,7 +2031,7 @@ namespace SourceFork.ViewModels
                 log = CreateLog("Auto-Fetch");
 
                 foreach (var remote in remotes)
-                    await new Commands.Fetch(FullPath, remote).Use(log).RunAsync();
+                    await new Commands.Fetch(FullPath, remote).Use(log).ExecAsync();
 
                 _lastFetchTime = DateTime.Now;
             }
