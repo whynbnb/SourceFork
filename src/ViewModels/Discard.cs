@@ -89,7 +89,7 @@ namespace SourceFork.ViewModels
 
             log.Complete();
 
-            _repo.WorkingCopy.SelectedUnstaged = _next != null ? [_next] : [];
+            _repo.WorkingCopy.SelectedUnstaged = new ChangeSelection(_next != null ? new List<Models.Change> { _next } : null);
             _repo.MarkWorkingCopyDirtyManually();
             return true;
         }

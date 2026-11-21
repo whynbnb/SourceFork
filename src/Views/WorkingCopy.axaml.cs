@@ -43,40 +43,30 @@ namespace SourceFork.Views
 
         private void OnUnstagedContextRequested(object sender, ContextRequestedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm && sender is Control control)
+            if (DataContext is ViewModels.WorkingCopy { Repository: { } repo, SelectedUnstaged: { Count: > 0 } selection } vm)
             {
-                var container = control.FindDescendantOfType<ChangeCollectionContainer>();
-                var selectedSingleFolder = string.Empty;
-                if (container is { SelectedItems.Count: 1, SelectedItem: ViewModels.ChangeTreeNode { IsFolder: true } node })
-                    selectedSingleFolder = node.FullPath;
-
-                var menu = CreateContextMenuForUnstagedChanges(vm, selectedSingleFolder);
-                menu?.Open(control);
+                var menu = CreateContextMenuForUnstagedChanges(repo, vm, selection);
+                menu?.Open(sender as Control);
                 e.Handled = true;
             }
         }
 
         private void OnStagedContextRequested(object sender, ContextRequestedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm && sender is Control control)
+            if (DataContext is ViewModels.WorkingCopy { Repository: { } repo, SelectedStaged: { Count: > 0 } selection } vm)
             {
-                var container = control.FindDescendantOfType<ChangeCollectionContainer>();
-                var selectedSingleFolder = string.Empty;
-                if (container is { SelectedItems.Count: 1, SelectedItem: ViewModels.ChangeTreeNode { IsFolder: true } node })
-                    selectedSingleFolder = node.FullPath;
-
-                var menu = CreateContextMenuForStagedChanges(vm, selectedSingleFolder);
-                menu?.Open(control);
+                var menu = CreateContextMenuForStagedChanges(repo, vm, selection);
+                menu?.Open(sender as Control);
                 e.Handled = true;
             }
         }
 
         private async void OnUnstagedChangeDoubleTapped(object _, RoutedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            if (DataContext is ViewModels.WorkingCopy { SelectedUnstaged: { Count: > 0 } selection } vm)
             {
                 var next = UnstagedChangesView.GetNextChangeWithoutSelection();
-                await vm.StageChangesAsync(vm.SelectedUnstaged, next);
+                await vm.StageChangesAsync(selection.Changes, next);
                 UnstagedChangesView.TakeFocus();
                 e.Handled = true;
             }
@@ -84,10 +74,10 @@ namespace SourceFork.Views
 
         private async void OnStagedChangeDoubleTapped(object _, RoutedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            if (DataContext is ViewModels.WorkingCopy { SelectedStaged: { Count: > 0 } selection } vm)
             {
                 var next = StagedChangesView.GetNextChangeWithoutSelection();
-                await vm.UnstageChangesAsync(vm.SelectedStaged, next);
+                await vm.UnstageChangesAsync(selection.Changes, next);
                 StagedChangesView.TakeFocus();
                 e.Handled = true;
             }
@@ -95,25 +85,27 @@ namespace SourceFork.Views
 
         private async void OnUnstagedKeyDown(object _, KeyEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+
+            if (DataContext is ViewModels.WorkingCopy { SelectedUnstaged: { Count: > 0 } selection } vm)
             {
-                var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+                var changes = selection.Changes;
 
                 if (e.Key is Key.Space or Key.Enter)
                 {
                     var next = UnstagedChangesView.GetNextChangeWithoutSelection();
-                    await vm.StageChangesAsync(vm.SelectedUnstaged, next);
+                    await vm.StageChangesAsync(changes, next);
                     UnstagedChangesView.TakeFocus();
                     e.Handled = true;
                 }
-                else if (e.Key is Key.Delete or Key.Back && vm.SelectedUnstaged is { Count: > 0 })
+                else if (e.Key is Key.Delete or Key.Back)
                 {
-                    vm.Discard(vm.SelectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
+                    vm.Discard(changes, UnstagedChangesView.GetNextChangeWithoutSelection());
                     e.Handled = true;
                 }
-                else if (e.Key is Key.O && e.KeyModifiers == cmdKey && vm.SelectedUnstaged is { Count: 1 })
+                else if (e.Key is Key.O && e.KeyModifiers == cmdKey && changes.Count == 1)
                 {
-                    var change = vm.SelectedUnstaged[0];
+                    var change = changes[0];
                     var fullpath = Native.OS.GetAbsPath(vm.Repository.FullPath, change.Path);
                     if (File.Exists(fullpath))
                         Native.OS.OpenWithDefaultEditor(fullpath);
@@ -123,19 +115,18 @@ namespace SourceFork.Views
                 {
                     var builder = new StringBuilder();
                     var copyAbsPath = e.KeyModifiers.HasFlag(KeyModifiers.Shift);
-                    var container = UnstagedChangesView.FindDescendantOfType<ChangeCollectionContainer>();
-                    if (container is { SelectedItems.Count: 1, SelectedItem: ViewModels.ChangeTreeNode { IsFolder: true } node })
+                    if (selection.IsSingleFolder)
                     {
-                        builder.Append(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, node.FullPath) : node.FullPath);
+                        builder.Append(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, selection.SingleFolderPath) : selection.SingleFolderPath);
                     }
-                    else if (vm.SelectedUnstaged is { Count: 1 })
+                    else if (changes.Count == 1)
                     {
-                        var change = vm.SelectedUnstaged[0];
+                        var change = changes[0];
                         builder.Append(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, change.Path) : change.Path);
                     }
-                    else if (vm.SelectedUnstaged is { Count: > 0 })
+                    else
                     {
-                        foreach (var c in vm.SelectedUnstaged)
+                        foreach (var c in changes)
                             builder.AppendLine(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, c.Path) : c.Path);
                     }
 
@@ -145,30 +136,32 @@ namespace SourceFork.Views
                         e.Handled = true;
                     }
                 }
-                else if (e.Key is Key.F && e.KeyModifiers == cmdKey)
-                {
-                    LocalChangesSearchBox.Focus();
-                    e.Handled = true;
-                }
+            }
+            else if (e.Key is Key.F && e.KeyModifiers == cmdKey)
+            {
+                LocalChangesSearchBox.Focus();
+                e.Handled = true;
             }
         }
 
         private async void OnStagedKeyDown(object _, KeyEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+
+            if (DataContext is ViewModels.WorkingCopy { SelectedStaged: { Count: > 0 } selection } vm)
             {
-                var cmdKey = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+                var changes = selection.Changes;
 
                 if (e.Key is Key.Space or Key.Enter)
                 {
                     var next = StagedChangesView.GetNextChangeWithoutSelection();
-                    await vm.UnstageChangesAsync(vm.SelectedStaged, next);
+                    await vm.UnstageChangesAsync(changes, next);
                     StagedChangesView.TakeFocus();
                     e.Handled = true;
                 }
-                else if (e.Key is Key.O && e.KeyModifiers == cmdKey && vm.SelectedStaged is { Count: 1 })
+                else if (e.Key is Key.O && e.KeyModifiers == cmdKey && changes.Count == 1)
                 {
-                    var change = vm.SelectedStaged[0];
+                    var change = changes[0];
                     var fullpath = Native.OS.GetAbsPath(vm.Repository.FullPath, change.Path);
                     if (File.Exists(fullpath))
                         Native.OS.OpenWithDefaultEditor(fullpath);
@@ -178,19 +171,18 @@ namespace SourceFork.Views
                 {
                     var builder = new StringBuilder();
                     var copyAbsPath = e.KeyModifiers.HasFlag(KeyModifiers.Shift);
-                    var container = StagedChangesView.FindDescendantOfType<ChangeCollectionContainer>();
-                    if (container is { SelectedItems.Count: 1, SelectedItem: ViewModels.ChangeTreeNode { IsFolder: true } node })
+                    if (selection.IsSingleFolder)
                     {
-                        builder.Append(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, node.FullPath) : node.FullPath);
+                        builder.Append(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, selection.SingleFolderPath) : selection.SingleFolderPath);
                     }
-                    else if (vm.SelectedStaged is { Count: 1 })
+                    else if (changes.Count == 1)
                     {
-                        var change = vm.SelectedStaged[0];
+                        var change = changes[0];
                         builder.Append(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, change.Path) : change.Path);
                     }
-                    else if (vm.SelectedStaged is { Count: > 0 })
+                    else
                     {
-                        foreach (var c in vm.SelectedStaged)
+                        foreach (var c in changes)
                             builder.AppendLine(copyAbsPath ? Native.OS.GetAbsPath(vm.Repository.FullPath, c.Path) : c.Path);
                     }
 
@@ -200,20 +192,20 @@ namespace SourceFork.Views
                         e.Handled = true;
                     }
                 }
-                else if (e.Key is Key.F && e.KeyModifiers == cmdKey)
-                {
-                    LocalChangesSearchBox.Focus();
-                    e.Handled = true;
-                }
+            }
+            else if (e.Key is Key.F && e.KeyModifiers == cmdKey)
+            {
+                LocalChangesSearchBox.Focus();
+                e.Handled = true;
             }
         }
 
         private async void OnStageSelectedButtonClicked(object _, RoutedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            if (DataContext is ViewModels.WorkingCopy { SelectedUnstaged: { Count: > 0 } selection } vm)
             {
                 var next = UnstagedChangesView.GetNextChangeWithoutSelection();
-                await vm.StageChangesAsync(vm.SelectedUnstaged, next);
+                await vm.StageChangesAsync(selection.Changes, next);
                 UnstagedChangesView.TakeFocus();
             }
 
@@ -230,10 +222,10 @@ namespace SourceFork.Views
 
         private async void OnUnstageSelectedButtonClicked(object _, RoutedEventArgs e)
         {
-            if (DataContext is ViewModels.WorkingCopy vm)
+            if (DataContext is ViewModels.WorkingCopy { SelectedStaged: { Count: > 0 } selection } vm)
             {
                 var next = StagedChangesView.GetNextChangeWithoutSelection();
-                await vm.UnstageChangesAsync(vm.SelectedStaged, next);
+                await vm.UnstageChangesAsync(selection.Changes, next);
                 StagedChangesView.TakeFocus();
             }
 
@@ -297,21 +289,17 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private ContextMenu CreateContextMenuForUnstagedChanges(ViewModels.WorkingCopy vm, string selectedSingleFolder)
+        private ContextMenu CreateContextMenuForUnstagedChanges(ViewModels.Repository repo, ViewModels.WorkingCopy vm, ViewModels.ChangeSelection selection)
         {
-            var repo = vm.Repository;
-            var selectedUnstaged = vm.SelectedUnstaged;
-            if (repo == null || selectedUnstaged == null || selectedUnstaged.Count == 0)
-                return null;
-
-            var hasSelectedFolder = !string.IsNullOrEmpty(selectedSingleFolder);
+            var changes = selection.Changes;
             var menu = new ContextMenu();
-            if (selectedUnstaged.Count == 1)
+
+            if (changes.Count == 1)
             {
-                var change = selectedUnstaged[0];
+                var change = changes[0];
                 var path = Native.OS.GetAbsPath(repo.FullPath, change.Path);
 
-                if (!change.IsConflicted)
+                if (!change.IsConflicted && !selection.HasFolder)
                 {
                     TryAddOpenFileToContextMenu(menu, path);
 
@@ -328,18 +316,23 @@ namespace SourceFork.Views
                     menu.Items.Add(diffWithMerger);
                 }
 
-                var explore = new MenuItem();
-                explore.Header = App.Text("RevealFile");
-                explore.Icon = this.CreateMenuIcon("Icons.Explore");
-                explore.IsEnabled = File.Exists(path) || Directory.Exists(path);
-                explore.Click += (_, e) =>
+                if (!selection.HasFolder || selection.IsSingleFolder)
                 {
-                    var target = hasSelectedFolder ? Native.OS.GetAbsPath(repo.FullPath, selectedSingleFolder) : path;
-                    Native.OS.OpenInFileManager(target);
-                    e.Handled = true;
-                };
-                menu.Items.Add(explore);
-                menu.Items.Add(new MenuItem() { Header = "-" });
+                    var absPath = selection.IsSingleFolder ? Native.OS.GetAbsPath(repo.FullPath, selection.SingleFolderPath) : path;
+                    var explore = new MenuItem();
+                    explore.Header = App.Text("RevealFile");
+                    explore.Icon = this.CreateMenuIcon("Icons.Explore");
+                    explore.IsEnabled = Path.Exists(absPath);
+                    explore.Click += (_, e) =>
+                    {
+                        Native.OS.OpenInFileManager(absPath);
+                        e.Handled = true;
+                    };
+                    menu.Items.Add(explore);
+                }
+
+                if (menu.Items.Count > 0)
+                    menu.Items.Add(new MenuItem() { Header = "-" });
 
                 if (change.IsConflicted)
                 {
@@ -347,7 +340,7 @@ namespace SourceFork.Views
                     useTheirs.Icon = this.CreateMenuIcon("Icons.Incoming");
                     useTheirs.Click += async (_, e) =>
                     {
-                        await vm.UseTheirsAsync(selectedUnstaged);
+                        await vm.UseTheirsAsync(changes);
                         e.Handled = true;
                     };
 
@@ -355,7 +348,7 @@ namespace SourceFork.Views
                     useMine.Icon = this.CreateMenuIcon("Icons.Local");
                     useMine.Click += async (_, e) =>
                     {
-                        await vm.UseMineAsync(selectedUnstaged);
+                        await vm.UseMineAsync(changes);
                         e.Handled = true;
                     };
 
@@ -421,7 +414,7 @@ namespace SourceFork.Views
                     stage.Tag = "Enter/Space";
                     stage.Click += async (_, e) =>
                     {
-                        await vm.StageChangesAsync(selectedUnstaged, null);
+                        await vm.StageChangesAsync(changes, null);
                         e.Handled = true;
                     };
 
@@ -431,7 +424,7 @@ namespace SourceFork.Views
                     discard.Tag = "Back/Delete";
                     discard.Click += (_, e) =>
                     {
-                        vm.Discard(selectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
+                        vm.Discard(changes, UnstagedChangesView.GetNextChangeWithoutSelection());
                         e.Handled = true;
                     };
 
@@ -441,7 +434,7 @@ namespace SourceFork.Views
                     stash.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())
-                            repo.ShowPopup(new ViewModels.StashChanges(repo, selectedUnstaged));
+                            repo.ShowPopup(new ViewModels.StashChanges(repo, changes));
 
                         e.Handled = true;
                     };
@@ -464,7 +457,7 @@ namespace SourceFork.Views
                         {
                             var storageFile = await storageProvider.SaveFilePickerAsync(options);
                             if (storageFile != null)
-                                await vm.SaveChangesToPatchAsync(selectedUnstaged, true, storageFile.Path.LocalPath);
+                                await vm.SaveChangesToPatchAsync(changes, true, storageFile.Path.LocalPath);
                         }
                         catch (Exception exception)
                         {
@@ -495,81 +488,7 @@ namespace SourceFork.Views
 
                     var extension = Path.GetExtension(change.Path);
                     var hasExtra = false;
-                    if (change.WorkTree == Models.ChangeState.Untracked)
-                    {
-                        var addToIgnore = new MenuItem();
-                        addToIgnore.Header = App.Text("WorkingCopy.AddToGitIgnore");
-                        addToIgnore.Icon = this.CreateMenuIcon("Icons.GitIgnore");
-
-                        if (hasSelectedFolder)
-                        {
-                            var ignoreFolder = new MenuItem();
-                            ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder");
-                            ignoreFolder.Click += (_, e) =>
-                            {
-                                if (repo.CanCreatePopup())
-                                    repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{selectedSingleFolder}/"));
-                                e.Handled = true;
-                            };
-                            addToIgnore.Items.Add(ignoreFolder);
-                        }
-                        else
-                        {
-                            var isRooted = change.Path!.IndexOf('/') <= 0;
-                            var singleFile = new MenuItem();
-                            singleFile.Header = App.Text("WorkingCopy.AddToGitIgnore.SingleFile");
-                            singleFile.Click += (_, e) =>
-                            {
-                                if (repo.CanCreatePopup())
-                                    repo.ShowPopup(new ViewModels.AddToIgnore(repo, change.Path));
-                                e.Handled = true;
-                            };
-                            addToIgnore.Items.Add(singleFile);
-
-                            if (!string.IsNullOrEmpty(extension))
-                            {
-                                var byExtension = new MenuItem();
-                                byExtension.Header = App.Text("WorkingCopy.AddToGitIgnore.Extension", extension);
-                                byExtension.Click += (_, e) =>
-                                {
-                                    if (repo.CanCreatePopup())
-                                        repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"*{extension}"));
-                                    e.Handled = true;
-                                };
-                                addToIgnore.Items.Add(byExtension);
-
-                                var byExtensionInSameFolder = new MenuItem();
-                                byExtensionInSameFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.ExtensionInSameFolder", extension);
-                                byExtensionInSameFolder.IsVisible = !isRooted;
-                                byExtensionInSameFolder.Click += (_, e) =>
-                                {
-                                    var dir = Path.GetDirectoryName(change.Path)!.Replace('\\', '/').TrimEnd('/');
-                                    if (repo.CanCreatePopup())
-                                        repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{dir}/*{extension}"));
-                                    e.Handled = true;
-                                };
-                                addToIgnore.Items.Add(byExtensionInSameFolder);
-                            }
-
-                            if (!isRooted)
-                            {
-                                var untrackedInSameFolder = new MenuItem();
-                                untrackedInSameFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.UntrackedInSameFolder");
-                                untrackedInSameFolder.Click += (_, e) =>
-                                {
-                                    var dir = Path.GetDirectoryName(change.Path)!.Replace('\\', '/').TrimEnd('/');
-                                    if (repo.CanCreatePopup())
-                                        repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{dir}/"));
-                                    e.Handled = true;
-                                };
-                                addToIgnore.Items.Add(untrackedInSameFolder);
-                            }
-                        }
-
-                        menu.Items.Add(addToIgnore);
-                        hasExtra = true;
-                    }
-                    else if (hasSelectedFolder)
+                    if (selection.IsSingleFolder)
                     {
                         var addToIgnore = new MenuItem();
                         addToIgnore.Header = App.Text("WorkingCopy.AddToGitIgnore");
@@ -580,7 +499,7 @@ namespace SourceFork.Views
                         ignoreFolder.Click += (_, e) =>
                         {
                             if (repo.CanCreatePopup())
-                                repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{selectedSingleFolder}/"));
+                                repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{selection.SingleFolderPath}/"));
                             e.Handled = true;
                         };
                         addToIgnore.Items.Add(ignoreFolder);
@@ -588,8 +507,67 @@ namespace SourceFork.Views
                         menu.Items.Add(addToIgnore);
                         hasExtra = true;
                     }
+                    else if (!selection.HasFolder && change.WorkTree == Models.ChangeState.Untracked)
+                    {
+                        var addToIgnore = new MenuItem();
+                        addToIgnore.Header = App.Text("WorkingCopy.AddToGitIgnore");
+                        addToIgnore.Icon = this.CreateMenuIcon("Icons.GitIgnore");
 
-                    if (File.Exists(path) && repo.IsLFSEnabled())
+                        var isRooted = change.Path!.IndexOf('/') <= 0;
+                        var singleFile = new MenuItem();
+                        singleFile.Header = App.Text("WorkingCopy.AddToGitIgnore.SingleFile");
+                        singleFile.Click += (_, e) =>
+                        {
+                            if (repo.CanCreatePopup())
+                                repo.ShowPopup(new ViewModels.AddToIgnore(repo, change.Path));
+                            e.Handled = true;
+                        };
+                        addToIgnore.Items.Add(singleFile);
+
+                        if (!string.IsNullOrEmpty(extension))
+                        {
+                            var byExtension = new MenuItem();
+                            byExtension.Header = App.Text("WorkingCopy.AddToGitIgnore.Extension", extension);
+                            byExtension.Click += (_, e) =>
+                            {
+                                if (repo.CanCreatePopup())
+                                    repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"*{extension}"));
+                                e.Handled = true;
+                            };
+                            addToIgnore.Items.Add(byExtension);
+
+                            var byExtensionInSameFolder = new MenuItem();
+                            byExtensionInSameFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.ExtensionInSameFolder", extension);
+                            byExtensionInSameFolder.IsVisible = !isRooted;
+                            byExtensionInSameFolder.Click += (_, e) =>
+                            {
+                                var dir = Path.GetDirectoryName(change.Path)!.Replace('\\', '/').TrimEnd('/');
+                                if (repo.CanCreatePopup())
+                                    repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{dir}/*{extension}"));
+                                e.Handled = true;
+                            };
+                            addToIgnore.Items.Add(byExtensionInSameFolder);
+                        }
+
+                        if (!isRooted)
+                        {
+                            var untrackedInSameFolder = new MenuItem();
+                            untrackedInSameFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.UntrackedInSameFolder");
+                            untrackedInSameFolder.Click += (_, e) =>
+                            {
+                                var dir = Path.GetDirectoryName(change.Path)!.Replace('\\', '/').TrimEnd('/');
+                                if (repo.CanCreatePopup())
+                                    repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{dir}/"));
+                                e.Handled = true;
+                            };
+                            addToIgnore.Items.Add(untrackedInSameFolder);
+                        }
+
+                        menu.Items.Add(addToIgnore);
+                        hasExtra = true;
+                    }
+
+                    if (!selection.HasFolder && File.Exists(path) && repo.IsLFSEnabled())
                     {
                         var lfs = new MenuItem();
                         lfs.Header = App.Text("GitLFS");
@@ -689,14 +667,14 @@ namespace SourceFork.Views
                         menu.Items.Add(new MenuItem() { Header = "-" });
                 }
 
-                if (hasSelectedFolder)
+                if (selection.IsSingleFolder)
                 {
                     var history = new MenuItem();
                     history.Header = App.Text("DirHistories");
                     history.Icon = this.CreateMenuIcon("Icons.Histories");
                     history.Click += (_, e) =>
                     {
-                        this.ShowWindow(new ViewModels.DirHistories(repo, selectedSingleFolder));
+                        this.ShowWindow(new ViewModels.DirHistories(repo, selection.SingleFolderPath));
                         e.Handled = true;
                     };
 
@@ -737,7 +715,7 @@ namespace SourceFork.Views
                 copy.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
                 copy.Click += async (_, e) =>
                 {
-                    await this.CopyTextAsync(hasSelectedFolder ? selectedSingleFolder : change.Path);
+                    await this.CopyTextAsync(selection.IsSingleFolder ? selection.SingleFolderPath : change.Path);
                     e.Handled = true;
                 };
 
@@ -747,7 +725,7 @@ namespace SourceFork.Views
                 copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
                 copyFullPath.Click += async (_, e) =>
                 {
-                    await this.CopyTextAsync(hasSelectedFolder ? Native.OS.GetAbsPath(repo.FullPath, selectedSingleFolder) : path);
+                    await this.CopyTextAsync(selection.IsSingleFolder ? Native.OS.GetAbsPath(repo.FullPath, selection.SingleFolderPath) : path);
                     e.Handled = true;
                 };
 
@@ -758,7 +736,7 @@ namespace SourceFork.Views
             {
                 var hasConflicts = false;
                 var hasNonConflicts = false;
-                foreach (var change in selectedUnstaged)
+                foreach (var change in changes)
                 {
                     if (change.IsConflicted)
                         hasConflicts = true;
@@ -778,7 +756,7 @@ namespace SourceFork.Views
                     useTheirs.Icon = this.CreateMenuIcon("Icons.Incoming");
                     useTheirs.Click += async (_, e) =>
                     {
-                        await vm.UseTheirsAsync(selectedUnstaged);
+                        await vm.UseTheirsAsync(changes);
                         e.Handled = true;
                     };
 
@@ -786,7 +764,7 @@ namespace SourceFork.Views
                     useMine.Icon = this.CreateMenuIcon("Icons.Local");
                     useMine.Click += async (_, e) =>
                     {
-                        await vm.UseMineAsync(selectedUnstaged);
+                        await vm.UseMineAsync(changes);
                         e.Handled = true;
                     };
 
@@ -819,9 +797,9 @@ namespace SourceFork.Views
                     return menu;
                 }
 
-                if (hasSelectedFolder)
+                if (selection.IsSingleFolder)
                 {
-                    var dir = Path.Combine(repo.FullPath, selectedSingleFolder);
+                    var dir = Path.Combine(repo.FullPath, selection.SingleFolderPath);
                     var explore = new MenuItem();
                     explore.Header = App.Text("RevealFile");
                     explore.Icon = this.CreateMenuIcon("Icons.Explore");
@@ -836,32 +814,32 @@ namespace SourceFork.Views
                 }
 
                 var stage = new MenuItem();
-                stage.Header = App.Text("FileCM.StageMulti", selectedUnstaged.Count);
+                stage.Header = App.Text("FileCM.StageMulti", changes.Count);
                 stage.Icon = this.CreateMenuIcon("Icons.File.Add");
                 stage.Tag = "Enter/Space";
                 stage.Click += async (_, e) =>
                 {
-                    await vm.StageChangesAsync(selectedUnstaged, null);
+                    await vm.StageChangesAsync(changes, null);
                     e.Handled = true;
                 };
 
                 var discard = new MenuItem();
-                discard.Header = App.Text("FileCM.DiscardMulti", selectedUnstaged.Count);
+                discard.Header = App.Text("FileCM.DiscardMulti", changes.Count);
                 discard.Icon = this.CreateMenuIcon("Icons.Undo");
                 discard.Tag = "Back/Delete";
                 discard.Click += (_, e) =>
                 {
-                    vm.Discard(selectedUnstaged, UnstagedChangesView.GetNextChangeWithoutSelection());
+                    vm.Discard(changes, UnstagedChangesView.GetNextChangeWithoutSelection());
                     e.Handled = true;
                 };
 
                 var stash = new MenuItem();
-                stash.Header = App.Text("FileCM.StashMulti", selectedUnstaged.Count);
+                stash.Header = App.Text("FileCM.StashMulti", changes.Count);
                 stash.Icon = this.CreateMenuIcon("Icons.Stashes.Add");
                 stash.Click += (_, e) =>
                 {
                     if (repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.StashChanges(repo, selectedUnstaged));
+                        repo.ShowPopup(new ViewModels.StashChanges(repo, changes));
 
                     e.Handled = true;
                 };
@@ -884,7 +862,7 @@ namespace SourceFork.Views
                     {
                         var storageFile = await storageProvider.SaveFilePickerAsync(options);
                         if (storageFile != null)
-                            await vm.SaveChangesToPatchAsync(selectedUnstaged, true, storageFile.Path.LocalPath);
+                            await vm.SaveChangesToPatchAsync(changes, true, storageFile.Path.LocalPath);
                     }
                     catch (Exception exception)
                     {
@@ -899,14 +877,14 @@ namespace SourceFork.Views
                 menu.Items.Add(stash);
                 menu.Items.Add(patch);
 
-                if (hasSelectedFolder)
+                if (selection.IsSingleFolder)
                 {
                     var ignoreFolder = new MenuItem();
                     ignoreFolder.Header = App.Text("WorkingCopy.AddToGitIgnore.InFolder");
                     ignoreFolder.Click += (_, e) =>
                     {
                         if (repo.CanCreatePopup())
-                            repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{selectedSingleFolder}/"));
+                            repo.ShowPopup(new ViewModels.AddToIgnore(repo, $"{selection.SingleFolderPath}/"));
                         e.Handled = true;
                     };
 
@@ -920,7 +898,7 @@ namespace SourceFork.Views
                     history.Icon = this.CreateMenuIcon("Icons.Histories");
                     history.Click += (_, e) =>
                     {
-                        this.ShowWindow(new ViewModels.DirHistories(repo, selectedSingleFolder));
+                        this.ShowWindow(new ViewModels.DirHistories(repo, selection.SingleFolderPath));
                         e.Handled = true;
                     };
 
@@ -930,7 +908,7 @@ namespace SourceFork.Views
                     copy.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
                     copy.Click += async (_, e) =>
                     {
-                        await this.CopyTextAsync(selectedSingleFolder);
+                        await this.CopyTextAsync(selection.SingleFolderPath);
                         e.Handled = true;
                     };
 
@@ -940,7 +918,7 @@ namespace SourceFork.Views
                     copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
                     copyFullPath.Click += async (_, e) =>
                     {
-                        await this.CopyTextAsync(Native.OS.GetAbsPath(repo.FullPath, selectedSingleFolder));
+                        await this.CopyTextAsync(Native.OS.GetAbsPath(repo.FullPath, selection.SingleFolderPath));
                         e.Handled = true;
                     };
 
@@ -957,13 +935,9 @@ namespace SourceFork.Views
             return menu;
         }
 
-        public ContextMenu CreateContextMenuForStagedChanges(ViewModels.WorkingCopy vm, string selectedSingleFolder)
+        public ContextMenu CreateContextMenuForStagedChanges(ViewModels.Repository repo, ViewModels.WorkingCopy vm, ViewModels.ChangeSelection selection)
         {
-            var repo = vm.Repository;
-            var selectedStaged = vm.SelectedStaged;
-            if (repo == null || selectedStaged == null || selectedStaged.Count == 0)
-                return null;
-
+            var changes = selection.Changes;
             var menu = new ContextMenu();
 
             MenuItem ai = null;
@@ -978,7 +952,7 @@ namespace SourceFork.Views
                 {
                     ai.Click += (_, e) =>
                     {
-                        DoOpenAIAssistant(repo, services[0], selectedStaged);
+                        DoOpenAIAssistant(repo, services[0], changes);
                         e.Handled = true;
                     };
                 }
@@ -992,7 +966,7 @@ namespace SourceFork.Views
                         item.Header = service.Name;
                         item.Click += (_, e) =>
                         {
-                            DoOpenAIAssistant(repo, dup, selectedStaged);
+                            DoOpenAIAssistant(repo, dup, changes);
                             e.Handled = true;
                         };
 
@@ -1001,32 +975,45 @@ namespace SourceFork.Views
                 }
             }
 
-            var hasSelectedFolder = !string.IsNullOrEmpty(selectedSingleFolder);
-            if (selectedStaged.Count == 1)
+            if (changes.Count == 1)
             {
-                var change = selectedStaged[0];
+                var change = changes[0];
                 var path = Native.OS.GetAbsPath(repo.FullPath, change.Path);
 
-                var openWithMerger = new MenuItem();
-                openWithMerger.Header = App.Text("OpenInExternalMergeTool");
-                openWithMerger.Icon = this.CreateMenuIcon("Icons.OpenWith");
-                openWithMerger.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+D" : "Ctrl+Shift+D";
-                openWithMerger.Click += (_, ev) =>
+                if (!selection.HasFolder)
                 {
-                    vm.UseExternalDiffTool(change, false);
-                    ev.Handled = true;
-                };
+                    TryAddOpenFileToContextMenu(menu, path);
 
-                var explore = new MenuItem();
-                explore.IsEnabled = File.Exists(path) || Directory.Exists(path);
-                explore.Header = App.Text("RevealFile");
-                explore.Icon = this.CreateMenuIcon("Icons.Explore");
-                explore.Click += (_, e) =>
+                    var openWithMerger = new MenuItem();
+                    openWithMerger.Header = App.Text("OpenInExternalMergeTool");
+                    openWithMerger.Icon = this.CreateMenuIcon("Icons.OpenWith");
+                    openWithMerger.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+D" : "Ctrl+Shift+D";
+                    openWithMerger.Click += (_, ev) =>
+                    {
+                        vm.UseExternalDiffTool(change, false);
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(openWithMerger);
+                }
+
+                if (!selection.HasFolder || selection.IsSingleFolder)
                 {
-                    var target = hasSelectedFolder ? Native.OS.GetAbsPath(repo.FullPath, selectedSingleFolder) : path;
-                    Native.OS.OpenInFileManager(target);
-                    e.Handled = true;
-                };
+                    var absPath = selection.IsSingleFolder ? Native.OS.GetAbsPath(repo.FullPath, selection.SingleFolderPath) : path;
+                    var explore = new MenuItem();
+                    explore.IsEnabled = File.Exists(path) || Directory.Exists(path);
+                    explore.Header = App.Text("RevealFile");
+                    explore.Icon = this.CreateMenuIcon("Icons.Explore");
+                    explore.IsEnabled = Path.Exists(absPath);
+                    explore.Click += (_, e) =>
+                    {
+                        Native.OS.OpenInFileManager(absPath);
+                        e.Handled = true;
+                    };
+                    menu.Items.Add(explore);
+                }
+
+                if (menu.Items.Count > 0)
+                    menu.Items.Add(new MenuItem() { Header = "-" });
 
                 var unstage = new MenuItem();
                 unstage.Header = App.Text("FileCM.Unstage");
@@ -1034,7 +1021,7 @@ namespace SourceFork.Views
                 unstage.Tag = "Enter/Space";
                 unstage.Click += async (_, e) =>
                 {
-                    await vm.UnstageChangesAsync(selectedStaged, null);
+                    await vm.UnstageChangesAsync(changes, null);
                     e.Handled = true;
                 };
 
@@ -1045,7 +1032,7 @@ namespace SourceFork.Views
                 stash.Click += (_, e) =>
                 {
                     if (repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.StashChanges(repo, selectedStaged));
+                        repo.ShowPopup(new ViewModels.StashChanges(repo, changes));
 
                     e.Handled = true;
                 };
@@ -1068,7 +1055,7 @@ namespace SourceFork.Views
                     {
                         var storageFile = await storageProvider.SaveFilePickerAsync(options);
                         if (storageFile != null)
-                            await vm.SaveChangesToPatchAsync(selectedStaged, false, storageFile.Path.LocalPath);
+                            await vm.SaveChangesToPatchAsync(changes, false, storageFile.Path.LocalPath);
                     }
                     catch (Exception exception)
                     {
@@ -1078,16 +1065,12 @@ namespace SourceFork.Views
                     e.Handled = true;
                 };
 
-                TryAddOpenFileToContextMenu(menu, path);
-                menu.Items.Add(openWithMerger);
-                menu.Items.Add(explore);
-                menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(unstage);
                 menu.Items.Add(stash);
                 menu.Items.Add(patch);
                 menu.Items.Add(new MenuItem() { Header = "-" });
 
-                if (File.Exists(path) && repo.IsLFSEnabled())
+                if (!selection.HasFolder && File.Exists(path) && repo.IsLFSEnabled())
                 {
                     var lfs = new MenuItem();
                     lfs.Header = App.Text("GitLFS");
@@ -1161,14 +1144,14 @@ namespace SourceFork.Views
                     menu.Items.Add(new MenuItem() { Header = "-" });
                 }
 
-                if (hasSelectedFolder)
+                if (selection.IsSingleFolder)
                 {
                     var history = new MenuItem();
                     history.Header = App.Text("DirHistories");
                     history.Icon = this.CreateMenuIcon("Icons.Histories");
                     history.Click += (_, e) =>
                     {
-                        this.ShowWindow(new ViewModels.DirHistories(repo, selectedSingleFolder));
+                        this.ShowWindow(new ViewModels.DirHistories(repo, selection.SingleFolderPath));
                         e.Handled = true;
                     };
 
@@ -1209,7 +1192,7 @@ namespace SourceFork.Views
                 copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
                 copyPath.Click += async (_, e) =>
                 {
-                    await this.CopyTextAsync(hasSelectedFolder ? selectedSingleFolder : change.Path);
+                    await this.CopyTextAsync(selection.IsSingleFolder ? selection.SingleFolderPath : change.Path);
                     e.Handled = true;
                 };
 
@@ -1219,7 +1202,7 @@ namespace SourceFork.Views
                 copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
                 copyFullPath.Click += async (_, e) =>
                 {
-                    var target = hasSelectedFolder ? Native.OS.GetAbsPath(repo.FullPath, selectedSingleFolder) : path;
+                    var target = selection.IsSingleFolder ? Native.OS.GetAbsPath(repo.FullPath, selection.SingleFolderPath) : path;
                     await this.CopyTextAsync(target);
                     e.Handled = true;
                 };
@@ -1229,9 +1212,9 @@ namespace SourceFork.Views
             }
             else
             {
-                if (hasSelectedFolder)
+                if (selection.IsSingleFolder)
                 {
-                    var dir = Path.Combine(repo.FullPath, selectedSingleFolder);
+                    var dir = Native.OS.GetAbsPath(repo.FullPath, selection.SingleFolderPath);
                     var explore = new MenuItem();
                     explore.IsEnabled = Directory.Exists(dir);
                     explore.Header = App.Text("RevealFile");
@@ -1247,23 +1230,23 @@ namespace SourceFork.Views
                 }
 
                 var unstage = new MenuItem();
-                unstage.Header = App.Text("FileCM.UnstageMulti", selectedStaged.Count);
+                unstage.Header = App.Text("FileCM.UnstageMulti", changes.Count);
                 unstage.Icon = this.CreateMenuIcon("Icons.File.Remove");
                 unstage.Tag = "Enter/Space";
                 unstage.Click += async (_, e) =>
                 {
-                    await vm.UnstageChangesAsync(selectedStaged, null);
+                    await vm.UnstageChangesAsync(changes, null);
                     e.Handled = true;
                 };
 
                 var stash = new MenuItem();
-                stash.Header = App.Text("FileCM.StashMulti", selectedStaged.Count);
+                stash.Header = App.Text("FileCM.StashMulti", changes.Count);
                 stash.Icon = this.CreateMenuIcon("Icons.Stashes.Add");
                 stash.IsEnabled = !vm.UseAmend;
                 stash.Click += (_, e) =>
                 {
                     if (repo.CanCreatePopup())
-                        repo.ShowPopup(new ViewModels.StashChanges(repo, selectedStaged));
+                        repo.ShowPopup(new ViewModels.StashChanges(repo, changes));
 
                     e.Handled = true;
                 };
@@ -1286,7 +1269,7 @@ namespace SourceFork.Views
                     {
                         var storageFile = await storageProvider.SaveFilePickerAsync(options);
                         if (storageFile != null)
-                            await vm.SaveChangesToPatchAsync(selectedStaged, false, storageFile.Path.LocalPath);
+                            await vm.SaveChangesToPatchAsync(changes, false, storageFile.Path.LocalPath);
                     }
                     catch (Exception exception)
                     {
@@ -1306,14 +1289,14 @@ namespace SourceFork.Views
                     menu.Items.Add(ai);
                 }
 
-                if (hasSelectedFolder)
+                if (selection.IsSingleFolder)
                 {
                     var history = new MenuItem();
                     history.Header = App.Text("DirHistories");
                     history.Icon = this.CreateMenuIcon("Icons.Histories");
                     history.Click += (_, e) =>
                     {
-                        this.ShowWindow(new ViewModels.DirHistories(repo, selectedSingleFolder));
+                        this.ShowWindow(new ViewModels.DirHistories(repo, selection.SingleFolderPath));
                         e.Handled = true;
                     };
 
@@ -1323,7 +1306,7 @@ namespace SourceFork.Views
                     copyPath.Tag = OperatingSystem.IsMacOS() ? "⌘+C" : "Ctrl+C";
                     copyPath.Click += async (_, e) =>
                     {
-                        await this.CopyTextAsync(selectedSingleFolder);
+                        await this.CopyTextAsync(selection.SingleFolderPath);
                         e.Handled = true;
                     };
 
@@ -1333,7 +1316,7 @@ namespace SourceFork.Views
                     copyFullPath.Tag = OperatingSystem.IsMacOS() ? "⌘+⇧+C" : "Ctrl+Shift+C";
                     copyFullPath.Click += async (_, e) =>
                     {
-                        await this.CopyTextAsync(Native.OS.GetAbsPath(repo.FullPath, selectedSingleFolder));
+                        await this.CopyTextAsync(Native.OS.GetAbsPath(repo.FullPath, selection.SingleFolderPath));
                         e.Handled = true;
                     };
 
