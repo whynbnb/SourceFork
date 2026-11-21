@@ -242,34 +242,6 @@ namespace SourceFork.Views
             preferences.Save();
         }
 
-        private async void SelectThemeOverrideFile(object _, RoutedEventArgs e)
-        {
-            var options = new FilePickerOpenOptions()
-            {
-                FileTypeFilter = [new FilePickerFileType("Theme Overrides File") { Patterns = ["*.json"] }],
-                AllowMultiple = false,
-            };
-
-            try
-            {
-                var selected = await StorageProvider.OpenFilePickerAsync(options);
-                if (selected is { Count: 1 })
-                    ViewModels.Preferences.Instance.ThemeOverrides = selected[0].Path.LocalPath;
-            }
-            catch (Exception ex)
-            {
-                await new Alert().ShowAsync(this, $"Failed to select theme override file: {ex.Message}", true);
-            }
-
-            e.Handled = true;
-        }
-
-        private void OpenThemeRepository(object _, RoutedEventArgs e)
-        {
-            Native.OS.OpenBrowser($"https://github.com/sourcegit-scm/sourcegit-theme");
-            e.Handled = true;
-        }
-
         private async void SelectGitExecutable(object _, RoutedEventArgs e)
         {
             var pattern = OperatingSystem.IsWindows() ? "git.exe" : "git";

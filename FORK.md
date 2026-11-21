@@ -6,6 +6,7 @@
 - 维护分支：`fork/2026.19`
 - 本 Fork 版本：`1.0`（定义在 `src/SourceFork.csproj`，两位版本号）
 - 发布 tag 使用 `sf` 前缀，首个版本为 `sf1.0`
+- 主题只保留“系统 / 浅色 / 深色”三种；已移除 ThemeOverrides、自定义主题文件加载和主题仓库入口。
 - 子模块：`depends/AvaloniaEdit` 固定在 `11bf2b6a`（v2026.19 对应的版本）
 
 选择 2026.19 的原因：侧边栏/仓库页布局重构从 `02799ba6 ux: repository page layout (#2660)` 开始，

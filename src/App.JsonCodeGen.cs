@@ -64,7 +64,6 @@ namespace SourceFork
     [JsonSerializable(typeof(Models.ExternalToolCustomization))]
     [JsonSerializable(typeof(Models.InteractiveRebaseJobCollection))]
     [JsonSerializable(typeof(Models.JetBrainsState))]
-    [JsonSerializable(typeof(Models.ThemeOverrides))]
     [JsonSerializable(typeof(Models.Version))]
     [JsonSerializable(typeof(Models.RepositorySettings))]
     [JsonSerializable(typeof(Models.RepositoryUIStates))]

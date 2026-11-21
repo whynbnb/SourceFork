@@ -3,7 +3,7 @@
              xmlns:s="using:SourceFork"
              x:Class="SourceFork.App"
              Name="SourceFork"
-             RequestedThemeVariant="Dark">
+             RequestedThemeVariant="Default">
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>

@@ -47,17 +47,7 @@ namespace SourceFork.ViewModels
             set
             {
                 if (SetProperty(ref _theme, value) && !_isLoading)
-                    App.SetTheme(_theme, _themeOverrides);
-            }
-        }
-
-        public string ThemeOverrides
-        {
-            get => _themeOverrides;
-            set
-            {
-                if (SetProperty(ref _themeOverrides, value) && !_isLoading)
-                    App.SetTheme(_theme, value);
+                    App.SetTheme(_theme);
             }
         }
 
@@ -656,7 +646,15 @@ namespace SourceFork.ViewModels
             try
             {
                 using var stream = File.OpenRead(path);
-                return JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences);
+                var pref = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences);
+                if (pref == null)
+                    return new Preferences();
+
+                if (string.IsNullOrEmpty(pref._theme) ||
+                    pref._theme.Equals("Default", StringComparison.OrdinalIgnoreCase))
+                    pref._theme = "System";
+
+                return pref;
             }
             catch
             {
@@ -791,8 +789,7 @@ namespace SourceFork.ViewModels
         private bool _isLoading = true;
         private bool _isReadonly = true;
         private string _locale = "en_US";
-        private string _theme = "Default";
-        private string _themeOverrides = string.Empty;
+        private string _theme = "System";
         private string _defaultFontFamily = string.Empty;
         private string _monospaceFontFamily = string.Empty;
         private double _defaultFontSize = 13;

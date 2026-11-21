@@ -117,7 +117,7 @@ namespace SourceFork
             app._activeLocale = targetLocale;
         }
 
-        public static void SetTheme(string theme, string themeOverridesFile)
+        public static void SetTheme(string theme)
         {
             if (Current is not App app)
                 return;
@@ -129,44 +129,7 @@ namespace SourceFork
             else
                 app.RequestedThemeVariant = ThemeVariant.Default;
 
-            if (app._themeOverrides != null)
-            {
-                app.Resources.MergedDictionaries.Remove(app._themeOverrides);
-                app._themeOverrides = null;
-            }
-
-            if (!string.IsNullOrEmpty(themeOverridesFile) && File.Exists(themeOverridesFile))
-            {
-                try
-                {
-                    var resDic = new ResourceDictionary();
-                    using var stream = File.OpenRead(themeOverridesFile);
-                    var overrides = JsonSerializer.Deserialize(stream, JsonCodeGen.Default.ThemeOverrides);
-                    foreach (var kv in overrides.BasicColors)
-                    {
-                        if (kv.Key.Equals("SystemAccentColor", StringComparison.Ordinal))
-                            resDic["SystemAccentColor"] = kv.Value;
-                        else
-                            resDic[$"Color.{kv.Key}"] = kv.Value;
-                    }
-
-                    if (overrides.GraphColors.Count > 0)
-                        Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
-                    else
-                        Models.CommitGraph.SetDefaultPens(overrides.GraphPenThickness);
-
-                    app.Resources.MergedDictionaries.Add(resDic);
-                    app._themeOverrides = resDic;
-                }
-                catch
-                {
-                    // ignore
-                }
-            }
-            else
-            {
-                Models.CommitGraph.SetDefaultPens();
-            }
+            Models.CommitGraph.SetDefaultPens();
         }
 
         public static void SetFonts(string defaultFont, string monospaceFont)
@@ -243,7 +206,7 @@ namespace SourceFork
 
             var pref = ViewModels.Preferences.Instance;
             SetLocale(pref.Locale);
-            SetTheme(pref.Theme, pref.ThemeOverrides);
+            SetTheme(pref.Theme);
             SetFonts(pref.DefaultFontFamily, pref.MonospaceFontFamily);
         }
 
@@ -600,7 +563,6 @@ namespace SourceFork
         private Models.IpcChannel _ipcChannel = null;
         private ViewModels.Launcher _launcher = null;
         private ResourceDictionary _activeLocale = null;
-        private ResourceDictionary _themeOverrides = null;
         private ResourceDictionary _fontsOverrides = null;
     }
 }

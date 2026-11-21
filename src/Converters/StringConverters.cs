@@ -3,7 +3,6 @@ using System.Globalization;
 
 using Avalonia.Data.Converters;
 using Avalonia.Input;
-using Avalonia.Styling;
 
 namespace SourceFork.Converters
 {
@@ -24,30 +23,31 @@ namespace SourceFork.Converters
 
         public static readonly ToLocaleConverter ToLocale = new ToLocaleConverter();
 
-        public class ToThemeConverter : IValueConverter
+        public class ThemeToIndexConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                var theme = (string)value;
-                if (string.IsNullOrEmpty(theme))
-                    return ThemeVariant.Default;
-
-                if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
-                    return ThemeVariant.Light;
-
-                if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
-                    return ThemeVariant.Dark;
-
-                return ThemeVariant.Default;
+                return (value as string) switch
+                {
+                    "Light" => 1,
+                    "Dark" => 2,
+                    _ => 0,
+                };
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                return (value as ThemeVariant)?.Key;
+                var index = value is int i ? i : 0;
+                return index switch
+                {
+                    1 => "Light",
+                    2 => "Dark",
+                    _ => "System",
+                };
             }
         }
 
-        public static readonly ToThemeConverter ToTheme = new ToThemeConverter();
+        public static readonly ThemeToIndexConverter ThemeToIndex = new ThemeToIndexConverter();
 
         public class FormatByResourceKeyConverter : IValueConverter
         {
