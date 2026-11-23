@@ -994,4 +994,23 @@
   <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">Descending</x:String>
   <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">Group by primary tag</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
+  <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
+  <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>
+  <x:String x:Key="Text.ScanFolders.Description" xml:space="preserve">Folders added here are remembered. Choose how deep to scan and when scanning should happen. Scanning only registers repositories in the repository list; it does not open them.</x:String>
+  <x:String x:Key="Text.ScanFolders.Add" xml:space="preserve">Add folder...</x:String>
+  <x:String x:Key="Text.ScanFolders.ScanAll" xml:space="preserve">Scan all now</x:String>
+  <x:String x:Key="Text.ScanFolders.ScanNow" xml:space="preserve">Scan this folder now</x:String>
+  <x:String x:Key="Text.ScanFolders.Remove" xml:space="preserve">Remove</x:String>
+  <x:String x:Key="Text.ScanFolders.Empty" xml:space="preserve">No folders configured yet.</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth.Single" xml:space="preserve">Direct only</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth.Recursive" xml:space="preserve">Recursive</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.Never" xml:space="preserve">Manual only</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.OnStartup" xml:space="preserve">On startup</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.Watch" xml:space="preserve">Real-time</x:String>
+  <x:String x:Key="Text.ScanFolders.Scanning" xml:space="preserve">Scanning {0}...</x:String>
+  <x:String x:Key="Text.ScanFolders.Result" xml:space="preserve">Added {0} repositories.</x:String>
+  <x:String x:Key="Text.ScanFolders.FolderMissing" xml:space="preserve">Folder does not exist: {0}</x:String>
+  <x:String x:Key="Text.Welcome.ManageScanFolders" xml:space="preserve">Manage auto-scan folders</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth" xml:space="preserve">Depth</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode" xml:space="preserve">Auto scan</x:String>
 </ResourceDictionary>

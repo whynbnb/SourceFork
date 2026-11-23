@@ -175,7 +175,7 @@ namespace SourceFork.ViewModels
                 Native.OS.OpenTerminal(null);
         }
 
-        public void ScanDefaultCloneDir()
+        public async void ScanDefaultCloneDir()
         {
             if (!Preferences.Instance.IsGitConfigured())
             {
@@ -183,9 +183,7 @@ namespace SourceFork.ViewModels
                 return;
             }
 
-            var activePage = App.GetLauncher().ActivePage;
-            if (activePage != null && activePage.CanCreatePopup())
-                activePage.Popup = new ScanRepositories();
+            await App.OpenPreferencesAsync(3);
         }
 
         public void ClearSearchFilter()

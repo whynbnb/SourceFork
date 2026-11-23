@@ -1,174 +1,265 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+
+using Avalonia.Collections;
+
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SourceFork.ViewModels
 {
-    public class ScanRepositories : Popup
+    public class ScanFolderItem : ObservableObject
     {
-        public bool UseCustomDir
-        {
-            get => _useCustomDir;
-            set => SetProperty(ref _useCustomDir, value);
-        }
-
-        public string CustomDir
-        {
-            get => _customDir;
-            set => SetProperty(ref _customDir, value);
-        }
-
-        public List<Models.ScanDir> ScanDirs
+        public Models.ScanFolder Folder
         {
             get;
         }
 
-        public Models.ScanDir Selected
+        public string Path
+        {
+            get => Folder.Path;
+        }
+
+        public int DepthIndex
+        {
+            get => Folder.Recursive ? 1 : 0;
+            set
+            {
+                var recursive = value == 1;
+                if (Folder.Recursive == recursive)
+                    return;
+
+                Folder.Recursive = recursive;
+                OnPropertyChanged();
+                Changed?.Invoke(this);
+            }
+        }
+
+        public int ModeIndex
+        {
+            get => (int)Folder.Mode;
+            set
+            {
+                var mode = (Models.ScanFolderMode)Math.Clamp(value, 0, 2);
+                if (Folder.Mode == mode)
+                    return;
+
+                Folder.Mode = mode;
+                OnPropertyChanged();
+                Changed?.Invoke(this);
+                ModeChanged?.Invoke(this);
+            }
+        }
+
+        public IReadOnlyList<string> DepthOptions
+        {
+            get;
+        } = [
+            App.Text("ScanFolders.Depth.Single"),
+            App.Text("ScanFolders.Depth.Recursive"),
+        ];
+
+        public IReadOnlyList<string> ModeOptions
+        {
+            get;
+        } = [
+            App.Text("ScanFolders.Mode.Never"),
+            App.Text("ScanFolders.Mode.OnStartup"),
+            App.Text("ScanFolders.Mode.Watch"),
+        ];
+
+        public event Action<ScanFolderItem> Changed;
+        public event Action<ScanFolderItem> ModeChanged;
+
+        public ScanFolderItem(Models.ScanFolder folder)
+        {
+            Folder = folder;
+        }
+    }
+
+    public class ScanRepositories : ObservableObject
+    {
+        public static ScanRepositories Instance { get; } = new();
+
+        public AvaloniaList<ScanFolderItem> Folders
+        {
+            get;
+        } = [];
+
+        public ScanFolderItem Selected
         {
             get => _selected;
-            set => SetProperty(ref _selected, value, true);
+            set => SetProperty(ref _selected, value);
+        }
+
+        public bool IsEmpty
+        {
+            get => Folders.Count == 0;
+        }
+
+        public bool IsScanning
+        {
+            get => RepositoryScanner.Instance.IsScanning;
+        }
+
+        public string ProgressDescription
+        {
+            get => RepositoryScanner.Instance.ProgressDescription;
+        }
+
+        public string Status
+        {
+            get => _status;
+            private set => SetProperty(ref _status, value);
         }
 
         public ScanRepositories()
         {
-            ScanDirs = new List<Models.ScanDir>();
-
-            if (!string.IsNullOrEmpty(Preferences.Instance.GitDefaultCloneDir))
-                ScanDirs.Add(new Models.ScanDir(Preferences.Instance.GitDefaultCloneDir, "Global"));
-
-            if (ScanDirs.Count > 0)
-                _selected = ScanDirs[0];
-            else
-                _useCustomDir = true;
-
-            GetManagedRepositories(Preferences.Instance.RepositoryNodes, _managed);
+            RepositoryScanner.Instance.StateChanged += OnScannerStateChanged;
+            Reload();
         }
 
-        public override async Task<bool> Sure()
+        public void Reload()
         {
-            string selectedDir;
-            if (_useCustomDir)
+            foreach (var item in Folders)
             {
-                if (string.IsNullOrEmpty(_customDir))
+                item.Changed -= OnItemChanged;
+                item.ModeChanged -= OnItemModeChanged;
+            }
+
+            Folders.Clear();
+            foreach (var folder in Preferences.Instance.ScanFolders)
+                Folders.Add(CreateItem(folder));
+
+            OnPropertyChanged(nameof(IsEmpty));
+        }
+
+        public void AddFolders(IEnumerable<string> paths)
+        {
+            var added = new List<ScanFolderItem>();
+            foreach (var path in paths)
+            {
+                if (string.IsNullOrWhiteSpace(path))
+                    continue;
+
+                string normalized;
+                try
                 {
-                    Models.Notification.Send(null, "Missing root directory to scan!", true);
-                    return false;
+                    normalized = ViewModels.RepositoryScanner.NormalizePath(Path.GetFullPath(path));
+                }
+                catch
+                {
+                    continue;
                 }
 
-                selectedDir = _customDir;
-            }
-            else
-            {
-                if (_selected == null || string.IsNullOrEmpty(_selected.Path))
+                if (Folders.Any(x => SamePath(RepositoryScanner.NormalizePath(x.Path), normalized)))
+                    continue;
+
+                var folder = new Models.ScanFolder()
                 {
-                    Models.Notification.Send(null, "Missing root directory to scan!", true);
-                    return false;
-                }
+                    Path = normalized,
+                    Recursive = true,
+                    Mode = Models.ScanFolderMode.OnStartup,
+                };
 
-                selectedDir = _selected.Path;
+                Preferences.Instance.ScanFolders.Add(folder);
+                var item = CreateItem(folder);
+                Folders.Add(item);
+                added.Add(item);
             }
 
-            if (!Directory.Exists(selectedDir))
-                return true;
+            if (added.Count == 0)
+                return;
 
-            ProgressDescription = $"Scan repositories under '{selectedDir}' ...";
-
-            var minDelay = Task.Delay(500);
-            var rootDir = new DirectoryInfo(selectedDir);
-            var found = new List<string>();
-
-            await GetUnmanagedRepositoriesAsync(rootDir, found, new EnumerationOptions()
-            {
-                AttributesToSkip = FileAttributes.Hidden | FileAttributes.System,
-                IgnoreInaccessible = true,
-            });
-
-            // Make sure this task takes at least 0.5s to avoid the popup panel disappearing too quickly.
-            await minDelay;
-
-            for (var i = 0; i < found.Count; i++)
-            {
-                var f = found[i];
-                ProgressDescription = $"Registering ({i + 1}/{found.Count}) {f}...";
-                var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(f, false);
-                await node.UpdateStatusAsync(false, null);
-            }
-
-            Preferences.Instance.AutoRemoveInvalidNode();
             Preferences.Instance.Save();
-            Welcome.Instance.Refresh();
+            RepositoryScanner.Instance.RefreshWatchers();
+            OnPropertyChanged(nameof(IsEmpty));
 
-            if (_untrusted > 0)
-                Models.Notification.Send(null, App.Text("TrustRepository.ScanSkipped", _untrusted));
-
-            return true;
+            _ = ScanAddedAsync(added);
         }
 
-        private void GetManagedRepositories(List<RepositoryNode> nodes, HashSet<string> repos)
+        public void RemoveFolder(ScanFolderItem item)
         {
-            foreach (var node in nodes)
-                repos.Add(OperatingSystem.IsLinux() ? node.Id : node.Id.ToLower(CultureInfo.CurrentCulture));
+            if (item == null)
+                return;
+
+            item.Changed -= OnItemChanged;
+            item.ModeChanged -= OnItemModeChanged;
+
+            Preferences.Instance.ScanFolders.Remove(item.Folder);
+            Preferences.Instance.Save();
+            Folders.Remove(item);
+            RepositoryScanner.Instance.RefreshWatchers();
+
+            if (Selected == item)
+                Selected = null;
+
+            OnPropertyChanged(nameof(IsEmpty));
         }
 
-        private async Task GetUnmanagedRepositoriesAsync(DirectoryInfo dir, List<string> outs, EnumerationOptions opts, int depth = 0)
+        public async Task ScanNowAsync(ScanFolderItem item)
         {
-            var subdirs = dir.GetDirectories("*", opts);
-            foreach (var subdir in subdirs)
-            {
-                if (subdir.Name.StartsWith(".", StringComparison.Ordinal) ||
-                    subdir.Name.Equals("node_modules", StringComparison.Ordinal))
-                    continue;
+            if (item == null)
+                return;
 
-                ProgressDescription = $"Scanning {subdir.FullName}...";
+            var result = await RepositoryScanner.Instance.ScanFolderAsync(item.Folder);
+            if (result.Queued)
+                return;
 
-                var normalizedSelf = subdir.FullName.Replace('\\', '/').TrimEnd('/');
-                if (IsManaged(normalizedSelf))
-                    continue;
-
-                var gitDir = Path.Combine(subdir.FullName, ".git");
-                if (Directory.Exists(gitDir) || File.Exists(gitDir))
-                {
-                    var test = await new Commands.QueryRepositoryRootPath(subdir.FullName).GetResultAsync();
-                    if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
-                    {
-                        var normalized = test.StdOut.Trim().Replace('\\', '/').TrimEnd('/');
-                        if (!IsManaged(normalized))
-                            outs.Add(normalized);
-                    }
-                    else if (Models.SafeDirectories.IsUntrustedRepository(test.StdErr))
-                    {
-                        _untrusted++;
-                    }
-
-                    continue;
-                }
-
-                var isBare = await new Commands.IsBareRepository(subdir.FullName).GetResultAsync();
-                if (isBare)
-                {
-                    outs.Add(normalizedSelf);
-                    continue;
-                }
-
-                if (depth < 5)
-                    await GetUnmanagedRepositoriesAsync(subdir, outs, opts, depth + 1);
-            }
+            if (!result.FolderExists)
+                Status = App.Text("ScanFolders.FolderMissing", item.Path);
+            else
+                Status = App.Text("ScanFolders.Result", result.Added);
         }
 
-        private bool IsManaged(string path)
+        public async Task ScanAllNowAsync()
         {
-            if (OperatingSystem.IsLinux())
-                return _managed.Contains(path);
-
-            return _managed.Contains(path.ToLower(CultureInfo.CurrentCulture));
+            var result = await RepositoryScanner.Instance.ScanAllAsync();
+            Status = App.Text("ScanFolders.Result", result.Added);
         }
 
-        private HashSet<string> _managed = new();
-        private bool _useCustomDir = false;
-        private string _customDir = string.Empty;
-        private Models.ScanDir _selected = null;
-        private int _untrusted = 0;
+        private ScanFolderItem CreateItem(Models.ScanFolder folder)
+        {
+            var item = new ScanFolderItem(folder);
+            item.Changed += OnItemChanged;
+            item.ModeChanged += OnItemModeChanged;
+            return item;
+        }
+
+        private void OnItemChanged(ScanFolderItem item)
+        {
+            Preferences.Instance.Save();
+            RepositoryScanner.Instance.RefreshWatchers();
+        }
+
+        private void OnItemModeChanged(ScanFolderItem item)
+        {
+            if (item.Folder.Mode == Models.ScanFolderMode.Watch)
+                _ = ScanNowAsync(item);
+        }
+
+        private async Task ScanAddedAsync(List<ScanFolderItem> items)
+        {
+            foreach (var item in items)
+                await ScanNowAsync(item);
+        }
+
+        private static bool SamePath(string left, string right)
+        {
+            return OperatingSystem.IsLinux()
+                ? left == right
+                : string.Equals(left, right, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void OnScannerStateChanged()
+        {
+            OnPropertyChanged(nameof(IsScanning));
+            OnPropertyChanged(nameof(ProgressDescription));
+        }
+
+        private ScanFolderItem _selected = null;
+        private string _status = string.Empty;
     }
 }

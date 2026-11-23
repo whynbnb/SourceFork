@@ -1143,4 +1143,23 @@
   <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">倒序</x:String>
   <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">依主要 Tag 分組</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">無 Tag</x:String>
+  <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">掃描</x:String>
+  <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">自動掃描目錄</x:String>
+  <x:String x:Key="Text.ScanFolders.Description" xml:space="preserve">在此加入的目錄會被永久保存。可分別設定掃描深度與自動掃描策略。掃描只會把倉庫註冊到倉庫清單，不會自動開啟。</x:String>
+  <x:String x:Key="Text.ScanFolders.Add" xml:space="preserve">加入目錄...</x:String>
+  <x:String x:Key="Text.ScanFolders.ScanAll" xml:space="preserve">立即全部掃描</x:String>
+  <x:String x:Key="Text.ScanFolders.ScanNow" xml:space="preserve">立即掃描此目錄</x:String>
+  <x:String x:Key="Text.ScanFolders.Remove" xml:space="preserve">移除</x:String>
+  <x:String x:Key="Text.ScanFolders.Empty" xml:space="preserve">尚未加入掃描目錄。</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth.Single" xml:space="preserve">僅單層</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth.Recursive" xml:space="preserve">遞迴</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.Never" xml:space="preserve">永不自動掃描</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.OnStartup" xml:space="preserve">開啟軟體時掃描</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.Watch" xml:space="preserve">即時監聽</x:String>
+  <x:String x:Key="Text.ScanFolders.Scanning" xml:space="preserve">正在掃描 {0}...</x:String>
+  <x:String x:Key="Text.ScanFolders.Result" xml:space="preserve">已加入 {0} 個倉庫。</x:String>
+  <x:String x:Key="Text.ScanFolders.FolderMissing" xml:space="preserve">目錄不存在：{0}</x:String>
+  <x:String x:Key="Text.Welcome.ManageScanFolders" xml:space="preserve">管理自動掃描目錄</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth" xml:space="preserve">掃描深度</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode" xml:space="preserve">自動掃描</x:String>
 </ResourceDictionary>

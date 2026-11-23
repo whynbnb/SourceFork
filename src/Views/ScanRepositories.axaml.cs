@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -11,9 +12,10 @@ namespace SourceFork.Views
         public ScanRepositories()
         {
             InitializeComponent();
+            DataContext = ViewModels.ScanRepositories.Instance;
         }
 
-        private async void OnSelectRootDir(object _, RoutedEventArgs e)
+        private async void OnAddFolder(object _, RoutedEventArgs e)
         {
             var provider = TopLevel.GetTopLevel(this)?.StorageProvider;
             if (provider == null)
@@ -22,21 +24,50 @@ namespace SourceFork.Views
             if (DataContext is not ViewModels.ScanRepositories vm)
                 return;
 
-            var options = new FolderPickerOpenOptions() { AllowMultiple = false };
+            var options = new FolderPickerOpenOptions() { AllowMultiple = true };
             try
             {
                 var selected = await provider.OpenFolderPickerAsync(options);
-                if (selected.Count == 1)
+                var paths = new List<string>();
+                foreach (var folder in selected)
                 {
-                    var folder = selected[0];
                     var folderPath = folder is { Path: { IsAbsoluteUri: true } path } ? path.LocalPath : folder?.Path.ToString();
-                    vm.CustomDir = folderPath;
+                    if (!string.IsNullOrEmpty(folderPath))
+                        paths.Add(folderPath);
                 }
+
+                vm.AddFolders(paths);
             }
             catch (Exception ex)
             {
-                Models.Notification.Send(null, $"Failed to select root scanning directory: {ex.Message}", true);
+                Models.Notification.Send(null, $"Failed to select scanning directory: {ex.Message}", true);
             }
+
+            e.Handled = true;
+        }
+
+        private void OnRemoveFolder(object sender, RoutedEventArgs e)
+        {
+            if (sender is Control { DataContext: ViewModels.ScanFolderItem item } &&
+                DataContext is ViewModels.ScanRepositories vm)
+                vm.RemoveFolder(item);
+
+            e.Handled = true;
+        }
+
+        private async void OnScanFolder(object sender, RoutedEventArgs e)
+        {
+            if (sender is Control { DataContext: ViewModels.ScanFolderItem item } &&
+                DataContext is ViewModels.ScanRepositories vm)
+                await vm.ScanNowAsync(item);
+
+            e.Handled = true;
+        }
+
+        private async void OnScanAll(object _, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.ScanRepositories vm)
+                await vm.ScanAllNowAsync();
 
             e.Handled = true;
         }

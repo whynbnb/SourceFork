@@ -462,6 +462,8 @@ namespace SourceFork
             desktop.MainWindow = new Views.Launcher() { DataContext = _launcher };
             desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
+            ViewModels.RepositoryScanner.Instance.Start();
+
             // Fix macOS crash when quiting from Dock
             if (OperatingSystem.IsMacOS())
             {
@@ -474,6 +476,7 @@ namespace SourceFork
 
             desktop.Exit += (_, _) =>
             {
+                ViewModels.RepositoryScanner.Instance.Stop();
                 _ipcChannel?.Dispose();
                 _ipcChannel = null;
             };

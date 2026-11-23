@@ -1123,4 +1123,23 @@
   <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">倒序</x:String>
   <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">按主要 Tag 分组</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">无 Tag</x:String>
+  <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">扫描</x:String>
+  <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">自动扫描目录</x:String>
+  <x:String x:Key="Text.ScanFolders.Description" xml:space="preserve">在此添加的目录会被永久保存。可分别设置扫描深度和自动扫描策略。扫描只会把仓库注册到仓库列表，不会自动打开。</x:String>
+  <x:String x:Key="Text.ScanFolders.Add" xml:space="preserve">添加目录...</x:String>
+  <x:String x:Key="Text.ScanFolders.ScanAll" xml:space="preserve">立即全部扫描</x:String>
+  <x:String x:Key="Text.ScanFolders.ScanNow" xml:space="preserve">立即扫描此目录</x:String>
+  <x:String x:Key="Text.ScanFolders.Remove" xml:space="preserve">移除</x:String>
+  <x:String x:Key="Text.ScanFolders.Empty" xml:space="preserve">尚未添加扫描目录。</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth.Single" xml:space="preserve">仅单层</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth.Recursive" xml:space="preserve">递归</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.Never" xml:space="preserve">永不自动扫描</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.OnStartup" xml:space="preserve">打开软件时扫描</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode.Watch" xml:space="preserve">实时监听</x:String>
+  <x:String x:Key="Text.ScanFolders.Scanning" xml:space="preserve">正在扫描 {0}...</x:String>
+  <x:String x:Key="Text.ScanFolders.Result" xml:space="preserve">已添加 {0} 个仓库。</x:String>
+  <x:String x:Key="Text.ScanFolders.FolderMissing" xml:space="preserve">目录不存在：{0}</x:String>
+  <x:String x:Key="Text.Welcome.ManageScanFolders" xml:space="preserve">管理自动扫描目录</x:String>
+  <x:String x:Key="Text.ScanFolders.Depth" xml:space="preserve">扫描深度</x:String>
+  <x:String x:Key="Text.ScanFolders.Mode" xml:space="preserve">自动扫描</x:String>
 </ResourceDictionary>

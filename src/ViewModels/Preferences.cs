@@ -29,6 +29,7 @@ namespace SourceFork.ViewModels
                 _instance.PrepareExternalDiffMergeTool();
                 _instance.PrepareRepositoryNodes();
                 _instance.PrepareOpenRepositories();
+                _instance.PrepareScanFolders();
 
                 return _instance;
             }
@@ -492,6 +493,12 @@ namespace SourceFork.ViewModels
             set;
         } = [];
 
+        public List<Models.ScanFolder> ScanFolders
+        {
+            get;
+            set;
+        } = [];
+
         public string ActiveRepositoryPath
         {
             get;
@@ -934,6 +941,34 @@ namespace SourceFork.ViewModels
 
             if (!string.IsNullOrEmpty(ActiveRepositoryPath) && FindNode(ActiveRepositoryPath) == null)
                 ActiveRepositoryPath = string.Empty;
+        }
+
+        private void PrepareScanFolders()
+        {
+            ScanFolders ??= [];
+
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = ScanFolders.Count - 1; i >= 0; i--)
+            {
+                var folder = ScanFolders[i];
+                if (folder == null || string.IsNullOrWhiteSpace(folder.Path))
+                {
+                    ScanFolders.RemoveAt(i);
+                    continue;
+                }
+
+                folder.Path = RepositoryScanner.NormalizePath(folder.Path);
+
+                var key = OperatingSystem.IsLinux() ? folder.Path : folder.Path.ToLowerInvariant();
+                if (!seen.Add(key))
+                {
+                    ScanFolders.RemoveAt(i);
+                    continue;
+                }
+
+                if (!Enum.IsDefined(folder.Mode))
+                    folder.Mode = Models.ScanFolderMode.OnStartup;
+            }
         }
 
         private void ReadLegacyWorkspaces(string json)
