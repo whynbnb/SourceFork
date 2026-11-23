@@ -10,7 +10,7 @@
 
 > Maintained with an LLM (DeepSeek V4.1 Flash 1017 / OpenCode).
 
-SourceFork keeps SourceGit's Git client and rebuilds the main window around a persistent workspace sidebar. The goal is to make switching between repositories faster and more direct, instead of hunting through tabs.
+SourceFork keeps SourceGit's Git client and rebuilds the main window around a persistent repository sidebar. The goal is to make switching between repositories faster and more direct, instead of hunting through tabs.
 
 ## Screenshots
 
@@ -24,14 +24,15 @@ SourceFork keeps SourceGit's Git client and rebuilds the main window around a pe
 
 ## What's different
 
-- **Workspace sidebar** — repositories are listed flat on the left instead of in top tabs. The sidebar is searchable, collapsible, and remembers its width.
-- **Workspace management** — create, edit, reorder, import/export, or hide workspaces in Preferences.
+- **Flat repository sidebar** — opened repositories are listed flat on the left instead of in top tabs. The sidebar is searchable, collapsible, and remembers its width.
+- **Tags** — give each repository multiple tags and filter the sidebar or Welcome page by any combination of tags.
+- **No groups or workspaces** — repository groups and workspaces were removed; all repositories are shown as a flat list.
 - **Preferences** — left-side navigation and a resizable window.
 - **Icon** — orange replaced with blue.
 
 ## Why v2026.19?
 
-`v2026.19` is the last release before upstream reworked the repository page layout. This fork keeps that layout and builds the workspace sidebar on top of it, so later upstream fixes and features are ported selectively instead of merged wholesale.
+`v2026.19` is the last release before upstream reworked the repository page layout. This fork keeps that layout and builds the flat repository sidebar on top of it, so later upstream fixes and features are ported selectively instead of merged wholesale.
 
 ## Build
 

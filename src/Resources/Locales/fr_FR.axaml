@@ -131,7 +131,6 @@
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Paramètres supplémentaires :</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Arguments additionnels au clônage. Optionnel.</x:String>
   <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Signet :</x:String>
-  <x:String x:Key="Text.Clone.Group" xml:space="preserve">Groupe :</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Nom local :</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Nom de dépôt. Optionnel.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Dossier parent :</x:String>
@@ -281,10 +280,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Les variables intégrées ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, et ${TAG} restent disponibles ici</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Type :</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Utiliser le nom convivial :</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Espaces de travail</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Couleur</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nom</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Restaurer les onglets au démarrage</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">CONTINUER</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Commit vide détecté ! Voulez-vous continuer (--allow-empty) ?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">TOUT INDEXER &amp; COMMIT</x:String>
@@ -344,9 +339,7 @@
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Remote :</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">Chemin:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Cible :</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">Tous les enfants seront retirés de la liste.</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">Cela le supprimera uniquement de la liste, pas du disque !</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">Confirmer la suppression du groupe</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">Confirmer la suppression du dépôt</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">Supprimer le sous-module</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">Chemin du sous-module :</x:String>
@@ -399,7 +392,6 @@
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Signet :</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Nouveau nom :</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Cible :</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">Éditer le groupe sélectionné</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Éditer le dépôt sélectionné</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">Cible :</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">Ce dépôt</x:String>
@@ -557,7 +549,6 @@
   <x:String x:Key="Text.Launcher.Info" xml:space="preserve">NOTICE</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">Ouvrir des dépôts</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">Onglets</x:String>
-  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">Espaces de travail</x:String>
   <x:String x:Key="Text.Merge" xml:space="preserve">Merger la branche </x:String>
   <x:String x:Key="Text.Merge.Edit" xml:space="preserve">Personnaliser le message de fusion</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Dans :</x:String>
@@ -586,8 +577,6 @@
   <x:String x:Key="Text.MoveSubmodule" xml:space="preserve">Déplacer le sous-module</x:String>
   <x:String x:Key="Text.MoveSubmodule.MoveTo" xml:space="preserve">Déplacer vers :</x:String>
   <x:String x:Key="Text.MoveSubmodule.Submodule" xml:space="preserve">Sous-module :</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">Déplacer le noeud du repository</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">Sélectionnier le noeud parent pour :</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">Nom :</x:String>
   <x:String x:Key="Text.No" xml:space="preserve">NON</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">Git n'a PAS été configuré. Veuillez d'abord le faire dans le menu Préférence.</x:String>
@@ -598,7 +587,6 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Ouvrir dans l'outil de fusion</x:String>
   <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Ouvrir un dépôt local</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Signet :</x:String>
-  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">Groupe :</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Dossier :</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Optionnel.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Créer un nouvel onglet</x:String>
@@ -607,7 +595,6 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Fermer les onglets à droite</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Copier le chemin vers le dépôt</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Éditer</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">Se déplacer vers l'espace de travail</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Actualiser</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Dépôts</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Coller</x:String>
@@ -931,13 +918,10 @@
   <x:String x:Key="Text.ViewLogs.Delete" xml:space="preserve">Supprimer</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">Avertissement</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Page d'accueil</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Créer un groupe</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Créer un sous-groupe</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Cloner un dépôt</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Supprimer</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">GLISSER / DEPOSER DE DOSSIER SUPPORTÉ. GROUPAGE PERSONNALISÉ SUPPORTÉ.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Éditer</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">Déplacer vers un autre groupe</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Ouvrir tous les dépôts</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Ouvrir un dépôt</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Ouvrir le terminal</x:String>
@@ -982,8 +966,6 @@
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">INDEXER TOUT</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">VOIR LES FICHIERS PRÉSUMÉS INCHANGÉS</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Modèle: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">ESPACE DE TRAVAIL : </x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Configurer les espaces de travail...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
   <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">BRANCHE</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Copier le chemin</x:String>
@@ -994,4 +976,9 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Supprimer</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Déverrouiller</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">OUI</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

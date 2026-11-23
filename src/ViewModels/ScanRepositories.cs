@@ -35,10 +35,6 @@ namespace SourceFork.ViewModels
         {
             ScanDirs = new List<Models.ScanDir>();
 
-            var workspace = Preferences.Instance.GetActiveWorkspace();
-            if (!string.IsNullOrEmpty(workspace.DefaultCloneDir))
-                ScanDirs.Add(new Models.ScanDir(workspace.DefaultCloneDir, "Workspace"));
-
             if (!string.IsNullOrEmpty(Preferences.Instance.GitDefaultCloneDir))
                 ScanDirs.Add(new Models.ScanDir(Preferences.Instance.GitDefaultCloneDir, "Global"));
 
@@ -92,24 +88,12 @@ namespace SourceFork.ViewModels
             // Make sure this task takes at least 0.5s to avoid the popup panel disappearing too quickly.
             await minDelay;
 
-            var normalizedRoot = rootDir.FullName.Replace('\\', '/').TrimEnd('/');
             for (var i = 0; i < found.Count; i++)
             {
                 var f = found[i];
                 ProgressDescription = $"Registering ({i + 1}/{found.Count}) {f}...";
-                var parent = new DirectoryInfo(f).Parent!.FullName.Replace('\\', '/').TrimEnd('/');
-                if (parent.Equals(normalizedRoot, StringComparison.OrdinalIgnoreCase))
-                {
-                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(f, null, false, false);
-                    await node.UpdateStatusAsync(false, null);
-                }
-                else if (parent.StartsWith(normalizedRoot, StringComparison.OrdinalIgnoreCase))
-                {
-                    var relative = parent.Substring(normalizedRoot.Length).TrimStart('/');
-                    var group = FindOrCreateGroupRecursive(Preferences.Instance.RepositoryNodes, relative);
-                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(f, group, false, false);
-                    await node.UpdateStatusAsync(false, null);
-                }
+                var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(f, false);
+                await node.UpdateStatusAsync(false, null);
             }
 
             Preferences.Instance.AutoRemoveInvalidNode();
@@ -122,15 +106,10 @@ namespace SourceFork.ViewModels
             return true;
         }
 
-        private void GetManagedRepositories(List<RepositoryNode> group, HashSet<string> repos)
+        private void GetManagedRepositories(List<RepositoryNode> nodes, HashSet<string> repos)
         {
-            foreach (var node in group)
-            {
-                if (node.IsRepository)
-                    repos.Add(OperatingSystem.IsLinux() ? node.Id : node.Id.ToLower(CultureInfo.CurrentCulture));
-                else
-                    GetManagedRepositories(node.SubNodes, repos);
-            }
+            foreach (var node in nodes)
+                repos.Add(OperatingSystem.IsLinux() ? node.Id : node.Id.ToLower(CultureInfo.CurrentCulture));
         }
 
         private async Task GetUnmanagedRepositoriesAsync(DirectoryInfo dir, List<string> outs, EnumerationOptions opts, int depth = 0)
@@ -176,39 +155,6 @@ namespace SourceFork.ViewModels
                 if (depth < 5)
                     await GetUnmanagedRepositoriesAsync(subdir, outs, opts, depth + 1);
             }
-        }
-
-        private RepositoryNode FindOrCreateGroupRecursive(List<RepositoryNode> collection, string path)
-        {
-            RepositoryNode node = null;
-            foreach (var name in path.Split('/'))
-            {
-                node = FindOrCreateGroup(collection, name);
-                collection = node.SubNodes;
-            }
-
-            return node;
-        }
-
-        private RepositoryNode FindOrCreateGroup(List<RepositoryNode> collection, string name)
-        {
-            foreach (var node in collection)
-            {
-                if (node.Name.Equals(name, StringComparison.Ordinal))
-                    return node;
-            }
-
-            var added = new RepositoryNode()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = name,
-                IsRepository = false,
-                IsExpanded = true,
-            };
-            collection.Add(added);
-
-            Preferences.Instance.SortNodes(collection);
-            return added;
         }
 
         private bool IsManaged(string path)

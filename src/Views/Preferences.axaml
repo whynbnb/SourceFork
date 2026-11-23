@@ -223,13 +223,6 @@
 
         <TabItem>
           <TabItem.Header>
-            <TextBlock Classes="tab_header" Text="{DynamicResource Text.ConfigureWorkspace}"/>
-          </TabItem.Header>
-          <v:WorkspaceManagement x:Name="WorkspaceManagementView"/>
-        </TabItem>
-
-        <TabItem>
-          <TabItem.Header>
             <TextBlock Classes="tab_header" Text="{DynamicResource Text.Preferences.Appearance}"/>
           </TabItem.Header>
           <Grid Margin="8" RowDefinitions="32,32,32,32,32,32,32,Auto" ColumnDefinitions="Auto,*">

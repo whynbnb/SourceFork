@@ -370,66 +370,6 @@ namespace SourceFork.Views
             }
         }
 
-        public void ShowWorkspaceMenu(Button button)
-        {
-            if (DataContext is not ViewModels.Launcher launcher)
-                return;
-
-            if (launcher.CommandPalette != null)
-                launcher.CommandPalette = null;
-
-            var pref = ViewModels.Preferences.Instance;
-            var menu = new ContextMenu();
-            menu.Placement = PlacementMode.BottomEdgeAlignedLeft;
-            menu.VerticalOffset = -6;
-
-            var groupHeader = new TextBlock()
-            {
-                Text = App.Text("Launcher.Workspaces"),
-                FontWeight = FontWeight.Bold,
-            };
-
-            var workspaces = new MenuItem();
-            workspaces.Header = groupHeader;
-            workspaces.IsEnabled = false;
-            menu.Items.Add(workspaces);
-
-            for (var i = 0; i < pref.Workspaces.Count; i++)
-            {
-                var workspace = pref.Workspaces[i];
-                if (workspace.IsHidden)
-                    continue;
-
-                var icon = this.CreateMenuIcon(workspace.IsActive ? "Icons.Check" : "Icons.Workspace");
-                icon.Fill = workspace.Brush;
-
-                var item = new MenuItem();
-                item.Header = workspace.Name;
-                item.Icon = icon;
-                item.Click += (_, ev) =>
-                {
-                    if (!workspace.IsActive)
-                        launcher.SwitchWorkspace(workspace);
-
-                    ev.Handled = true;
-                };
-
-                menu.Items.Add(item);
-            }
-
-            menu.Items.Add(new MenuItem() { Header = "-" });
-
-            var configure = new MenuItem();
-            configure.Header = App.Text("Workspace.Configure");
-            configure.Click += async (_, ev) =>
-            {
-                await App.OpenPreferencesAsync(Views.Preferences.WorkspacesTabIndex);
-                ev.Handled = true;
-            };
-            menu.Items.Add(configure);
-            menu.Open(button);
-        }
-
         private void OnToggleWorkspaceSidebar(object sender, RoutedEventArgs e)
         {
             var layout = ViewModels.Preferences.Instance.Layout;

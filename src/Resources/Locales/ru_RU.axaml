@@ -152,7 +152,6 @@
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Параметры:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Аргументы git clone (необязательно)</x:String>
   <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Закладка:</x:String>
-  <x:String x:Key="Text.Clone.Group" xml:space="preserve">Группа:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Локальное имя:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Имя репозитория (необязательно)</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Родительский каталог:</x:String>
@@ -306,10 +305,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Встроенные переменные ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, и ${TAG} останутся здесь доступными</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Тип:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Используйте понятное имя:</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Рабочие пространства</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Цвет</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Имя</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Восстанавливать вкладки при запуске</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">ПРОДОЛЖИТЬ</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Обнаружена пустая ревизия! Вы хотите продолжить (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">Сформировать всё и зафиксировать ревизию</x:String>
@@ -373,9 +368,7 @@
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Внешний репозиторий:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">Путь:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Цель:</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">Все дочерние элементы будут удалены из списка.</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">Будет удалён из списка. На диске останется.</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">Подтвердите удаление группы</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">Подтвердите удаление репозитория</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">Удалить подмодуль</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">Путь подмодуля:</x:String>
@@ -436,7 +429,6 @@
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Закладка:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Новое имя:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Цель:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">Редактировать выбранную группу</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Редактировать выбранный репозиторий</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">Цель:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">Этот репозиторий</x:String>
@@ -618,7 +610,6 @@
   <x:String x:Key="Text.Launcher.NewVersion" xml:space="preserve">Доступна новая версия</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">Открыть репозитории</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">Вкладки</x:String>
-  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">Рабочие места</x:String>
   <x:String x:Key="Text.Merge" xml:space="preserve">Влить ветку</x:String>
   <x:String x:Key="Text.Merge.Edit" xml:space="preserve">Изменить сообщение слияния</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">В:</x:String>
@@ -651,8 +642,6 @@
   <x:String x:Key="Text.MoveSubmodule" xml:space="preserve">Переместить подмодуль</x:String>
   <x:String x:Key="Text.MoveSubmodule.MoveTo" xml:space="preserve">Переместить в:</x:String>
   <x:String x:Key="Text.MoveSubmodule.Submodule" xml:space="preserve">Подмодуль:</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">Переместить репозиторий в другую группу</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">Выбрать группу для:</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">Имя:</x:String>
   <x:String x:Key="Text.No" xml:space="preserve">Нет</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">Git НЕ был настроен. Пожалуйста, перейдите в [Настройки] и сначала настройте его.</x:String>
@@ -665,7 +654,6 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Открыть в инструменте слияния</x:String>
   <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Открыть локальный репозиторий</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Закладка:</x:String>
-  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">Группа:</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Каталог:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Необязательно.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Создать новую вкладку</x:String>
@@ -674,7 +662,6 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Закрыть вкладки справа</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Копировать путь репозитория</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Редактировать...</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">Переместить в рабочее пространство</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Обновить</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Репозитории</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Вставить</x:String>
@@ -1053,13 +1040,10 @@
   <x:String x:Key="Text.ViewLogs.Delete" xml:space="preserve">Удалить</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">Предупреждение</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Приветствие</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Создать группу</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Создать подгруппу...</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Клонировать репозиторий</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Удалить...</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ПОДДЕРЖИВАЕТСЯ: ПЕРЕТАСКИВАНИЕ КАТАЛОГОВ, ПОЛЬЗОВАТЕЛЬСКАЯ ГРУППИРОВКА.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Редактировать...</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">Переместить в другую группу...</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Открыть все репозитории</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Открыть репозиторий</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Открыть терминал</x:String>
@@ -1109,8 +1093,6 @@
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">СФОРМИРОВАТЬ ВСЁ</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">ОТКРЫТЬ СПИСОК НЕОТСЛЕЖИВАЕМЫХ ФАЙЛОВ</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Шаблон: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">РАБОЧЕЕ ПРОСТРАНСТВО: </x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Настройка рабочего пространства...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">РАБОЧИЙ КАТАЛОГ</x:String>
   <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">ВЕТКА</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Копировать путь</x:String>
@@ -1121,4 +1103,9 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Удалить</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Разблокировать</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">Да</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

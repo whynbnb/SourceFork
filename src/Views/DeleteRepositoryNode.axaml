@@ -14,12 +14,7 @@
 
       <TextBlock FontSize="18"
                  Classes="bold"
-                 Text="{DynamicResource Text.DeleteRepositoryNode.TitleForGroup}"
-                 IsVisible="{Binding !Node.IsRepository}"/>
-      <TextBlock FontSize="18"
-                 Classes="bold"
-                 Text="{DynamicResource Text.DeleteRepositoryNode.TitleForRepository}"
-                 IsVisible="{Binding Node.IsRepository}"/>
+                 Text="{DynamicResource Text.DeleteRepositoryNode.TitleForRepository}"/>
     </StackPanel>
 
 
@@ -31,13 +26,7 @@
       <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
         <v:Bookmark Width="12" Height="12" Margin="0,0,8,0"
                     Value="{Binding Node.Bookmark, Mode=OneWay}"
-                    HorizontalAlignment="Left" VerticalAlignment="Center"
-                    IsVisible="{Binding Node.IsRepository}"/>
-        <Path Width="12" Height="12" Margin="0,0,8,0"
-              Fill="{DynamicResource Brush.FG1}"
-              HorizontalAlignment="Left" VerticalAlignment="Center"
-              Data="{StaticResource Icons.Folder}"
-              IsVisible="{Binding !Node.IsRepository}"/>
+                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
         <TextBlock VerticalAlignment="Center" Text="{Binding Node.Name}"/>
       </StackPanel>
@@ -45,9 +34,8 @@
       <TextBlock Grid.Row="1" Grid.Column="0"
                  HorizontalAlignment="Right" VerticalAlignment="Center"
                  Margin="0,0,8,0"
-                 Text="{DynamicResource Text.DeleteRepositoryNode.Path}"
-                 IsVisible="{Binding Node.IsRepository}"/>
-      <StackPanel Grid.Row="1" Grid.Column="1" Height="32" Orientation="Horizontal" IsVisible="{Binding Node.IsRepository}">
+                 Text="{DynamicResource Text.DeleteRepositoryNode.Path}"/>
+      <StackPanel Grid.Row="1" Grid.Column="1" Height="32" Orientation="Horizontal">
         <Path Width="12" Height="12"
               Margin="0,0,8,0"
               Fill="{DynamicResource Brush.FG1}"
@@ -59,12 +47,7 @@
       <Grid Grid.Row="2" Grid.Column="1">
         <TextBlock Text="{DynamicResource Text.DeleteRepositoryNode.TipForRepository}"
                    TextWrapping="Wrap"
-                   Foreground="{DynamicResource Brush.FG2}"
-                   IsVisible="{Binding Node.IsRepository}"/>
-        <TextBlock Text="{DynamicResource Text.DeleteRepositoryNode.TipForGroup}"
-                   TextWrapping="Wrap"
-                   Foreground="{DynamicResource Brush.FG2}"
-                   IsVisible="{Binding !Node.IsRepository}"/>
+                   Foreground="{DynamicResource Brush.FG2}"/>
       </Grid>
     </Grid>
   </StackPanel>

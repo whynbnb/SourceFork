@@ -11,8 +11,6 @@ namespace SourceFork.Views
 {
     public partial class Preferences : ChromelessWindow
     {
-        public const int WorkspacesTabIndex = 1;
-
         public static readonly DirectProperty<Preferences, string> GitVersionProperty =
             AvaloniaProperty.RegisterDirect<Preferences, string>(
                 nameof(GitVersion),
@@ -107,11 +105,6 @@ namespace SourceFork.Views
             set;
         } = false;
 
-        public ViewModels.ConfigureWorkspace WorkspaceManager
-        {
-            get;
-        } = new();
-
         public static readonly DirectProperty<Preferences, AI.Service> SelectedOpenAIServiceProperty =
             AvaloniaProperty.RegisterDirect<Preferences, AI.Service>(
                 nameof(SelectedOpenAIService),
@@ -182,7 +175,6 @@ namespace SourceFork.Views
             UpdateGitVersion();
             InitializeComponent();
 
-            WorkspaceManagementView.DataContext = WorkspaceManager;
             if (initialTab >= 0 && initialTab < Tabs.ItemCount)
                 Tabs.SelectedIndex = initialTab;
         }

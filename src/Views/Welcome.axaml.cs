@@ -11,69 +11,6 @@ using Avalonia.VisualTree;
 
 namespace SourceFork.Views
 {
-    public class RepositoryTreeNodeToggleButton : ToggleButton
-    {
-        protected override Type StyleKeyOverride => typeof(ToggleButton);
-
-        protected override void OnPointerPressed(PointerPressedEventArgs e)
-        {
-            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed &&
-                DataContext is ViewModels.RepositoryNode { IsRepository: false } node)
-                ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
-
-            e.Handled = true;
-        }
-    }
-
-    public class RepositoryListBox : ListBoxEx
-    {
-        protected override Type StyleKeyOverride => typeof(ListBox);
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if (SelectedItem is ViewModels.RepositoryNode node && e.KeyModifiers == KeyModifiers.None)
-            {
-                if (e.Key is Key.Left)
-                {
-                    if (node.IsExpanded)
-                        ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
-                    else if (FindParent(node) is { } parent)
-                        Select(parent);
-
-                    e.Handled = true;
-                }
-                else if (e.Key is Key.Right && node.SubNodes.Count > 0)
-                {
-                    if (!node.IsExpanded)
-                        ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
-                    else
-                        Select(node.SubNodes[0]);
-                }
-            }
-
-            if (!e.Handled)
-                base.OnKeyDown(e);
-        }
-
-        private ViewModels.RepositoryNode FindParent(ViewModels.RepositoryNode item)
-        {
-            if (item.Depth == 0)
-                return null;
-
-            var idx = Items.IndexOf(item);
-            if (idx < 1)
-                return null;
-
-            for (var i = idx - 1; i >= 0; i--)
-            {
-                if (Items[i] is ViewModels.RepositoryNode node && node.Depth < item.Depth)
-                    return node;
-            }
-
-            return null;
-        }
-    }
-
     public partial class Welcome : UserControl
     {
         public Welcome()
@@ -114,7 +51,7 @@ namespace SourceFork.Views
                 }
                 else if (e.Key == Key.Enter)
                 {
-                    if (TreeContainer.SelectedItem is ViewModels.RepositoryNode { IsRepository: true } node)
+                    if (TreeContainer.SelectedItem is ViewModels.RepositoryNode node)
                     {
                         node.Open();
                         e.Handled = true;
@@ -144,171 +81,150 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs ev)
+        private void OnTagFilterMenu(object sender, RoutedEventArgs e)
         {
-            if (sender is Grid { DataContext: ViewModels.RepositoryNode node } grid)
+            if (sender is not Button button)
+                return;
+
+            var welcome = ViewModels.Welcome.Instance;
+            var menu = new ContextMenu()
             {
-                var menu = new ContextMenu();
+                Placement = PlacementMode.BottomEdgeAlignedLeft,
+                VerticalOffset = -6,
+            };
 
-                var edit = new MenuItem();
-                edit.Header = App.Text("Welcome.Edit");
-                edit.Icon = this.CreateMenuIcon("Icons.Edit");
-                edit.Click += (_, e) =>
-                {
-                    node.Edit();
-                    e.Handled = true;
-                };
-
-                var move = new MenuItem();
-                move.Header = App.Text("Welcome.Move");
-                move.Icon = this.CreateMenuIcon("Icons.MoveTo");
-                move.Click += (_, e) =>
-                {
-                    node.Move();
-                    e.Handled = true;
-                };
-
-                var delete = new MenuItem();
-                delete.Header = App.Text("Welcome.Delete");
-                delete.Icon = this.CreateMenuIcon("Icons.Clear");
-                delete.Click += (_, e) =>
-                {
-                    node.Delete();
-                    e.Handled = true;
-                };
-
-                if (!node.IsRepository)
-                {
-                    if (node.SubNodes.Count > 0)
-                    {
-                        var openAll = new MenuItem();
-                        openAll.Header = App.Text("Welcome.OpenAllInNode");
-                        openAll.Icon = this.CreateMenuIcon("Icons.Folder.Open");
-                        openAll.Click += (_, e) =>
-                        {
-                            node.Open();
-                            e.Handled = true;
-                        };
-
-                        menu.Items.Add(openAll);
-                        menu.Items.Add(new MenuItem() { Header = "-" });
-                    }
-
-                    var addSubFolder = new MenuItem();
-                    addSubFolder.Header = App.Text("Welcome.AddSubFolder");
-                    addSubFolder.Icon = this.CreateMenuIcon("Icons.Folder.Add");
-                    addSubFolder.Click += (_, e) =>
-                    {
-                        node.AddSubFolder();
-                        e.Handled = true;
-                    };
-
-                    menu.Items.Add(addSubFolder);
-                    menu.Items.Add(edit);
-                    menu.Items.Add(move);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(delete);
-                }
-                else if (Directory.Exists(node.Id))
-                {
-                    var open = new MenuItem();
-                    open.Header = App.Text("Welcome.OpenOrInit");
-                    open.Icon = this.CreateMenuIcon("Icons.Folder.Open");
-                    open.Click += (_, e) =>
-                    {
-                        node.Open();
-                        e.Handled = true;
-                    };
-
-                    var explore = new MenuItem();
-                    explore.Header = App.Text("Repository.Explore");
-                    explore.Icon = this.CreateMenuIcon("Icons.Explore");
-                    explore.Click += (_, e) =>
-                    {
-                        node.OpenInFileManager();
-                        e.Handled = true;
-                    };
-
-                    var terminal = new MenuItem();
-                    terminal.Header = App.Text("Repository.Terminal");
-                    terminal.Icon = this.CreateMenuIcon("Icons.Terminal");
-                    terminal.Click += (_, e) =>
-                    {
-                        node.OpenTerminal();
-                        e.Handled = true;
-                    };
-
-                    menu.Items.Add(open);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(explore);
-                    menu.Items.Add(terminal);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(edit);
-                    menu.Items.Add(move);
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-                    menu.Items.Add(delete);
-                }
-                else
-                {
-                    menu.Items.Add(delete);
-                }
-
-                menu.Open(grid);
-            }
-
-            ev.Handled = true;
-        }
-
-        private void OnPointerPressedTreeNode(object sender, PointerPressedEventArgs e)
-        {
-            if (e.GetCurrentPoint(sender as Visual).Properties.IsLeftButtonPressed)
+            menu.Items.Add(new MenuItem()
             {
-                _pressTreeNodeEvent = e;
-                _startDragTreeNode = false;
+                Header = App.Text("Sidebar.FilterByTags"),
+                IsEnabled = false,
+            });
+
+            var tags = welcome.GetAvailableTags();
+            if (tags.Count == 0)
+            {
+                menu.Items.Add(new MenuItem()
+                {
+                    Header = App.Text("Sidebar.NoTags"),
+                    IsEnabled = false,
+                });
             }
             else
             {
-                _pressTreeNodeEvent = null;
-                _startDragTreeNode = false;
+                foreach (var tag in tags)
+                {
+                    var item = new MenuItem();
+                    item.Header = $"#{tag}";
+                    if (welcome.IsTagFiltered(tag))
+                        item.Icon = this.CreateMenuIcon("Icons.Check");
+                    item.Click += (_, ev) =>
+                    {
+                        welcome.ToggleTagFilter(tag);
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(item);
+                }
             }
-        }
 
-        private void OnPointerReleasedOnTreeNode(object _1, PointerReleasedEventArgs _2)
-        {
-            _pressTreeNodeEvent = null;
-            _startDragTreeNode = false;
-        }
-
-        private async void OnPointerMovedOverTreeNode(object sender, PointerEventArgs e)
-        {
-            if (_pressTreeNodeEvent != null &&
-                !_startDragTreeNode &&
-                sender is Grid { DataContext: ViewModels.RepositoryNode node } grid)
+            if (welcome.HasTagFilters)
             {
-                var delta = e.GetPosition(grid) - _pressTreeNodeEvent.GetPosition(grid);
-                var sizeSquired = delta.X * delta.X + delta.Y * delta.Y;
-                if (sizeSquired < 64)
-                    return;
+                menu.Items.Add(new MenuItem() { Header = "-" });
 
-                _startDragTreeNode = true;
-
-                var data = new DataTransfer();
-                data.Add(DataTransferItem.Create(_dndRepoNode, node.Id));
-                await DragDrop.DoDragDropAsync(_pressTreeNodeEvent, data, DragDropEffects.Move);
+                var clear = new MenuItem();
+                clear.Header = App.Text("Tags.ClearFilter");
+                clear.Icon = this.CreateMenuIcon("Icons.Clear");
+                clear.Click += (_, ev) =>
+                {
+                    welcome.ClearTagFilters();
+                    ev.Handled = true;
+                };
+                menu.Items.Add(clear);
             }
+
+            menu.Open(button);
+            e.Handled = true;
+        }
+
+        private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs ev)
+        {
+            if (sender is not Grid { DataContext: ViewModels.RepositoryNode node } grid)
+                return;
+
+            var menu = new ContextMenu();
+
+            var edit = new MenuItem();
+            edit.Header = App.Text("Welcome.Edit");
+            edit.Icon = this.CreateMenuIcon("Icons.Edit");
+            edit.Click += (_, e) =>
+            {
+                node.Edit();
+                e.Handled = true;
+            };
+
+            var delete = new MenuItem();
+            delete.Header = App.Text("Welcome.Delete");
+            delete.Icon = this.CreateMenuIcon("Icons.Clear");
+            delete.Click += (_, e) =>
+            {
+                node.Delete();
+                e.Handled = true;
+            };
+
+            if (Directory.Exists(node.Id))
+            {
+                var open = new MenuItem();
+                open.Header = App.Text("Welcome.OpenOrInit");
+                open.Icon = this.CreateMenuIcon("Icons.Folder.Open");
+                open.Click += (_, e) =>
+                {
+                    node.Open();
+                    e.Handled = true;
+                };
+
+                var explore = new MenuItem();
+                explore.Header = App.Text("Repository.Explore");
+                explore.Icon = this.CreateMenuIcon("Icons.Explore");
+                explore.Click += (_, e) =>
+                {
+                    node.OpenInFileManager();
+                    e.Handled = true;
+                };
+
+                var terminal = new MenuItem();
+                terminal.Header = App.Text("Repository.Terminal");
+                terminal.Icon = this.CreateMenuIcon("Icons.Terminal");
+                terminal.Click += (_, e) =>
+                {
+                    node.OpenTerminal();
+                    e.Handled = true;
+                };
+
+                menu.Items.Add(open);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(explore);
+                menu.Items.Add(terminal);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(edit);
+                menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(delete);
+            }
+            else
+            {
+                menu.Items.Add(delete);
+            }
+
+            menu.Open(grid);
+            ev.Handled = true;
         }
 
         private void OnTreeViewLostFocus(object _1, RoutedEventArgs _2)
         {
-            _pressTreeNodeEvent = null;
-            _startDragTreeNode = false;
         }
 
         private void DragOverTreeView(object sender, DragEventArgs e)
         {
-            if (e.DataTransfer.Contains(DataFormat.File) || e.DataTransfer.Contains(_dndRepoNode))
+            if (e.DataTransfer.Contains(DataFormat.File))
             {
-                e.DragEffects = DragDropEffects.Move;
+                e.DragEffects = DragDropEffects.Copy;
                 e.Handled = true;
             }
             else
@@ -320,156 +236,59 @@ namespace SourceFork.Views
 
         private async void DropOnTreeView(object sender, DragEventArgs e)
         {
-            if (e.DataTransfer.TryGetValue(_dndRepoNode) is { Length: > 1 } nodeId)
-            {
-                var moved = ViewModels.Welcome.Instance.FindNodeById(nodeId);
-                ViewModels.Welcome.Instance.MoveNode(moved, null);
-                e.Handled = true;
-            }
-            else if (e.DataTransfer.Contains(DataFormat.File))
-            {
-                e.Handled = true;
-
-                var items = e.DataTransfer.TryGetFiles() ?? [];
-                var refresh = false;
-
-                foreach (var item in items)
-                {
-                    var root = item.Path.LocalPath;
-                    if (!Directory.Exists(root))
-                    {
-                        if (File.Exists(root))
-                            root = Path.GetDirectoryName(root);
-                        else
-                            continue;
-                    }
-
-                    var rs = await ViewModels.Welcome.Instance.GetRepositoryRootAsync(root);
-                    if (!rs.IsSuccess)
-                    {
-                        if (Models.SafeDirectories.IsUntrustedRepository(rs.StdErr) &&
-                            Models.SafeDirectories.TryGetSafeDirectoryValue(root, rs.StdErr, out var safeDirectory))
-                        {
-                            var pageView = this.FindAncestorOfType<LauncherPage>();
-                            if (pageView is { DataContext: ViewModels.LauncherPage page })
-                            {
-                                page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, null, false, false, 0);
-                                break; // Stop processing further because `SourceGit` only supports processing one popup at a time.
-                            }
-                        }
-                    }
-                    else
-                    {
-                        await ViewModels.Welcome.Instance.AddRepositoryAsync(rs.StdOut.Trim(), null, true, false);
-                        refresh = true;
-                    }
-                }
-
-                if (refresh)
-                    ViewModels.Welcome.Instance.Refresh();
-            }
-
-            _pressTreeNodeEvent = null;
-            _startDragTreeNode = false;
-        }
-
-        private void DragOverTreeNode(object sender, DragEventArgs e)
-        {
-            if (e.DataTransfer.Contains(DataFormat.File) || e.DataTransfer.Contains(_dndRepoNode))
-            {
-                if (sender is not Grid { DataContext: ViewModels.RepositoryNode })
-                    return;
-
-                e.DragEffects = DragDropEffects.Move;
-                e.Handled = true;
-            }
-        }
-
-        private async void DropOnTreeNode(object sender, DragEventArgs e)
-        {
-            if (sender is not Grid grid)
+            if (!e.DataTransfer.Contains(DataFormat.File))
                 return;
 
-            if (grid.DataContext is not ViewModels.RepositoryNode to)
+            e.Handled = true;
+
+            var items = e.DataTransfer.TryGetFiles() ?? [];
+            var refresh = false;
+
+            foreach (var item in items)
             {
-                e.Handled = true;
-                return;
-            }
-
-            if (to.IsRepository)
-                to = ViewModels.Welcome.Instance.FindParentGroup(to);
-
-            if (e.DataTransfer.TryGetValue(_dndRepoNode) is { } nodeId)
-            {
-                e.Handled = true;
-
-                var moved = ViewModels.Welcome.Instance.FindNodeById(nodeId);
-                if (to != moved)
-                    ViewModels.Welcome.Instance.MoveNode(moved, to);
-            }
-            else if (e.DataTransfer.Contains(DataFormat.File))
-            {
-                e.Handled = true;
-
-                var items = e.DataTransfer.TryGetFiles() ?? [];
-                var refresh = false;
-
-                foreach (var item in items)
+                var root = item.Path.LocalPath;
+                if (!Directory.Exists(root))
                 {
-                    var root = item.Path.LocalPath;
-                    if (!Directory.Exists(root))
-                    {
-                        if (File.Exists(root))
-                            root = Path.GetDirectoryName(root);
-                        else
-                            continue;
-                    }
-
-                    var rs = await ViewModels.Welcome.Instance.GetRepositoryRootAsync(root);
-                    if (!rs.IsSuccess)
-                    {
-                        if (Models.SafeDirectories.IsUntrustedRepository(rs.StdErr) &&
-                            Models.SafeDirectories.TryGetSafeDirectoryValue(root, rs.StdErr, out var safeDirectory))
-                        {
-                            var pageView = this.FindAncestorOfType<LauncherPage>();
-                            if (pageView is { DataContext: ViewModels.LauncherPage page })
-                            {
-                                page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, to, false, false, 0);
-                                break; // Stop processing further because `SourceGit` only supports processing one popup at a time.
-                            }
-                        }
-                    }
+                    if (File.Exists(root))
+                        root = Path.GetDirectoryName(root);
                     else
-                    {
-                        await ViewModels.Welcome.Instance.AddRepositoryAsync(rs.StdOut.Trim(), to, true, false);
-                        refresh = true;
-                    }
+                        continue;
                 }
 
-                if (refresh)
-                    ViewModels.Welcome.Instance.Refresh();
+                var rs = await ViewModels.Welcome.Instance.GetRepositoryRootAsync(root);
+                if (!rs.IsSuccess)
+                {
+                    if (Models.SafeDirectories.IsUntrustedRepository(rs.StdErr) &&
+                        Models.SafeDirectories.TryGetSafeDirectoryValue(root, rs.StdErr, out var safeDirectory))
+                    {
+                        var pageView = this.FindAncestorOfType<LauncherPage>();
+                        if (pageView is { DataContext: ViewModels.LauncherPage page })
+                        {
+                            page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, false, 0);
+                            break; // Stop processing further because SourceFork only supports one popup at a time.
+                        }
+                    }
+                }
+                else
+                {
+                    await ViewModels.Welcome.Instance.AddRepositoryAsync(rs.StdOut.Trim(), false);
+                    refresh = true;
+                }
             }
 
-            _pressTreeNodeEvent = null;
-            _startDragTreeNode = false;
+            if (refresh)
+                ViewModels.Welcome.Instance.Refresh();
         }
 
         private void OnDoubleTappedTreeNode(object sender, TappedEventArgs e)
         {
             if (sender is Grid { DataContext: ViewModels.RepositoryNode node })
             {
-                if (node.IsRepository)
-                    node.Open();
-                else
-                    ViewModels.Welcome.Instance.ToggleNodeIsExpanded(node);
-
+                node.Open();
                 e.Handled = true;
             }
         }
 
-        private PointerPressedEventArgs _pressTreeNodeEvent = null;
-        private bool _startDragTreeNode = false;
-        private readonly DataFormat<string> _dndRepoNode = DataFormat.CreateStringApplicationFormat("sourcefork-dnd-repo-node");
-        private CancellationTokenSource _cancellation = new CancellationTokenSource();
+        private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
     }
 }

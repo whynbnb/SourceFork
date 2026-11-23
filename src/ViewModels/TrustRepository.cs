@@ -24,11 +24,9 @@ namespace SourceFork.ViewModels
             get;
         }
 
-        public TrustRepository(string pageId, string path, string reason, string safeDirectory, RepositoryNode parent, bool moveNode, bool open, int bookmark)
+        public TrustRepository(string pageId, string path, string reason, string safeDirectory, bool open, int bookmark)
         {
             _pageId = pageId;
-            _parent = parent;
-            _moveNode = moveNode;
             _open = open;
             _bookmark = bookmark;
 
@@ -70,7 +68,7 @@ namespace SourceFork.ViewModels
 
             log.Complete();
 
-            var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(root, _parent, _moveNode);
+            var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(root);
             node.Bookmark = _bookmark;
             await node.UpdateStatusAsync(false, null);
             Welcome.Instance.Refresh();
@@ -97,8 +95,6 @@ namespace SourceFork.ViewModels
         }
 
         private readonly string _pageId;
-        private readonly RepositoryNode _parent;
-        private readonly bool _moveNode;
         private readonly bool _open;
         private readonly int _bookmark;
     }

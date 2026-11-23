@@ -151,10 +151,6 @@
   <x:String x:Key="Text.Configure.Proxy.Placeholder" xml:space="preserve">இந்த களஞ்சியத்தால் பயன்படுத்தப்படும் உஉபநெ பதிலாள்</x:String>
   <x:String x:Key="Text.Configure.User" xml:space="preserve">பயனர் பெயர்</x:String>
   <x:String x:Key="Text.Configure.User.Placeholder" xml:space="preserve">இந்த களஞ்சியத்திற்கான பயனர் பெயர்</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">பணியிடங்கள்</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">நிறம்</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">பெயர்</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">தாவல்களை மீட்டமை</x:String>
   <x:String x:Key="Text.ConventionalCommit" xml:space="preserve">வழக்கமான உறுதிமொழி உதவியாளர்</x:String>
   <x:String x:Key="Text.ConventionalCommit.BreakingChanges" xml:space="preserve">உடைக்கும் மாற்றம்:</x:String>
   <x:String x:Key="Text.ConventionalCommit.ClosedIssue" xml:space="preserve">மூடப்பட்ட வெளியீடு சிக்கல்:</x:String>
@@ -199,9 +195,7 @@
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">தொலை:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">பாதை:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">இலக்கு:</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">எல்லா குழந்தைகளும் பட்டியலிலிருந்து நீக்கப்படுவார்கள்.</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">இது பட்டியலிலிருந்து மட்டுமே அகற்றும், வட்டிலிருந்து அல்ல!</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">குழுவை நீக்குவதை உறுதிப்படுத்து</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">களஞ்சியத்தை நீக்குவதை உறுதிப்படுத்து</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">துணைத்தொகுதியை நீக்கு</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">துணைத்தொகுதி பாதை:</x:String>
@@ -238,7 +232,6 @@
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">புத்தகக்குறி:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">புதிய பெயர்:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">இலக்கு:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">தேர்ந்தெடுக்கப்பட்ட குழுவைத் திருத்து</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">தேர்ந்தெடுக்கப்பட்ட களஞ்சியத்தைத் திருத்து</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">பெறு</x:String>
   <x:String x:Key="Text.Fetch.AllRemotes" xml:space="preserve">எல்லா தொலைகளையும் பெறு</x:String>
@@ -372,8 +365,6 @@
   <x:String x:Key="Text.MergeMultiple.CommitChanges" xml:space="preserve">அனைத்து மாற்றங்களையும் உறுதிமொழி</x:String>
   <x:String x:Key="Text.MergeMultiple.Strategy" xml:space="preserve">சூழ்ச்சிமுறை:</x:String>
   <x:String x:Key="Text.MergeMultiple.Targets" xml:space="preserve">இலக்குகள்:</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">களஞ்சிய முனையை நகர்த்து</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">இதற்கான பெற்றோர் முனையைத் தேர்ந்தெடு</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">பெயர்:</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">அறிவிலி உள்ளமைக்கப்படவில்லை. [விருப்பத்தேர்வுகள்]க்குச் சென்று முதலில் அதை உள்ளமை. </x:String>
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">தரவு சேமிப்பக கோப்பகத்தைத் திற</x:String>
@@ -614,13 +605,10 @@
   <x:String x:Key="Text.URL" xml:space="preserve">முகவரி:</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">முன்னறிவிப்பு</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">வரவேற்பு பக்கம்</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">குழுவை உருவாக்கு</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">துணைக் குழுவை உருவாக்கு</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">நகலி களஞ்சியம்</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">நீக்கு</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">கோப்புறையை இழுத்து &amp; விடு ஆதரிக்கப்படுகிறது. தனிப்பயன் குழுவாக்க ஆதரவு.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">திருத்து</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">வேறொரு குழுவிற்கு நகர்த்து</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">அனைத்து களஞ்சியங்களையும் திற</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">களஞ்சியத்தைத் திற</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">முனையத்தைத் திற</x:String>
@@ -654,11 +642,14 @@
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">அனைத்தும் நிலைபடுத்து</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">மாறாதது எனநினைப்பதை பார்</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">வளர்புரு: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">பணியிடம்:</x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">பணியிடங்களை உள்ளமை...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">பணிமரம்</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">பாதையை நகலெடு</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">பூட்டு</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">நீக்கு</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">திற</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

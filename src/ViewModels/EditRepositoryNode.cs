@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace SourceFork.ViewModels
@@ -10,16 +11,17 @@ namespace SourceFork.ViewModels
             get;
         }
 
-        public bool IsRepository
-        {
-            get;
-        }
-
         [Required(ErrorMessage = "Name is required!")]
         public string Name
         {
             get => _name;
             set => SetProperty(ref _name, value, true);
+        }
+
+        public string TagsText
+        {
+            get => _tagsText;
+            set => SetProperty(ref _tagsText, value);
         }
 
         public int Bookmark
@@ -32,10 +34,9 @@ namespace SourceFork.ViewModels
         {
             _node = node;
             _name = node.Name;
+            _tagsText = string.Join(", ", node.Tags);
             _bookmark = node.Bookmark;
-
-            Target = node.IsRepository ? node.Id : node.Name;
-            IsRepository = node.IsRepository;
+            Target = node.Id;
         }
 
         public override Task<bool> Sure()
@@ -43,18 +44,21 @@ namespace SourceFork.ViewModels
             bool needSort = _node.Name != _name;
             _node.Name = _name;
             _node.Bookmark = _bookmark;
+            _node.SetTags(_tagsText.Split([',', ';'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
 
             if (needSort)
-            {
                 Preferences.Instance.SortByRenamedNode(_node);
-                Welcome.Instance.Refresh();
-            }
+            else
+                Preferences.Instance.Save();
 
+            Welcome.Instance.Refresh();
+            App.GetLauncher()?.RefreshRepositoryFilters();
             return Task.FromResult(true);
         }
 
-        private RepositoryNode _node = null;
+        private readonly RepositoryNode _node = null;
         private string _name = null;
+        private string _tagsText = string.Empty;
         private int _bookmark = 0;
     }
 }

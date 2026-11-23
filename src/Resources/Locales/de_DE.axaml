@@ -139,7 +139,6 @@
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Extra-Parameter:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Zusätzliche Argumente für das Klonen des Repositorys. Optional.</x:String>
   <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Lesezeichen:</x:String>
-  <x:String x:Key="Text.Clone.Group" xml:space="preserve">Gruppe:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Lokaler Name:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Repository-Name. Optional.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Übergeordnetes Verzeichnis:</x:String>
@@ -292,10 +291,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Die vordefinierten Parameter ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE} und ${TAG} bleiben hier verwendbar</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Typ:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">Kurznamen verwenden:</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Arbeitsumgebungen</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Farbe</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Name</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Offene Registerkarten beim Programmstart wiederherstellen</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">WEITER</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Leerer Commit erkannt! Möchtest du trotzdem fortfahren (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">ALLES STAGEN &amp; COMMITTEN</x:String>
@@ -357,9 +352,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Remote:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">Pfad:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Ziel:</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">Alle Nachfolger werden aus der Liste entfernt.</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">Dadurch wird es nur aus der Liste entfernt, nicht von der Festplatte!</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">Bestätige Löschen von Gruppe</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">Bestätige Löschen von Repository</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">Lösche Submodul</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">Submodul-Pfad:</x:String>
@@ -413,7 +406,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Lesezeichen:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Neuer Name:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Ziel:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">Ausgewählte Gruppe bearbeiten</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Ausgewähltes Repository bearbeiten</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">Ziel:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">Dieses Repository</x:String>
@@ -585,7 +577,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Launcher.NewVersion" xml:space="preserve">Neue Version verfügbar</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">Repositorys öffnen</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">Registerkarten</x:String>
-  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">Arbeitsumgebungen</x:String>
   <x:String x:Key="Text.Merge" xml:space="preserve">Branch mergen</x:String>
   <x:String x:Key="Text.Merge.Edit" xml:space="preserve">Merge-Nachricht anpassen</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Ziel-Branch:</x:String>
@@ -618,8 +609,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.MoveSubmodule" xml:space="preserve">Submodul verschieben</x:String>
   <x:String x:Key="Text.MoveSubmodule.MoveTo" xml:space="preserve">Verschieben zu:</x:String>
   <x:String x:Key="Text.MoveSubmodule.Submodule" xml:space="preserve">Submodul:</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">Verschiebe Repository-Knoten</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">Wähle Vorgänger-Knoten für:</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">Name:</x:String>
   <x:String x:Key="Text.No" xml:space="preserve">NEIN</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">Git wurde NICHT konfiguriert. Gehe bitte zunächst in die [Einstellungen] und konfiguriere es.</x:String>
@@ -630,7 +619,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Öffnen in externem Merge-Tool</x:String>
   <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Lokales Repository öffnen</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Lesezeichen:</x:String>
-  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">Gruppe:</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Ordner:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Optional.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Neue Registerkarte erstellen</x:String>
@@ -639,7 +627,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Registerkarten zur Rechten schließen</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Kopiere Repository-Pfad</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Bearbeiten</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">In Arbeitsumgebung verschieben</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Aktualisieren</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repositorys</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Einfügen</x:String>
@@ -974,13 +961,10 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.ViewLogs.Delete" xml:space="preserve">Löschen</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">Warnung</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Willkommensseite</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Erstelle Gruppe</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Erstelle Untergruppe</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Klone Repository</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Lösche</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">DRAG &amp; DROP VON ORDNER UNTERSTÜTZT. BENUTZERDEFINIERTE GRUPPIERUNG UNTERSTÜTZT.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Bearbeiten</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">Verschiebe in eine andere Gruppe</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Öffne alle Repositorys</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Öffne Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Öffne Terminal</x:String>
@@ -1027,8 +1011,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">ALLES STAGEN</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">ALS UNVERÄNDERT BETRACHTETE ANZEIGEN</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Vorlage: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">ARBEITSUMGEBUNG: </x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Arbeitsumgebungen konfigurieren…</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
   <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">BRANCH</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Pfad kopieren</x:String>
@@ -1039,4 +1021,9 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Entfernen</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Entsperren</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">JA</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

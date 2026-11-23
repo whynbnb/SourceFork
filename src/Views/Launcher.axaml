@@ -15,7 +15,6 @@
   <v:ChromelessWindow.Title>
     <MultiBinding Converter="{x:Static c:StringConverters.ToWindowTitle}">
       <Binding Path="ActivePage?.Node.Name" Mode="OneWay"/>
-      <Binding Path="ActiveWorkspace?.Name" Mode="OneWay"/>
     </MultiBinding>
   </v:ChromelessWindow.Title>
   <Grid>

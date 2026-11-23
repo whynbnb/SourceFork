@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +29,21 @@ namespace SourceFork.ViewModels
             }
         }
 
+        public int TagFilterCount
+        {
+            get => _tagFilters.Count;
+        }
+
+        public bool HasTagFilters
+        {
+            get => _tagFilters.Count > 0;
+        }
+
+        public IReadOnlyList<string> ActiveTagFilters
+        {
+            get => _tagFilters;
+        }
+
         public Welcome()
         {
             Refresh();
@@ -35,21 +51,14 @@ namespace SourceFork.ViewModels
 
         public void Refresh()
         {
-            if (string.IsNullOrWhiteSpace(_searchFilter))
-            {
-                foreach (var node in Preferences.Instance.RepositoryNodes)
-                    ResetVisibility(node);
-            }
-            else
-            {
-                foreach (var node in Preferences.Instance.RepositoryNodes)
-                    SetVisibilityBySearch(node);
-            }
-
-            var rows = new List<RepositoryNode>();
-            MakeTreeRows(rows, Preferences.Instance.RepositoryNodes);
             Rows.Clear();
-            Rows.AddRange(rows);
+            foreach (var node in Preferences.Instance.RepositoryNodes)
+            {
+                if (node.IsRepository &&
+                    node.MatchesSearch(_searchFilter) &&
+                    node.HasAllTags(_tagFilters))
+                    Rows.Add(node);
+            }
         }
 
         public async Task UpdateStatusAsync(bool force, CancellationToken? token)
@@ -59,44 +68,55 @@ namespace SourceFork.ViewModels
 
             _isUpdatingStatus = true;
 
-            // avoid collection was modified while enumerating.
-            var nodes = new List<RepositoryNode>();
-            nodes.AddRange(Preferences.Instance.RepositoryNodes);
-
-            foreach (var node in nodes)
+            foreach (var node in Rows)
                 await node.UpdateStatusAsync(force, token);
 
             _isUpdatingStatus = false;
         }
 
-        public void ToggleNodeIsExpanded(RepositoryNode node)
+        public List<string> GetAvailableTags()
         {
-            node.IsExpanded = !node.IsExpanded;
+            var tags = new List<string>();
+            foreach (var node in Preferences.Instance.RepositoryNodes)
+            {
+                foreach (var tag in node.Tags)
+                {
+                    if (!tags.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+                        tags.Add(tag);
+                }
+            }
 
-            var depth = node.Depth;
-            var idx = Rows.IndexOf(node);
-            if (idx == -1)
+            tags.Sort((l, r) => string.Compare(l, r, StringComparison.OrdinalIgnoreCase));
+            return tags;
+        }
+
+        public bool IsTagFiltered(string tag)
+        {
+            return _tagFilters.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void ToggleTagFilter(string tag)
+        {
+            var exists = _tagFilters.FindIndex(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            if (exists >= 0)
+                _tagFilters.RemoveAt(exists);
+            else
+                _tagFilters.Add(tag);
+
+            OnPropertyChanged(nameof(TagFilterCount));
+            OnPropertyChanged(nameof(HasTagFilters));
+            Refresh();
+        }
+
+        public void ClearTagFilters()
+        {
+            if (_tagFilters.Count == 0)
                 return;
 
-            if (node.IsExpanded)
-            {
-                var subrows = new List<RepositoryNode>();
-                MakeTreeRows(subrows, node.SubNodes, depth + 1);
-                Rows.InsertRange(idx + 1, subrows);
-            }
-            else
-            {
-                var removeCount = 0;
-                for (int i = idx + 1; i < Rows.Count; i++)
-                {
-                    var row = Rows[i];
-                    if (row.Depth <= depth)
-                        break;
-
-                    removeCount++;
-                }
-                Rows.RemoveRange(idx + 1, removeCount);
-            }
+            _tagFilters.Clear();
+            OnPropertyChanged(nameof(TagFilterCount));
+            OnPropertyChanged(nameof(HasTagFilters));
+            Refresh();
         }
 
         public async Task<Commands.Command.Result> GetRepositoryRootAsync(string path)
@@ -111,9 +131,9 @@ namespace SourceFork.ViewModels
             return await new Commands.QueryRepositoryRootPath(path).GetResultAsync();
         }
 
-        public async Task AddRepositoryAsync(string path, RepositoryNode parent, bool moveNode, bool open)
+        public async Task AddRepositoryAsync(string path, bool open)
         {
-            var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path, parent, moveNode);
+            var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path);
             await node.UpdateStatusAsync(false, null);
 
             if (open)
@@ -143,7 +163,7 @@ namespace SourceFork.ViewModels
 
             var activePage = App.GetLauncher().ActivePage;
             if (activePage != null && activePage.CanCreatePopup())
-                activePage.Popup = new OpenLocalRepository(activePage.Node.Id, null);
+                activePage.Popup = new OpenLocalRepository(activePage.Node.Id);
         }
 
         public void OpenTerminal()
@@ -172,107 +192,8 @@ namespace SourceFork.ViewModels
             SearchFilter = string.Empty;
         }
 
-        public void AddRootNode()
-        {
-            var activePage = App.GetLauncher().ActivePage;
-            if (activePage != null && activePage.CanCreatePopup())
-                activePage.Popup = new CreateGroup(null);
-        }
-
-        public RepositoryNode FindNodeById(string id, RepositoryNode root = null)
-        {
-            var collection = (root == null) ? Preferences.Instance.RepositoryNodes : root.SubNodes;
-            foreach (var node in collection)
-            {
-                if (node.Id.Equals(id, StringComparison.Ordinal))
-                    return node;
-
-                var sub = FindNodeById(id, node);
-                if (sub != null)
-                    return sub;
-            }
-
-            return null;
-        }
-
-        public RepositoryNode FindParentGroup(RepositoryNode node, RepositoryNode group = null)
-        {
-            var collection = (group == null) ? Preferences.Instance.RepositoryNodes : group.SubNodes;
-            if (collection.Contains(node))
-                return group;
-
-            foreach (var item in collection)
-            {
-                if (!item.IsRepository)
-                {
-                    var parent = FindParentGroup(node, item);
-                    if (parent != null)
-                        return parent;
-                }
-            }
-
-            return null;
-        }
-
-        public void MoveNode(RepositoryNode from, RepositoryNode to)
-        {
-            Preferences.Instance.MoveNode(from, to, true);
-            Refresh();
-        }
-
-        private void ResetVisibility(RepositoryNode node)
-        {
-            node.IsVisible = true;
-            foreach (var subNode in node.SubNodes)
-                ResetVisibility(subNode);
-        }
-
-        private void SetVisibilityBySearch(RepositoryNode node)
-        {
-            if (!node.IsRepository)
-            {
-                if (node.Name.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase))
-                {
-                    node.IsVisible = true;
-                    foreach (var subNode in node.SubNodes)
-                        ResetVisibility(subNode);
-                }
-                else
-                {
-                    bool hasVisibleSubNode = false;
-                    foreach (var subNode in node.SubNodes)
-                    {
-                        SetVisibilityBySearch(subNode);
-                        hasVisibleSubNode |= subNode.IsVisible;
-                    }
-                    node.IsVisible = hasVisibleSubNode;
-                }
-            }
-            else
-            {
-                node.IsVisible = node.Name.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase) ||
-                    node.Id.Contains(_searchFilter, StringComparison.OrdinalIgnoreCase);
-            }
-        }
-
-        private void MakeTreeRows(List<RepositoryNode> rows, List<RepositoryNode> nodes, int depth = 0)
-        {
-            foreach (var node in nodes)
-            {
-                if (!node.IsVisible)
-                    continue;
-
-                node.Depth = depth;
-                rows.Add(node);
-
-                if (node.IsRepository || !node.IsExpanded)
-                    continue;
-
-                MakeTreeRows(rows, node.SubNodes, depth + 1);
-            }
-        }
-
         private string _searchFilter = string.Empty;
         private bool _isUpdatingStatus = false;
+        private readonly List<string> _tagFilters = [];
     }
 }

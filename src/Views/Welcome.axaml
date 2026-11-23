@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,60 +18,85 @@
 
     <!-- Managed Repositories -->
     <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto,*">
-      <!-- Search Box -->
-      <TextBox Grid.Row="0"
-               x:Name="SearchBox"
-               Height="32"
-               Padding="0"
-               CornerRadius="16"
-               BorderBrush="{DynamicResource Brush.Border0}"
-               BorderThickness="1"
-               Background="{DynamicResource Brush.Contents}"
-               PlaceholderText="{DynamicResource Text.Welcome.Search}"
-               VerticalContentAlignment="Center"
-               Text="{Binding SearchFilter, Mode=TwoWay}">
-        <TextBox.Styles>
-          <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
-          </Style>
-          <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
-          </Style>
-        </TextBox.Styles>
+      <!-- Search and Tag Filter -->
+      <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+        <TextBox Grid.Column="0"
+                 x:Name="SearchBox"
+                 Height="32"
+                 Padding="0"
+                 CornerRadius="16"
+                 BorderBrush="{DynamicResource Brush.Border0}"
+                 BorderThickness="1"
+                 Background="{DynamicResource Brush.Contents}"
+                 PlaceholderText="{DynamicResource Text.Welcome.Search}"
+                 VerticalContentAlignment="Center"
+                 Text="{Binding SearchFilter, Mode=TwoWay}">
+          <TextBox.Styles>
+            <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+              <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
+            </Style>
+            <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+              <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
+            </Style>
+          </TextBox.Styles>
 
-        <TextBox.InnerLeftContent>
-          <Path Width="16" Height="16" Margin="6,0,3,0" Data="{StaticResource Icons.Search}" Fill="{DynamicResource Brush.FG2}"/>
-        </TextBox.InnerLeftContent>
+          <TextBox.InnerLeftContent>
+            <Path Width="16" Height="16" Margin="6,0,3,0" Data="{StaticResource Icons.Search}" Fill="{DynamicResource Brush.FG2}"/>
+          </TextBox.InnerLeftContent>
 
-        <TextBox.InnerRightContent>
-          <StackPanel Orientation="Horizontal">
-            <!-- Invisible Button to handle search hotkey pressed-->
-            <Button Width="0" Height="0"
-                    Margin="0" Padding="0"
-                    Click="OnSearchHotKey"
-                    HotKey="{OnPlatform Ctrl+F, macOS=⌘+F}"/>
+          <TextBox.InnerRightContent>
+            <StackPanel Orientation="Horizontal">
+              <!-- Invisible Button to handle search hotkey pressed-->
+              <Button Width="0" Height="0"
+                      Margin="0" Padding="0"
+                      Click="OnSearchHotKey"
+                      HotKey="{OnPlatform Ctrl+F, macOS=⌘+F}"/>
 
-            <Button Classes="icon_button" IsVisible="{Binding SearchFilter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Click="OnClearSearchFilter">
-              <Path Width="16" Height="16" Margin="0,0,0,0" Data="{StaticResource Icons.Clear}" Fill="{DynamicResource Brush.FG1}"/>
-            </Button>
-          </StackPanel>
-        </TextBox.InnerRightContent>
-      </TextBox>
+              <Button Classes="icon_button" IsVisible="{Binding SearchFilter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Click="OnClearSearchFilter">
+                <Path Width="16" Height="16" Margin="0,0,0,0" Data="{StaticResource Icons.Clear}" Fill="{DynamicResource Brush.FG1}"/>
+              </Button>
+            </StackPanel>
+          </TextBox.InnerRightContent>
+        </TextBox>
 
-      <!-- Repository Tree -->
-      <v:RepositoryListBox Grid.Row="1"
-                           x:Name="TreeContainer"
-                           Margin="0,8,8,0"
-                           Focusable="True"
-                           Background="Transparent"
-                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                           ItemsSource="{Binding Rows}"
-                           SelectionMode="Single"
-                           LostFocus="OnTreeViewLostFocus"
-                           DragDrop.AllowDrop="True"
-                           DragDrop.DragOver="DragOverTreeView"
-                           DragDrop.Drop="DropOnTreeView">
+        <Button Grid.Column="1"
+                Classes="icon_button"
+                Width="32" Height="32"
+                Margin="8,0,0,0"
+                Click="OnTagFilterMenu">
+          <ToolTip.Tip>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock Text="{DynamicResource Text.Sidebar.FilterByTags}"/>
+              <TextBlock Margin="6,0,0,0"
+                         Text="{Binding TagFilterCount, Mode=OneWay}"
+                         IsVisible="{Binding HasTagFilters, Mode=OneWay}"
+                         Foreground="{DynamicResource Brush.Accent}"/>
+            </StackPanel>
+          </ToolTip.Tip>
+          <Panel>
+            <Path Width="16" Height="16" Data="{StaticResource Icons.Tags}" Fill="{DynamicResource Brush.FG1}"/>
+            <Ellipse Width="7" Height="7"
+                     HorizontalAlignment="Right" VerticalAlignment="Top"
+                     Fill="{DynamicResource Brush.Accent}"
+                     IsVisible="{Binding HasTagFilters, Mode=OneWay}"/>
+          </Panel>
+        </Button>
+      </Grid>
+
+      <!-- Repository List -->
+      <ListBox Grid.Row="1"
+               x:Name="TreeContainer"
+               Margin="0,8,8,0"
+               Focusable="True"
+               Background="Transparent"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+               ScrollViewer.VerticalScrollBarVisibility="Auto"
+               ItemsSource="{Binding Rows}"
+               SelectionMode="Single"
+               LostFocus="OnTreeViewLostFocus"
+               DragDrop.AllowDrop="True"
+               DragDrop.DragOver="DragOverTreeView"
+               DragDrop.Drop="DropOnTreeView">
         <ListBox.Styles>
           <Style Selector="ListBox">
             <Setter Property="FocusAdorner">
@@ -100,54 +125,20 @@
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
 
-        <ListBox.ContextMenu>
-          <ContextMenu>
-            <MenuItem Header="{DynamicResource Text.Welcome.AddRootFolder}" Command="{Binding AddRootNode}">
-              <MenuItem.Icon>
-                <Path Width="12" Height="12" Data="{DynamicResource Icons.Folder.Add}"/>
-              </MenuItem.Icon>
-            </MenuItem>
-          </ContextMenu>
-        </ListBox.ContextMenu>
-
         <ListBox.ItemTemplate>
           <DataTemplate DataType="vm:RepositoryNode">
             <Grid Background="Transparent"
                   Height="30"
-                  ColumnDefinitions="16,18,*,Auto,8"
-                  Margin="{Binding Depth, Converter={x:Static c:IntConverters.ToTreeMargin}}"
+                  ColumnDefinitions="18,*,Auto"
                   ClipToBounds="True"
                   ContextRequested="OnTreeNodeContextRequested"
-                  PointerPressed="OnPointerPressedTreeNode"
-                  PointerMoved="OnPointerMovedOverTreeNode"
-                  PointerReleased="OnPointerReleasedOnTreeNode"
-                  DoubleTapped="OnDoubleTappedTreeNode"
-                  DragDrop.AllowDrop="True"
-                  DragDrop.DragOver="DragOverTreeNode"
-                  DragDrop.Drop="DropOnTreeNode">
-              <v:RepositoryTreeNodeToggleButton Grid.Column="0"
-                                                Classes="tree_expander"
-                                                Focusable="False"
-                                                HorizontalAlignment="Center"
-                                                IsChecked="{Binding IsExpanded, Mode=OneWay}"
-                                                IsVisible="{Binding !IsRepository}"/>
-
-              <v:Bookmark Grid.Column="1"
+                  DoubleTapped="OnDoubleTappedTreeNode">
+              <v:Bookmark Grid.Column="0"
                           Width="14" Height="14"
                           HorizontalAlignment="Center"
-                          Value="{Binding Bookmark, Mode=OneWay}"
-                          IsVisible="{Binding IsRepository}"/>
+                          Value="{Binding Bookmark, Mode=OneWay}"/>
 
-              <ToggleButton Grid.Column="1"
-                            Classes="folder"
-                            Focusable="False"
-                            Width="14" Height="14"
-                            HorizontalAlignment="Left"
-                            Foreground="{DynamicResource Brush.FG1}"
-                            IsChecked="{Binding IsExpanded}"
-                            IsVisible="{Binding !IsRepository}"/>
-
-              <StackPanel Grid.Column="2" Orientation="Horizontal" ClipToBounds="True">
+              <StackPanel Grid.Column="1" Orientation="Horizontal" ClipToBounds="True">
                 <TextBlock VerticalAlignment="Center" Text="{Binding Name}"/>
                 <TextBlock Margin="4,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource Brush.FG2}" Text="{Binding Id, StringFormat=({0}), Converter={x:Static c:PathConverters.RelativeToHome}}">
                   <TextBlock.IsVisible>
@@ -157,6 +148,12 @@
                     </MultiBinding>
                   </TextBlock.IsVisible>
                 </TextBlock>
+                <TextBlock Margin="12,0,0,0"
+                           VerticalAlignment="Center"
+                           FontSize="11"
+                           Foreground="{DynamicResource Brush.Accent}"
+                           Text="{Binding TagsDisplay}"
+                           IsVisible="{Binding HasTags}"/>
                 <Path Margin="2,0,0,0"
                       Width="12" Height="12"
                       Data="{StaticResource Icons.Error}"
@@ -164,7 +161,7 @@
                       IsVisible="{Binding IsInvalid}"/>
               </StackPanel>
 
-              <ContentControl Grid.Column="3"
+              <ContentControl Grid.Column="2"
                               Margin="6,0,0,0"
                               Content="{Binding Status, Mode=OneWay}"
                               IsVisible="{Binding Status, Converter={x:Static ObjectConverters.NotEqual}}">
@@ -191,11 +188,11 @@
                                  IsVisible="{Binding IsTrackingStatusVisible}"/>
 
                       <Border Margin="3,0,0,0"
-                                      BorderThickness="1"
-                                      BorderBrush="{DynamicResource Brush.FG2}"
-                                      Height="20"
-                                      CornerRadius="4"
-                                      Padding="4,0">
+                              BorderThickness="1"
+                              BorderBrush="{DynamicResource Brush.FG2}"
+                              Height="20"
+                              CornerRadius="4"
+                              Padding="4,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                           <Path Width="12" Height="12" Data="{StaticResource Icons.Branch}"/>
                           <TextBlock Margin="2,0,0,0" Text="{Binding CurrentBranch}" FontSize="12"/>
@@ -208,7 +205,7 @@
             </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
-      </v:RepositoryListBox>
+      </ListBox>
     </Grid>
 
     <!-- Tips -->

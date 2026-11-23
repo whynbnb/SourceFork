@@ -141,7 +141,6 @@
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">追加の引数:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">リポジトリをクローンする際の追加の引数 (省略可能)</x:String>
   <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">ブックマーク:</x:String>
-  <x:String x:Key="Text.Clone.Group" xml:space="preserve">グループ:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">ローカル名:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">リポジトリの名前 (省略可能)</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">親フォルダー:</x:String>
@@ -294,10 +293,6 @@
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">ここでも組み込みの変数 ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE}, ${TAG} がそのまま利用できます</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">種類:</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.UseFriendlyName" xml:space="preserve">リモート名付きの名前を使用:</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">ワークスペース</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">色</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">名前</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">起動時にタブを復元</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">続行</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">コミットの内容が何もありません！それでも続行しますか (--allow-empty)？</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">すべてステージに上げてからコミット</x:String>
@@ -360,9 +355,7 @@
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">リモート:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">パス:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">対象:</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">このグループ配下の項目も含め、すべて一覧から削除されます。</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">一覧から削除されるのみで、ディスクから削除されるわけではありません！</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">グループの削除を確認</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">リポジトリの削除を確認</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">サブモジュールを削除</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">サブモジュールへのパス:</x:String>
@@ -417,7 +410,6 @@
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">ブックマーク:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">新しい名前:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">対象:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">選択したグループを編集</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">選択したリポジトリを編集</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">対象:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">このリポジトリ</x:String>
@@ -598,7 +590,6 @@
   <x:String x:Key="Text.Launcher.NewVersion" xml:space="preserve">新しいバージョンが利用できます</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">リポジトリを開く</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">タブ</x:String>
-  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">ワークスペース</x:String>
   <x:String x:Key="Text.Merge" xml:space="preserve">ブランチをマージ</x:String>
   <x:String x:Key="Text.Merge.Edit" xml:space="preserve">マージメッセージを編集</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">マージ先:</x:String>
@@ -631,8 +622,6 @@
   <x:String x:Key="Text.MoveSubmodule" xml:space="preserve">サブモジュールを移動</x:String>
   <x:String x:Key="Text.MoveSubmodule.MoveTo" xml:space="preserve">移動先:</x:String>
   <x:String x:Key="Text.MoveSubmodule.Submodule" xml:space="preserve">サブモジュール:</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">リポジトリを別のグループに移動</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">このリポジトリの新しい所属先を選択:</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">名前:</x:String>
   <x:String x:Key="Text.No" xml:space="preserve">いいえ</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">Git の設定が行われていません。[設定] を開いて初期設定をしてください。</x:String>
@@ -645,7 +634,6 @@
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">外部のマージツールで開く</x:String>
   <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">ローカルリポジトリを開く</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">ブックマーク:</x:String>
-  <x:String x:Key="Text.OpenLocalRepository.Group" xml:space="preserve">グループ:</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">フォルダー:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">省略可能</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">新しいタブを作成</x:String>
@@ -654,7 +642,6 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">右側のタブを閉じる</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">リポジトリへのパスをコピー</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">編集</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">ワークスペースに移動</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">再読み込み</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">リポジトリ</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">貼り付け</x:String>
@@ -1017,13 +1004,10 @@
   <x:String x:Key="Text.ViewLogs.Delete" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">警告</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">ようこそページ</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">グループを作成</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">サブグループを作成</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">リポジトリをクローン</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ドラッグ &amp; ドロップでフォルダーを追加できます。また、グループの作成・編集もできます。</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">編集</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">別のグループに移動</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">すべてのリポジトリを開く</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">リポジトリを開く</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">端末を開く</x:String>
@@ -1071,8 +1055,6 @@
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">すべてステージに上げる</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">未変更と見なしたファイルを表示</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">テンプレート: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">ワークスペース: </x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">ワークスペースの設定...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">作業ツリー</x:String>
   <x:String x:Key="Text.Worktree.Branch" xml:space="preserve">ブランチ</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">パスをコピー</x:String>
@@ -1083,4 +1065,9 @@
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">削除</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">ロックを解除</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">はい</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

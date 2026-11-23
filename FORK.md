@@ -22,22 +22,15 @@
 ## 本 Fork 的定制
 
 - 品牌与标识整体改为 `SourceFork`：命名空间、程序集/可执行文件、项目文件、资源 URI、UI 文案、macOS bundle id（`me.whynbnb.SourceFork`）、配置目录和打包元数据均使用 SourceFork；仅保留上游链接与版权归属中的 SourceGit。
-- 左侧工作区侧边栏：`src/Views/WorkspaceSidebar.axaml`，把所有打开的仓库平铺显示，替代顶部 tab。
-- 工作区切换移到侧边栏顶部；`src/Views/Launcher.axaml` 中已移除 `LauncherTabBar`。
-- 仓库工具栏（`RepositoryToolbar` / `WelcomeToolbar`）已并入顶部标题栏，`LauncherPage` 不再有独立的 36px 工具栏行。
-- 顶部标题栏按侧边栏宽度切分：左侧只放窗口控件，仓库工具栏从右侧内容区开始，不跨越左侧栏边界。
-- 顶栏原本的页面列表按钮已移除；`Ctrl+P` / `⌘+P` 仍可打开页面列表。
-- 侧边栏顶部是仓库搜索框（按名称或路径过滤），最右侧按钮用于切换工作区。
+- 左侧仓库侧边栏：`src/Views/WorkspaceSidebar.axaml`，把当前打开的仓库平铺显示，替代顶部 tab。
+- 仓库列表完全扁平化：不再有分组、子分组、移动分组或工作区（Workspace）概念；Welcome 页和侧边栏都只显示平铺的仓库。
+- 侧边栏顶部是仓库搜索框（按名称、路径和 tag 过滤），右侧按钮可多选 tag 进行筛选（多个 tag 取交集）。
+- 每个仓库支持多个 tag；在 Welcome 页或侧边栏右键 `Edit` 中用逗号分隔填写。tag 会随偏好设置和仓库内的 `sourcefork.node` 一起保存。
+- 首次启动时会读取旧偏好中的分组/工作区数据，把所有仓库路径扁平化迁移到新的仓库列表；旧的分组和工作区层级直接丢弃。
 - 侧边栏可折叠/展开，状态保存在 `LayoutInfo.WorkspaceSidebarCollapsed`。折叠后 macOS 红绿灯/Windows 菜单会移到内容区顶栏最左侧，工具栏按钮紧随其后。
 - 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`；拖动分隔线结束、折叠/展开时会立即保存偏好，避免异常退出丢失宽度。
 - 顶部菜单按钮抽成了 `LauncherMenuButton` 控件，方便侧边栏展开和折叠两种位置复用。
-- 偏好设置新增 `Workspaces` 页，工作区管理 UI 抽成 `WorkspaceManagement` 控件；工作区菜单里的“配置工作区”改为直接打开该页。
 - 偏好设置窗口可自由调整宽高，初始尺寸 860×520。
-- `WorkspaceManagement` 支持导入/导出工作区 JSON（全部或当前选中），导入时自动处理重名。
-- 工作区支持 `Hidden` 状态：隐藏后不出现在主界面的工作区切换菜单，但数据保留；管理页用“隐藏”徽标、灰斜体名称和眼睛关闭图标标记，可随时取消隐藏。
-- 旧的 `ConfigureWorkspace` 窗口保留为同一控件的轻量宿主，避免重复维护管理界面。
-- 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`，可拖动分隔线调整。
-- 旧的 `LauncherTabBar` 文件保留但不再引用，方便对照上游。
 - 移植上游 `Launcher.axaml`、`LauncherPage.axaml`、`RepositoryToolbar.axaml`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏和统一顶栏结构。
 - 发布流程按 `framework` / `aot` / `aot-static` 三种模式构建；`aot-static` 通过 `StaticLink.Avalonia` 和 `StaticLink.libonigwrap` 静态链接 Avalonia/Skia/HarfBuzz/Oniguruma，输出单文件。
 - Release 暂只产出 Linux x64、Windows x64 和 macOS arm64，共 9 种资产；RPM、Flatpak 等暂不构建。

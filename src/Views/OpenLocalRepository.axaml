@@ -20,7 +20,7 @@
                  Text="{DynamicResource Text.OpenLocalRepository}"/>
     </StackPanel>
 
-    <Grid Margin="8,16,0,0" RowDefinitions="32,32,32" ColumnDefinitions="Auto,*">
+    <Grid Margin="8,16,0,0" RowDefinitions="32,32" ColumnDefinitions="Auto,*">
       <TextBlock Grid.Row="0" Grid.Column="0"
                  HorizontalAlignment="Right"
                  Margin="0,0,8,0"
@@ -39,31 +39,8 @@
       <TextBlock Grid.Row="1" Grid.Column="0"
                  HorizontalAlignment="Right"
                  Margin="0,0,8,0"
-                 Text="{DynamicResource Text.OpenLocalRepository.Group}"/>
-      <ComboBox Grid.Row="1" Grid.Column="1"
-                Height="28" Padding="8,0"
-                VerticalAlignment="Center" HorizontalAlignment="Stretch"
-                ItemsSource="{Binding Groups}"
-                SelectedIndex="{Binding SelectedGroupIndex, Mode=TwoWay}">
-        <ComboBox.ItemTemplate>
-          <DataTemplate DataType="vm:TargetGroup">
-            <Grid ColumnDefinitions="*,Auto">
-              <TextBlock Grid.Column="0"
-                         Text="{Binding Name, Mode=OneWay}"/>
-              <TextBlock Grid.Column="1"
-                         Text="{Binding Description, Mode=OneWay}"
-                         Margin="8,0,0,0"
-                         Foreground="{DynamicResource Brush.FG2}"/>
-            </Grid>
-          </DataTemplate>
-        </ComboBox.ItemTemplate>
-      </ComboBox>
-
-      <TextBlock Grid.Row="2" Grid.Column="0"
-                 HorizontalAlignment="Right"
-                 Margin="0,0,8,0"
                  Text="{DynamicResource Text.OpenLocalRepository.Bookmark}"/>
-      <v:BookmarkSelector Grid.Row="2" Grid.Column="1"
+      <v:BookmarkSelector Grid.Row="1" Grid.Column="1"
                           HorizontalAlignment="Left" VerticalAlignment="Center"
                           Bookmark="{Binding Bookmark, Mode=TwoWay}"/>
     </Grid>

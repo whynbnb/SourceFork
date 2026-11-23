@@ -152,9 +152,6 @@
   <x:String x:Key="Text.Configure.Proxy.Placeholder" xml:space="preserve">HTTP проксі, що використовується цим сховищем</x:String>
   <x:String x:Key="Text.Configure.User" xml:space="preserve">Ім'я користувача</x:String>
   <x:String x:Key="Text.Configure.User.Placeholder" xml:space="preserve">Ім'я користувача для цього сховища</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Робочі простори</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Колір</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Відновлювати вкладки при запуску</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">ПРОДОВЖИТИ</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Виявлено порожній коміт! Продовжити (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">ІНДЕКСУВАТИ ВСЕ ТА ЗАКОМІТИТИ</x:String>
@@ -203,9 +200,7 @@
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Віддалене сховище:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">Шлях:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Ціль:</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">Усі дочірні елементи будуть видалені зі списку.</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">Це видалить сховище лише зі списку, а не з диска!</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">Підтвердити видалення групи</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">Підтвердити видалення сховища</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">Видалити підмодуль</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">Шлях до підмодуля:</x:String>
@@ -242,7 +237,6 @@
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Закладка:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Нова назва:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Ціль:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">Редагувати вибрану групу</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Редагувати вибраний репозиторій</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">Витягти</x:String>
   <x:String x:Key="Text.Fetch.AllRemotes" xml:space="preserve">Витягти всі віддалені сховища</x:String>
@@ -376,8 +370,6 @@
   <x:String x:Key="Text.MergeMultiple.CommitChanges" xml:space="preserve">Закомітити всі зміни</x:String>
   <x:String x:Key="Text.MergeMultiple.Strategy" xml:space="preserve">Стратегія:</x:String>
   <x:String x:Key="Text.MergeMultiple.Targets" xml:space="preserve">Цілі:</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">Перемістити вузол сховища</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">Виберіть батьківський вузол для:</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">Назва:</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">Git не налаштовано. Будь ласка, перейдіть до [Налаштування] та налаштуйте його.</x:String>
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">Відкрити теку зберігання даних</x:String>
@@ -619,13 +611,10 @@
   <x:String x:Key="Text.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">Попередження</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Вітальна сторінка</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Створити групу</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Створити підгрупу</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Клонувати сховище</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Видалити</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ПІДТРИМУЄТЬСЯ ПЕРЕТЯГУВАННЯ ТЕК. МОЖЛИВЕ ГРУПУВАННЯ.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Редагувати</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">Перемістити до іншої групи</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Відкрити всі сховища</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Відкрити сховище</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Відкрити термінал</x:String>
@@ -662,11 +651,14 @@
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">ІНДЕКСУВАТИ ВСЕ</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">ПЕРЕГЛЯНУТИ ФАЙЛИ, ЩО ВВАЖАЮТЬСЯ НЕЗМІНЕНИМИ</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Шаблон: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">РОБОЧИЙ ПРОСТІР: </x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Налаштувати робочі простори...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">РОБОЧЕ ДЕРЕВО</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Копіювати шлях</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">Заблокувати</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Видалити</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Розблокувати</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

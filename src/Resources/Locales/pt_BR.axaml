@@ -173,10 +173,6 @@
   <x:String x:Key="Text.Configure.Proxy.Placeholder" xml:space="preserve">Proxy HTTP usado por este repositório</x:String>
   <x:String x:Key="Text.Configure.User" xml:space="preserve">Nome de Usuário</x:String>
   <x:String x:Key="Text.Configure.User.Placeholder" xml:space="preserve">Nome de usuário para este repositório</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Workspaces</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Cor</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nome</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Restaurar abas ao inicializar</x:String>
   <x:String x:Key="Text.ConventionalCommit" xml:space="preserve">Assistente de Conventional Commit</x:String>
   <x:String x:Key="Text.ConventionalCommit.BreakingChanges" xml:space="preserve">Breaking Change:</x:String>
   <x:String x:Key="Text.ConventionalCommit.ClosedIssue" xml:space="preserve">Ticket encerrado:</x:String>
@@ -220,7 +216,6 @@
   <x:String x:Key="Text.DeleteRemote" xml:space="preserve">Excluir Remoto</x:String>
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Remoto:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Alvo:</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">Confirmar Exclusão do Grupo</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">Confirmar Exclusão do Repositório</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">Excluir Submódulo</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">Caminho do Submódulo:</x:String>
@@ -255,7 +250,6 @@
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Favorito:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Novo Nome:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Alvo:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">Editar Grupo Selecionado</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Editar Repositório Selecionado</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">Buscar</x:String>
   <x:String x:Key="Text.Fetch.AllRemotes" xml:space="preserve">Buscar todos os remotos</x:String>
@@ -377,8 +371,6 @@
   <x:String x:Key="Text.Merge" xml:space="preserve">Mesclar Ramo</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">Para:</x:String>
   <x:String x:Key="Text.Merge.Mode" xml:space="preserve">Opção de Mesclagem:</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">Mover nó do repositório</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">Selecionar nó pai para:</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">Nome:</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">O Git NÃO foi configurado. Por favor, vá para [Preferências] e configure primeiro.</x:String>
   <x:String x:Key="Text.OpenAppDataDir" xml:space="preserve">Abrir Pasta de Dados do Aplicativo</x:String>
@@ -600,13 +592,10 @@
   <x:String x:Key="Text.URL" xml:space="preserve">URL:</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">Aviso</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Página de Boas-vindas</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Criar Grupo Raíz</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Criar Subgrupo</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clonar Repositório</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Excluir</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ARRASTAR E SOLTAR PASTAS SUPORTADO. AGRUPAMENTO PERSONALIZADO SUPORTADO.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Editar</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">Mover para Outro Grupo</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Abrir Todos os Repositórios</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Abrir Repositório</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Abrir Terminal</x:String>
@@ -637,11 +626,14 @@
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">STAGE TODOS</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">VER SUPOR NÃO ALTERADO</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Template: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">Workspaces: </x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Configurar workspaces...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Copiar Caminho</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">Bloquear</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Remover</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Desbloquear</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

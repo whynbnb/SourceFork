@@ -26,7 +26,7 @@
   </UserControl.Styles>
 
   <Grid RowDefinitions="Auto,*,Auto">
-    <!-- Repository Search and Workspace Switcher -->
+    <!-- Repository Search and Tag Filter -->
     <Grid Grid.Row="0" Height="34" Margin="8,10,8,6" ColumnDefinitions="*,Auto">
       <Border Grid.Column="0"
               Classes="search_box"
@@ -57,19 +57,23 @@
               Width="30" Height="30"
               Margin="4,0,0,0"
               VerticalAlignment="Center"
-              Click="OnWorkspaceMenu"
-              HotKey="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}">
+              Click="OnTagFilterMenu">
         <ToolTip.Tip>
           <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{DynamicResource Text.Workspace}" FontWeight="Bold"/>
-            <TextBlock Text="{Binding ActiveWorkspace.Name}"/>
-            <TextBlock Margin="16,0,0,0"
-                       Text="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}"
-                       FontSize="11"
-                       Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+            <TextBlock Text="{DynamicResource Text.Sidebar.FilterByTags}" FontWeight="Bold"/>
+            <TextBlock Margin="6,0,0,0"
+                       Text="{Binding TagFilterCount, Mode=OneWay}"
+                       IsVisible="{Binding HasTagFilters, Mode=OneWay}"
+                       Foreground="{DynamicResource Brush.Accent}"/>
           </StackPanel>
         </ToolTip.Tip>
-        <Path Width="14" Height="14" Data="{StaticResource Icons.Workspace}" Fill="{Binding ActiveWorkspace.Brush}"/>
+        <Panel>
+          <Path Width="14" Height="14" Data="{StaticResource Icons.Tags}" Fill="{DynamicResource Brush.FG1}"/>
+          <Ellipse Width="7" Height="7"
+                   HorizontalAlignment="Right" VerticalAlignment="Top"
+                   Fill="{DynamicResource Brush.Accent}"
+                   IsVisible="{Binding HasTagFilters, Mode=OneWay}"/>
+        </Panel>
       </Button>
     </Grid>
 
@@ -165,12 +169,20 @@
                          FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
                          Text="{DynamicResource Text.PageTabBar.Welcome.Title}"
                          IsVisible="{Binding !Node.IsRepository}"/>
-              <TextBlock Grid.Row="1"
-                         FontSize="10"
-                         Foreground="{DynamicResource Brush.FG2}"
-                         Text="{Binding Node.Id}"
-                         TextTrimming="CharacterEllipsis"
-                         IsVisible="{Binding Node.IsRepository}"/>
+              <Grid Grid.Row="1" ColumnDefinitions="*,Auto" IsVisible="{Binding Node.IsRepository}">
+                <TextBlock Grid.Column="0"
+                           FontSize="10"
+                           Foreground="{DynamicResource Brush.FG2}"
+                           Text="{Binding Node.Id}"
+                           TextTrimming="CharacterEllipsis"/>
+                <TextBlock Grid.Column="1"
+                           Margin="8,0,0,0"
+                           FontSize="10"
+                           Foreground="{DynamicResource Brush.Accent}"
+                           Text="{Binding Node.TagsDisplay}"
+                           TextTrimming="CharacterEllipsis"
+                           IsVisible="{Binding Node.HasTags}"/>
+              </Grid>
             </Grid>
 
             <Ellipse Grid.Column="2"

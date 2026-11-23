@@ -97,17 +97,11 @@ namespace SourceFork.Converters
         {
             public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
             {
-                if (values is not { Count: 2 })
+                if (values is not { Count: 1 })
                     return "SourceFork";
 
                 var page = values[0] as string;
-                var workspace = values[1] as string;
-                if (string.IsNullOrEmpty(page))
-                    page = "Repositories";
-                if (string.IsNullOrEmpty(workspace))
-                    workspace = "Unnamed";
-
-                return $"{page} - {workspace}";
+                return string.IsNullOrEmpty(page) ? "SourceFork" : $"{page} - SourceFork";
             }
 
             public IList<object> ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

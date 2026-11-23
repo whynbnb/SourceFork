@@ -27,7 +27,8 @@ namespace SourceFork.ViewModels
                 _instance.PrepareShellOrTerminal();
                 _instance.PrepareExternalTools();
                 _instance.PrepareExternalDiffMergeTool();
-                _instance.PrepareWorkspaces();
+                _instance.PrepareRepositoryNodes();
+                _instance.PrepareOpenRepositories();
 
                 return _instance;
             }
@@ -485,11 +486,17 @@ namespace SourceFork.ViewModels
             set;
         } = [];
 
-        public List<Workspace> Workspaces
+        public List<string> OpenRepositories
         {
             get;
             set;
         } = [];
+
+        public string ActiveRepositoryPath
+        {
+            get;
+            set;
+        } = string.Empty;
 
         public AvaloniaList<Models.CustomAction> CustomActions
         {
@@ -535,24 +542,12 @@ namespace SourceFork.ViewModels
             return true;
         }
 
-        public Workspace GetActiveWorkspace()
+        public void AddNode(RepositoryNode node, bool save)
         {
-            foreach (var w in Workspaces)
-            {
-                if (w.IsActive)
-                    return w;
-            }
+            if (!RepositoryNodes.Contains(node))
+                RepositoryNodes.Add(node);
 
-            var first = Workspaces[0];
-            first.IsActive = true;
-            return first;
-        }
-
-        public void AddNode(RepositoryNode node, RepositoryNode to, bool save)
-        {
-            var collection = to == null ? RepositoryNodes : to.SubNodes;
-            collection.Add(node);
-            SortNodes(collection);
+            SortNodes(RepositoryNodes);
 
             if (save)
                 Save();
@@ -560,39 +555,19 @@ namespace SourceFork.ViewModels
 
         public void SortNodes(List<RepositoryNode> collection)
         {
-            collection?.Sort((l, r) =>
-            {
-                if (l.IsRepository != r.IsRepository)
-                    return l.IsRepository ? 1 : -1;
-
-                return Models.NumericSort.Compare(l.Name, r.Name);
-            });
+            collection?.Sort((l, r) => Models.NumericSort.Compare(l.Name, r.Name));
         }
 
         public RepositoryNode FindNode(string id)
         {
-            return FindNodeRecursive(id, RepositoryNodes);
+            return RepositoryNodes.Find(x => x.Id == id);
         }
 
-        public RepositoryNode FindOrCreateGroupRecursive(string path)
-        {
-            List<RepositoryNode> collection = RepositoryNodes;
-            RepositoryNode node = null;
-
-            foreach (var name in path.Split('/'))
-            {
-                node = FindOrCreateGroupInCollection(collection, name);
-                collection = node.SubNodes;
-            }
-
-            return node;
-        }
-
-        public RepositoryNode FindOrAddNodeByRepositoryPath(string repo, RepositoryNode parent, bool shouldMoveNode, bool save = true)
+        public RepositoryNode FindOrAddNodeByRepositoryPath(string repo, bool save = true)
         {
             var normalized = repo.Replace('\\', '/').TrimEnd('/');
 
-            var node = FindNodeRecursive(normalized, RepositoryNodes);
+            var node = FindNode(normalized);
             if (node == null)
             {
                 node = new RepositoryNode()
@@ -603,33 +578,16 @@ namespace SourceFork.ViewModels
                     IsRepository = true,
                 };
 
-                AddNode(node, parent, save);
-            }
-            else if (shouldMoveNode)
-            {
-                MoveNode(node, parent, save);
+                AddNode(node, save);
             }
 
             return node;
         }
 
-        public void MoveNode(RepositoryNode node, RepositoryNode to, bool save)
-        {
-            if (to == null && RepositoryNodes.Contains(node))
-                return;
-            if (to != null && to.SubNodes.Contains(node))
-                return;
-
-            RemoveNode(node, false);
-            AddNode(node, to, false);
-
-            if (save)
-                Save();
-        }
-
         public void RemoveNode(RepositoryNode node, bool save)
         {
-            RemoveNodeRecursive(node, RepositoryNodes);
+            RepositoryNodes.Remove(node);
+            OpenRepositories.Remove(node.Id);
 
             if (save)
                 Save();
@@ -637,14 +595,37 @@ namespace SourceFork.ViewModels
 
         public void SortByRenamedNode(RepositoryNode node)
         {
-            var container = FindNodeContainer(node, RepositoryNodes);
-            SortNodes(container);
+            SortNodes(RepositoryNodes);
             Save();
         }
 
         public void AutoRemoveInvalidNode()
         {
-            RemoveInvalidRepositoriesRecursive(RepositoryNodes);
+            for (var i = RepositoryNodes.Count - 1; i >= 0; i--)
+            {
+                var node = RepositoryNodes[i];
+                if (node.IsInvalid)
+                {
+                    RepositoryNodes.RemoveAt(i);
+                    OpenRepositories.Remove(node.Id);
+                }
+            }
+
+            for (var i = OpenRepositories.Count - 1; i >= 0; i--)
+            {
+                if (FindNode(OpenRepositories[i]) == null)
+                    OpenRepositories.RemoveAt(i);
+            }
+        }
+
+        public void SetOpenRepositories(IEnumerable<string> repositories)
+        {
+            OpenRepositories.Clear();
+            foreach (var repo in repositories)
+            {
+                if (!OpenRepositories.Contains(repo))
+                    OpenRepositories.Add(repo);
+            }
         }
 
         public void Save()
@@ -668,8 +649,10 @@ namespace SourceFork.ViewModels
 
             try
             {
-                using var stream = File.OpenRead(path);
-                return JsonSerializer.Deserialize(stream, JsonCodeGen.Default.Preferences) ?? new Preferences();
+                var json = File.ReadAllText(path);
+                var pref = JsonSerializer.Deserialize(json, JsonCodeGen.Default.Preferences) ?? new Preferences();
+                pref.ReadLegacyWorkspaces(json);
+                return pref;
             }
             catch
             {
@@ -807,114 +790,138 @@ namespace SourceFork.ViewModels
             }
         }
 
-        private void PrepareWorkspaces()
+        private void PrepareRepositoryNodes()
         {
-            if (Workspaces.Count == 0)
-            {
-                Workspaces.Add(new Workspace() { Name = "Default" });
-                return;
-            }
+            var flattened = new List<RepositoryNode>();
+            var seen = new HashSet<string>(StringComparer.Ordinal);
 
-            foreach (var workspace in Workspaces)
+            void Collect(List<RepositoryNode> nodes)
             {
-                if (!workspace.RestoreOnStartup)
+                if (nodes == null)
+                    return;
+
+                foreach (var node in nodes)
                 {
-                    workspace.Repositories.Clear();
-                    workspace.ActiveIdx = 0;
-                }
-            }
-        }
-
-        private RepositoryNode FindNodeRecursive(string id, List<RepositoryNode> collection)
-        {
-            foreach (var node in collection)
-            {
-                if (node.Id == id)
-                    return node;
-
-                var sub = FindNodeRecursive(id, node.SubNodes);
-                if (sub != null)
-                    return sub;
-            }
-
-            return null;
-        }
-
-        private RepositoryNode FindOrCreateGroupInCollection(List<RepositoryNode> collection, string name)
-        {
-            foreach (var node in collection)
-            {
-                if (!node.IsRepository && node.Name.Equals(name, StringComparison.Ordinal))
-                    return node;
-            }
-
-            var added = new RepositoryNode()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = name,
-                IsRepository = false,
-                IsExpanded = true,
-            };
-            collection.Add(added);
-
-            SortNodes(collection);
-            return added;
-        }
-
-        private List<RepositoryNode> FindNodeContainer(RepositoryNode node, List<RepositoryNode> collection)
-        {
-            foreach (var sub in collection)
-            {
-                if (node == sub)
-                    return collection;
-
-                var subCollection = FindNodeContainer(node, sub.SubNodes);
-                if (subCollection != null)
-                    return subCollection;
-            }
-
-            return null;
-        }
-
-        private bool RemoveNodeRecursive(RepositoryNode node, List<RepositoryNode> collection)
-        {
-            if (collection.Contains(node))
-            {
-                collection.Remove(node);
-                return true;
-            }
-
-            foreach (var one in collection)
-            {
-                if (RemoveNodeRecursive(node, one.SubNodes))
-                    return true;
-            }
-
-            return false;
-        }
-
-        private bool RemoveInvalidRepositoriesRecursive(List<RepositoryNode> collection)
-        {
-            bool changed = false;
-
-            for (int i = collection.Count - 1; i >= 0; i--)
-            {
-                var node = collection[i];
-                if (node.IsInvalid)
-                {
-                    collection.RemoveAt(i);
-                    changed = true;
-                }
-                else if (!node.IsRepository)
-                {
-                    changed |= RemoveInvalidRepositoriesRecursive(node.SubNodes);
+                    if (node.IsRepository)
+                    {
+                        if (!string.IsNullOrEmpty(node.Id) && seen.Add(node.Id))
+                        {
+                            node.Tags ??= [];
+                            node.SubNodes = null;
+                            flattened.Add(node);
+                        }
+                    }
+                    else
+                    {
+                        Collect(node.SubNodes);
+                    }
                 }
             }
 
-            return changed;
+            Collect(RepositoryNodes);
+            RepositoryNodes = flattened;
+
+            foreach (var path in _legacyRepositories)
+            {
+                if (seen.Add(path))
+                {
+                    RepositoryNodes.Add(new RepositoryNode()
+                    {
+                        Id = path,
+                        Name = Path.GetFileName(path),
+                        IsRepository = true,
+                    });
+                }
+            }
+
+            SortNodes(RepositoryNodes);
+        }
+
+        private void PrepareOpenRepositories()
+        {
+            if (OpenRepositories.Count == 0)
+            {
+                foreach (var repo in _legacyOpenRepositories)
+                {
+                    if (FindNode(repo) != null)
+                        OpenRepositories.Add(repo);
+                }
+            }
+
+            if (string.IsNullOrEmpty(ActiveRepositoryPath))
+                ActiveRepositoryPath = _legacyActiveRepository;
+
+            for (var i = OpenRepositories.Count - 1; i >= 0; i--)
+            {
+                if (FindNode(OpenRepositories[i]) == null)
+                    OpenRepositories.RemoveAt(i);
+            }
+
+            if (!string.IsNullOrEmpty(ActiveRepositoryPath) && FindNode(ActiveRepositoryPath) == null)
+                ActiveRepositoryPath = string.Empty;
+        }
+
+        private void ReadLegacyWorkspaces(string json)
+        {
+            try
+            {
+                using var doc = JsonDocument.Parse(json);
+                if (!doc.RootElement.TryGetProperty("Workspaces", out var workspaces) ||
+                    workspaces.ValueKind != JsonValueKind.Array)
+                    return;
+
+                foreach (var workspace in workspaces.EnumerateArray())
+                {
+                    if (!workspace.TryGetProperty("Repositories", out var repos) ||
+                        repos.ValueKind != JsonValueKind.Array)
+                        continue;
+
+                    var isActive = workspace.TryGetProperty("IsActive", out var activeElement) &&
+                        activeElement.ValueKind == JsonValueKind.True;
+                    var activeIdx = 0;
+                    if (workspace.TryGetProperty("ActiveIdx", out var idxElement))
+                        idxElement.TryGetInt32(out activeIdx);
+
+                    var index = 0;
+                    foreach (var repo in repos.EnumerateArray())
+                    {
+                        if (repo.ValueKind != JsonValueKind.String)
+                            continue;
+
+                        var path = repo.GetString()?.Replace('\\', '/').TrimEnd('/');
+                        if (string.IsNullOrEmpty(path))
+                            continue;
+
+                        if (!_legacyRepositories.Contains(path))
+                            _legacyRepositories.Add(path);
+
+                        if (isActive)
+                        {
+                            _legacyOpenRepositories.Add(path);
+                            if (index == activeIdx)
+                                _legacyActiveRepository = path;
+                        }
+
+                        index++;
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore malformed legacy data.
+            }
         }
 
         private static Preferences _instance = null;
+
+        [JsonIgnore]
+        private readonly List<string> _legacyRepositories = [];
+
+        [JsonIgnore]
+        private readonly List<string> _legacyOpenRepositories = [];
+
+        [JsonIgnore]
+        private string _legacyActiveRepository = string.Empty;
 
         private bool _isLoading = true;
         private bool _isReadonly = true;

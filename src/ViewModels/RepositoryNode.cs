@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -13,6 +14,7 @@ namespace SourceFork.ViewModels
     {
         public string FriendlyName { get; set; } = string.Empty;
         public int Bookmark { get; set; } = 0;
+        public List<string> Tags { get; set; } = [];
     }
 
     public class RepositoryNode : ObservableObject
@@ -45,10 +47,29 @@ namespace SourceFork.ViewModels
             set => SetProperty(ref _isRepository, value);
         }
 
-        public bool IsExpanded
+        public List<string> Tags
         {
-            get => _isExpanded;
-            set => SetProperty(ref _isExpanded, value);
+            get => _tags;
+            set
+            {
+                if (SetProperty(ref _tags, NormalizeTags(value)))
+                {
+                    OnPropertyChanged(nameof(TagsDisplay));
+                    OnPropertyChanged(nameof(HasTags));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string TagsDisplay
+        {
+            get => string.Join("  ", _tags.Select(t => $"#{t}"));
+        }
+
+        [JsonIgnore]
+        public bool HasTags
+        {
+            get => _tags.Count > 0;
         }
 
         [JsonIgnore]
@@ -71,12 +92,16 @@ namespace SourceFork.ViewModels
             set;
         } = false;
 
-        [JsonIgnore]
-        public int Depth
+        /// <summary>
+        /// Legacy group hierarchy loaded from older preference files. It is only used once to
+        /// flatten the old tree and is cleared afterwards.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<RepositoryNode> SubNodes
         {
             get;
             set;
-        } = 0;
+        } = null;
 
         public Models.RepositoryStatus Status
         {
@@ -84,23 +109,41 @@ namespace SourceFork.ViewModels
             set => SetProperty(ref _status, value);
         }
 
-        public List<RepositoryNode> SubNodes
+        public void SetTags(IEnumerable<string> tags)
         {
-            get;
-            set;
-        } = [];
+            Tags = [.. tags];
+        }
+
+        public bool HasAllTags(IReadOnlyCollection<string> filters)
+        {
+            if (filters == null || filters.Count == 0)
+                return true;
+
+            foreach (var filter in filters)
+            {
+                if (!_tags.Any(t => t.Equals(filter, StringComparison.OrdinalIgnoreCase)))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool MatchesSearch(string filter)
+        {
+            if (string.IsNullOrWhiteSpace(filter))
+                return true;
+
+            if ((_name?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true) ||
+                (_id?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true))
+                return true;
+
+            return _tags.Any(t => t.Contains(filter, StringComparison.OrdinalIgnoreCase));
+        }
 
         public void Open()
         {
-            if (!_isRepository)
-            {
-                foreach (var subNode in SubNodes)
-                    subNode.Open();
-            }
-            else if (Directory.Exists(_id))
-            {
+            if (Directory.Exists(_id))
                 App.GetLauncher().OpenRepositoryInTab(this, null);
-            }
         }
 
         public void Edit()
@@ -108,20 +151,6 @@ namespace SourceFork.ViewModels
             var activePage = App.GetLauncher().ActivePage;
             if (activePage != null && activePage.CanCreatePopup())
                 activePage.Popup = new EditRepositoryNode(this);
-        }
-
-        public void AddSubFolder()
-        {
-            var activePage = App.GetLauncher().ActivePage;
-            if (activePage != null && activePage.CanCreatePopup())
-                activePage.Popup = new CreateGroup(this);
-        }
-
-        public void Move()
-        {
-            var activePage = App.GetLauncher().ActivePage;
-            if (activePage != null && activePage.CanCreatePopup())
-                activePage.Popup = new MoveRepositoryNode(this);
         }
 
         public void OpenInFileManager()
@@ -148,24 +177,7 @@ namespace SourceFork.ViewModels
             if (token is { IsCancellationRequested: true })
                 return;
 
-            if (!_isRepository)
-            {
-                Status = null;
-
-                if (SubNodes.Count > 0)
-                {
-                    // avoid collection was modified while enumerating.
-                    var nodes = new List<RepositoryNode>();
-                    nodes.AddRange(SubNodes);
-
-                    foreach (var node in nodes)
-                        await node.UpdateStatusAsync(force, token);
-                }
-
-                return;
-            }
-
-            if (!Directory.Exists(_id))
+            if (!_isRepository || !Directory.Exists(_id))
             {
                 _lastUpdateStatus = DateTime.Now;
                 Status = null;
@@ -195,6 +207,7 @@ namespace SourceFork.ViewModels
                 if (!string.IsNullOrEmpty(minimalInfo.FriendlyName))
                     Name = minimalInfo.FriendlyName;
                 Bookmark = minimalInfo.Bookmark;
+                Tags = minimalInfo.Tags ?? [];
             }
             catch
             {
@@ -211,7 +224,8 @@ namespace SourceFork.ViewModels
             var minimalInfo = new RepositoryNodeMinimalInfo
             {
                 FriendlyName = Name,
-                Bookmark = Bookmark
+                Bookmark = Bookmark,
+                Tags = _tags
             };
 
             try
@@ -224,11 +238,33 @@ namespace SourceFork.ViewModels
             }
         }
 
+        private static List<string> NormalizeTags(IEnumerable<string> tags)
+        {
+            var normalized = new List<string>();
+            if (tags == null)
+                return normalized;
+
+            foreach (var tag in tags)
+            {
+                if (string.IsNullOrWhiteSpace(tag))
+                    continue;
+
+                var value = tag.Trim().TrimStart('#').Trim();
+                if (string.IsNullOrEmpty(value))
+                    continue;
+
+                if (!normalized.Any(t => t.Equals(value, StringComparison.OrdinalIgnoreCase)))
+                    normalized.Add(value);
+            }
+
+            return normalized;
+        }
+
         private string _id = string.Empty;
         private string _name = string.Empty;
         private bool _isRepository = false;
         private int _bookmark = 0;
-        private bool _isExpanded = false;
+        private List<string> _tags = [];
         private bool _isVisible = true;
         private Models.RepositoryStatus _status = null;
         private DateTime _lastUpdateStatus = DateTime.UnixEpoch.ToLocalTime();

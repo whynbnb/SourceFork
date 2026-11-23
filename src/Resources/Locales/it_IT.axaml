@@ -257,10 +257,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Options.Tip" xml:space="preserve">Usa '|' come delimitatore per le opzioni</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.StringValue.Tip" xml:space="preserve">Le variabili integrate ${REPO}, ${REMOTE}, ${BRANCH}, ${BRANCH_FRIENDLY_NAME}, ${SHA}, ${FILE} e ${TAG} rimangono disponibili qui</x:String>
   <x:String x:Key="Text.ConfigureCustomActionControls.Type" xml:space="preserve">Tipo:</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace" xml:space="preserve">Spazi di Lavoro</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Color" xml:space="preserve">Colore</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Name" xml:space="preserve">Nome</x:String>
-  <x:String x:Key="Text.ConfigureWorkspace.Restore" xml:space="preserve">Ripristina schede all'avvio</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.Continue" xml:space="preserve">CONTINUA</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.NoLocalChanges" xml:space="preserve">Trovato un commit vuoto! Vuoi procedere (--allow-empty)?</x:String>
   <x:String x:Key="Text.ConfirmEmptyCommit.StageAllThenCommit" xml:space="preserve">STAGE DI TUTTO E COMMITTA</x:String>
@@ -319,9 +315,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.DeleteRemote.Remote" xml:space="preserve">Remoto:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Path" xml:space="preserve">Percorso:</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.Target" xml:space="preserve">Destinazione:</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TipForGroup" xml:space="preserve">Tutti i figli verranno rimossi dalla lista.</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TipForRepository" xml:space="preserve">Lo rimuoverà solamente dalla lista, non dal disco!</x:String>
-  <x:String x:Key="Text.DeleteRepositoryNode.TitleForGroup" xml:space="preserve">Conferma Eliminazione Gruppo</x:String>
   <x:String x:Key="Text.DeleteRepositoryNode.TitleForRepository" xml:space="preserve">Conferma Eliminazione Repository</x:String>
   <x:String x:Key="Text.DeleteSubmodule" xml:space="preserve">Elimina Sottomodulo</x:String>
   <x:String x:Key="Text.DeleteSubmodule.Path" xml:space="preserve">Percorso Sottomodulo:</x:String>
@@ -372,7 +366,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Segnalibro:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Nuovo Nome:</x:String>
   <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Destinazione:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForGroup" xml:space="preserve">Modifica Gruppo Selezionato</x:String>
   <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Modifica Repository Selezionato</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">Destinazione:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">Questo repository</x:String>
@@ -512,7 +505,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Launcher.Info" xml:space="preserve">AVVISO</x:String>
   <x:String x:Key="Text.Launcher.OpenRepository" xml:space="preserve">Apri Repository</x:String>
   <x:String x:Key="Text.Launcher.Pages" xml:space="preserve">Schede</x:String>
-  <x:String x:Key="Text.Launcher.Workspaces" xml:space="preserve">Workspaces</x:String>
   <x:String x:Key="Text.Merge" xml:space="preserve">Unisci Branch</x:String>
   <x:String x:Key="Text.Merge.Edit" xml:space="preserve">Personalizza messaggio di merge</x:String>
   <x:String x:Key="Text.Merge.Into" xml:space="preserve">In:</x:String>
@@ -541,8 +533,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.MoveSubmodule" xml:space="preserve">Sposta Sottomodulo</x:String>
   <x:String x:Key="Text.MoveSubmodule.MoveTo" xml:space="preserve">Sposta Verso:</x:String>
   <x:String x:Key="Text.MoveSubmodule.Submodule" xml:space="preserve">Sottomodulo:</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode" xml:space="preserve">Sposta Nodo Repository</x:String>
-  <x:String x:Key="Text.MoveRepositoryNode.Target" xml:space="preserve">Seleziona nodo padre per:</x:String>
   <x:String x:Key="Text.Name" xml:space="preserve">Nome:</x:String>
   <x:String x:Key="Text.No" xml:space="preserve">NO</x:String>
   <x:String x:Key="Text.NotConfigured" xml:space="preserve">Git NON è configurato. Prima vai su [Preferenze] per configurarlo.</x:String>
@@ -558,7 +548,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Chiudi i Tab a Destra</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Copia Percorso Repository</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Modifica</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.MoveToWorkspace" xml:space="preserve">Sposta nel Workspace</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Aggiorna</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repository</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Incolla</x:String>
@@ -868,13 +857,10 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.ViewLogs.Delete" xml:space="preserve">Elimina</x:String>
   <x:String x:Key="Text.Warn" xml:space="preserve">Avviso</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pagina di Benvenuto</x:String>
-  <x:String x:Key="Text.Welcome.AddRootFolder" xml:space="preserve">Crea Gruppo</x:String>
-  <x:String x:Key="Text.Welcome.AddSubFolder" xml:space="preserve">Crea Sottogruppo</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clona Repository</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Elimina</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">TRASCINA E RILASCIA CARTELLA SUPPORTATO. RAGGRUPPAMENTI PERSONALIZZATI SUPPORTATI.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Modifica</x:String>
-  <x:String x:Key="Text.Welcome.Move" xml:space="preserve">Sposta in un Altro Gruppo</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Apri Tutti i Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Apri Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Apri Terminale</x:String>
@@ -919,8 +905,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.StageAll" xml:space="preserve">FAI LO STAGE DI TUTTO</x:String>
   <x:String x:Key="Text.WorkingCopy.Unstaged.ViewAssumeUnchanged" xml:space="preserve">VISUALIZZA COME NON MODIFICATO</x:String>
   <x:String x:Key="Text.WorkingCopy.UseCommitTemplate" xml:space="preserve">Template: ${0}$</x:String>
-  <x:String x:Key="Text.Workspace" xml:space="preserve">WORKSPACE:</x:String>
-  <x:String x:Key="Text.Workspace.Configure" xml:space="preserve">Configura Workspaces...</x:String>
   <x:String x:Key="Text.Worktree" xml:space="preserve">WORKTREE</x:String>
   <x:String x:Key="Text.Worktree.CopyPath" xml:space="preserve">Copia Percorso</x:String>
   <x:String x:Key="Text.Worktree.Lock" xml:space="preserve">Blocca</x:String>
@@ -928,4 +912,9 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Worktree.Remove" xml:space="preserve">Rimuovi</x:String>
   <x:String x:Key="Text.Worktree.Unlock" xml:space="preserve">Sblocca</x:String>
   <x:String x:Key="Text.Yes" xml:space="preserve">SÌ</x:String>
+  <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
+  <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
+  <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
+  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
 </ResourceDictionary>

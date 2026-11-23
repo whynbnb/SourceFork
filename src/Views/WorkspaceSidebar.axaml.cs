@@ -2,6 +2,7 @@ using System;
 using System.IO;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -15,11 +16,66 @@ namespace SourceFork.Views
             InitializeComponent();
         }
 
-        private void OnWorkspaceMenu(object sender, RoutedEventArgs e)
+        private void OnTagFilterMenu(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button)
-                this.FindAncestorOfType<Launcher>()?.ShowWorkspaceMenu(button);
+            if (sender is not Button button || DataContext is not ViewModels.Launcher launcher)
+                return;
 
+            var menu = new ContextMenu()
+            {
+                Placement = PlacementMode.BottomEdgeAlignedLeft,
+                VerticalOffset = -6,
+            };
+
+            var header = new MenuItem()
+            {
+                Header = App.Text("Sidebar.FilterByTags"),
+                IsEnabled = false,
+            };
+            menu.Items.Add(header);
+
+            var tags = launcher.GetAvailableTags();
+            if (tags.Count == 0)
+            {
+                menu.Items.Add(new MenuItem()
+                {
+                    Header = App.Text("Sidebar.NoTags"),
+                    IsEnabled = false,
+                });
+            }
+            else
+            {
+                foreach (var tag in tags)
+                {
+                    var item = new MenuItem();
+                    item.Header = $"#{tag}";
+                    if (launcher.IsTagFiltered(tag))
+                        item.Icon = this.CreateMenuIcon("Icons.Check");
+                    item.Click += (_, ev) =>
+                    {
+                        launcher.ToggleTagFilter(tag);
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(item);
+                }
+            }
+
+            if (launcher.HasTagFilters)
+            {
+                menu.Items.Add(new MenuItem() { Header = "-" });
+
+                var clear = new MenuItem();
+                clear.Header = App.Text("Tags.ClearFilter");
+                clear.Icon = this.CreateMenuIcon("Icons.Clear");
+                clear.Click += (_, ev) =>
+                {
+                    launcher.ClearTagFilters();
+                    ev.Handled = true;
+                };
+                menu.Items.Add(clear);
+            }
+
+            menu.Open(button);
             e.Handled = true;
         }
 

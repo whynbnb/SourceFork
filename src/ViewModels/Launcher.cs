@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.IO;
 
 using Avalonia.Collections;
@@ -21,12 +23,6 @@ namespace SourceFork.ViewModels
         {
             get;
         } = new();
-
-        public Workspace ActiveWorkspace
-        {
-            get => _activeWorkspace;
-            private set => SetProperty(ref _activeWorkspace, value);
-        }
 
         public LauncherPage ActivePage
         {
@@ -68,12 +64,11 @@ namespace SourceFork.ViewModels
             Models.Notification.Raised += DispatchNotification;
             _ignoreIndexChange = true;
 
-            ActiveWorkspace = Preferences.Instance.GetActiveWorkspace();
             Pages = new AvaloniaList<LauncherPage>();
             AttachPagesEvents();
             AddNewTab();
 
-            var repos = ActiveWorkspace.Repositories.ToArray();
+            var repos = Preferences.Instance.OpenRepositories.ToArray();
             foreach (var repo in repos)
                 OpenRepositoryInTab(repo, null);
 
@@ -81,11 +76,9 @@ namespace SourceFork.ViewModels
 
             if (!TryOpenRepositoryFromPath(startupRepo))
             {
-                var activeIdx = ActiveWorkspace.ActiveIdx;
-                if (activeIdx > 0 && activeIdx < Pages.Count)
-                    ActivePage = Pages[activeIdx];
-                else
-                    ActivePage = Pages[0];
+                var activeRepo = Preferences.Instance.ActiveRepositoryPath;
+                var activePage = Pages.FirstOrDefault(x => x.Data is Repository repo && repo.FullPath.Equals(activeRepo, StringComparison.Ordinal));
+                ActivePage = activePage ?? Pages[0];
             }
 
             PostActivePageChanged();
@@ -99,7 +92,7 @@ namespace SourceFork.ViewModels
                 var isBare = new Commands.IsBareRepository(repo).GetResult();
                 if (isBare)
                 {
-                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repo, null, false);
+                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repo, false);
                     Welcome.Instance.Refresh();
                     OpenRepositoryInTab(node, null);
                     return true;
@@ -108,7 +101,7 @@ namespace SourceFork.ViewModels
                 var test = new Commands.QueryRepositoryRootPath(repo).GetResult();
                 if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
                 {
-                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), null, false);
+                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), false);
                     Welcome.Instance.Refresh();
                     OpenRepositoryInTab(node, null);
                     return true;
@@ -120,9 +113,9 @@ namespace SourceFork.ViewModels
 
                     if (Models.SafeDirectories.IsUntrustedRepository(test.StdErr) &&
                         Models.SafeDirectories.TryGetSafeDirectoryValue(repo, test.StdErr, out var safeDirectory))
-                        ActivePage.Popup = new TrustRepository(ActivePage.Node.Id, repo, test.StdErr, safeDirectory, null, false, true, 0);
+                        ActivePage.Popup = new TrustRepository(ActivePage.Node.Id, repo, test.StdErr, safeDirectory, true, 0);
                     else
-                        ActivePage.Popup = new Init(ActivePage.Node.Id, repo, null, 0, test.StdErr ?? "Unknown error occurred while opening the repository.");
+                        ActivePage.Popup = new Init(ActivePage.Node.Id, repo, 0, test.StdErr ?? "Unknown error occurred while opening the repository.");
 
                     return true;
                 }
@@ -136,46 +129,9 @@ namespace SourceFork.ViewModels
             _ignoreIndexChange = true;
 
             foreach (var one in Pages)
-                CloseRepositoryInTab(one, false);
+                CloseRepositoryInTab(one);
 
             _ignoreIndexChange = false;
-        }
-
-        public void SwitchWorkspace(Workspace to)
-        {
-            if (to == null || to.IsActive)
-                return;
-
-            RepositoryFilter = string.Empty;
-            _ignoreIndexChange = true;
-
-            var pref = Preferences.Instance;
-            foreach (var w in pref.Workspaces)
-                w.IsActive = false;
-
-            ActiveWorkspace = to;
-            to.IsActive = true;
-
-            foreach (var one in Pages)
-                CloseRepositoryInTab(one, false);
-
-            Pages.Clear();
-            AddNewTab();
-
-            var repos = to.Repositories.ToArray();
-            foreach (var repo in repos)
-                OpenRepositoryInTab(repo, null);
-
-            var activeIdx = to.ActiveIdx;
-            if (activeIdx >= 0 && activeIdx < Pages.Count)
-                ActivePage = Pages[activeIdx];
-            else
-                ActivePage = Pages[0];
-
-            _ignoreIndexChange = false;
-            PostActivePageChanged();
-            Preferences.Instance.Save();
-            GC.Collect();
         }
 
         public void AddNewTab()
@@ -193,12 +149,7 @@ namespace SourceFork.ViewModels
             var toIdx = Pages.IndexOf(to);
             Pages.Move(fromIdx, toIdx);
 
-            _activeWorkspace.Repositories.Clear();
-            foreach (var p in Pages)
-            {
-                if (p.Data is Repository r)
-                    _activeWorkspace.Repositories.Add(r.FullPath);
-            }
+            PersistOpenRepositories();
 
             _ignoreIndexChange = false;
             ActivePage = from;
@@ -231,8 +182,8 @@ namespace SourceFork.ViewModels
                 var last = Pages[0];
                 if (last.Data is Repository repo)
                 {
-                    _activeWorkspace.Repositories.Clear();
-                    _activeWorkspace.ActiveIdx = 0;
+                    Preferences.Instance.SetOpenRepositories([]);
+                    Preferences.Instance.ActiveRepositoryPath = string.Empty;
 
                     if (last.Node.IsUnmanaged)
                         last.Node.SaveMinimalInfo(repo.GitDir);
@@ -286,7 +237,7 @@ namespace SourceFork.ViewModels
             AttachPagesEvents();
             RefreshVisiblePages();
 
-            _activeWorkspace.ActiveIdx = 0;
+            PersistOpenRepositories();
             _ignoreIndexChange = false;
             GC.Collect();
         }
@@ -382,12 +333,7 @@ namespace SourceFork.ViewModels
                 page.Data = repo;
             }
 
-            _activeWorkspace.Repositories.Clear();
-            foreach (var p in Pages)
-            {
-                if (p.Data is Repository r)
-                    _activeWorkspace.Repositories.Add(r.FullPath);
-            }
+            PersistOpenRepositories();
 
             if (_activePage == page)
                 PostActivePageChanged();
@@ -457,7 +403,7 @@ namespace SourceFork.ViewModels
             var page = new LauncherPage(node, repo);
             var idxOfOwner = Pages.IndexOf(ownerPage);
             Pages.Insert(idxOfOwner + 1, page);
-            _activeWorkspace.Repositories.Insert(idxOfOwner + 1, normalizedPath);
+            Preferences.Instance.OpenRepositories.Insert(idxOfOwner + 1, normalizedPath);
             ActivePage = page;
         }
 
@@ -479,10 +425,14 @@ namespace SourceFork.ViewModels
 
             foreach (var page in Pages)
             {
-                if (string.IsNullOrEmpty(filter) ||
-                    (page.Node.IsRepository &&
-                     (page.Node.Name?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true ||
-                      page.Node.Id?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true)))
+                if (page.Data is not Repository)
+                {
+                    if (string.IsNullOrEmpty(filter) && _tagFilters.Count == 0)
+                        VisiblePages.Add(page);
+                    continue;
+                }
+
+                if (page.Node.MatchesSearch(filter) && page.Node.HasAllTags(_tagFilters))
                     VisiblePages.Add(page);
             }
 
@@ -548,12 +498,11 @@ namespace SourceFork.ViewModels
             return new Commands.QueryGitDir(repo).GetResult();
         }
 
-        private void CloseRepositoryInTab(LauncherPage page, bool removeFromWorkspace = true)
+        private void CloseRepositoryInTab(LauncherPage page)
         {
             if (page.Data is Repository repo)
             {
-                if (removeFromWorkspace)
-                    _activeWorkspace.Repositories.Remove(repo.FullPath);
+                Preferences.Instance.OpenRepositories.Remove(repo.FullPath);
 
                 if (page.Node.IsUnmanaged)
                     page.Node.SaveMinimalInfo(repo.GitDir);
@@ -572,12 +521,95 @@ namespace SourceFork.ViewModels
                 return;
 
             if (_activePage is { Data: Repository repo })
-                _activeWorkspace.ActiveIdx = _activeWorkspace.Repositories.IndexOf(repo.FullPath);
+            {
+                Preferences.Instance.ActiveRepositoryPath = repo.FullPath;
+                Preferences.Instance.Save();
+            }
 
             CommandPalette = null;
         }
 
-        private Workspace _activeWorkspace;
+        public int TagFilterCount
+        {
+            get => _tagFilters.Count;
+        }
+
+        public bool HasTagFilters
+        {
+            get => _tagFilters.Count > 0;
+        }
+
+        public IReadOnlyList<string> ActiveTagFilters
+        {
+            get => _tagFilters;
+        }
+
+        public List<string> GetAvailableTags()
+        {
+            var tags = new List<string>();
+            foreach (var page in Pages)
+            {
+                if (page.Data is not Repository)
+                    continue;
+
+                foreach (var tag in page.Node.Tags)
+                {
+                    if (!tags.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase)))
+                        tags.Add(tag);
+                }
+            }
+
+            tags.Sort((l, r) => string.Compare(l, r, StringComparison.OrdinalIgnoreCase));
+            return tags;
+        }
+
+        public bool IsTagFiltered(string tag)
+        {
+            return _tagFilters.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void ToggleTagFilter(string tag)
+        {
+            var exists = _tagFilters.FindIndex(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            if (exists >= 0)
+                _tagFilters.RemoveAt(exists);
+            else
+                _tagFilters.Add(tag);
+
+            OnPropertyChanged(nameof(TagFilterCount));
+            OnPropertyChanged(nameof(HasTagFilters));
+            RefreshVisiblePages();
+        }
+
+        public void ClearTagFilters()
+        {
+            if (_tagFilters.Count == 0)
+                return;
+
+            _tagFilters.Clear();
+            OnPropertyChanged(nameof(TagFilterCount));
+            OnPropertyChanged(nameof(HasTagFilters));
+            RefreshVisiblePages();
+        }
+
+        public void RefreshRepositoryFilters()
+        {
+            RefreshVisiblePages();
+        }
+
+        private void PersistOpenRepositories()
+        {
+            var repos = new List<string>();
+            foreach (var page in Pages)
+            {
+                if (page.Data is Repository repo && !repos.Contains(repo.FullPath))
+                    repos.Add(repo.FullPath);
+            }
+
+            Preferences.Instance.SetOpenRepositories(repos);
+        }
+
+        private readonly List<string> _tagFilters = [];
         private LauncherPage _activePage;
         private bool _ignoreIndexChange;
         private string _repositoryFilter = string.Empty;

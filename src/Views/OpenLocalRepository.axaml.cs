@@ -24,10 +24,7 @@ namespace SourceFork.Views
                 return;
 
             var preference = ViewModels.Preferences.Instance;
-            var workspace = preference.GetActiveWorkspace();
-            var initDir = workspace.DefaultCloneDir;
-            if (string.IsNullOrEmpty(initDir) || !Directory.Exists(initDir))
-                initDir = preference.GitDefaultCloneDir;
+            var initDir = preference.GitDefaultCloneDir;
 
             var options = new FolderPickerOpenOptions() { AllowMultiple = false };
             if (Directory.Exists(initDir))
