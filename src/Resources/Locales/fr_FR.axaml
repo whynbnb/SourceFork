@@ -986,4 +986,12 @@
   <x:String x:Key="Text.RepositoryTags.MoveDown" xml:space="preserve">Move down</x:String>
   <x:String x:Key="Text.RepositoryTags.Remove" xml:space="preserve">Remove</x:String>
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
+  <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
+  <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
+  <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
+  <x:String x:Key="Text.RepositorySort.Custom" xml:space="preserve">Custom (drag to reorder)</x:String>
+  <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">Descending</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">Group by primary tag</x:String>
+  <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
 </ResourceDictionary>

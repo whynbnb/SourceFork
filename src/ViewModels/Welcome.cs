@@ -13,7 +13,7 @@ namespace SourceFork.ViewModels
     {
         public static Welcome Instance { get; } = new();
 
-        public AvaloniaList<RepositoryNode> Rows
+        public AvaloniaList<RepositoryListRow> Rows
         {
             get;
             private set;
@@ -52,13 +52,11 @@ namespace SourceFork.ViewModels
         public void Refresh()
         {
             Rows.Clear();
-            foreach (var node in Preferences.Instance.RepositoryNodes)
-            {
-                if (node.IsRepository &&
-                    node.MatchesSearch(_searchFilter) &&
-                    node.HasAllTags(_tagFilters))
-                    Rows.Add(node);
-            }
+
+            var nodes = Preferences.Instance.RepositoryNodes
+                .Where(x => x.IsRepository && x.MatchesSearch(_searchFilter) && x.HasAllTags(_tagFilters));
+            foreach (var row in RepositoryListSorter.Build(nodes))
+                Rows.Add(row);
         }
 
         public async Task UpdateStatusAsync(bool force, CancellationToken? token)
@@ -68,8 +66,11 @@ namespace SourceFork.ViewModels
 
             _isUpdatingStatus = true;
 
-            foreach (var node in Rows)
-                await node.UpdateStatusAsync(force, token);
+            foreach (var row in Rows)
+            {
+                if (row.Node != null)
+                    await row.Node.UpdateStatusAsync(force, token);
+            }
 
             _isUpdatingStatus = false;
         }

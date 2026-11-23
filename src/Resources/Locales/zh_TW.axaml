@@ -1135,4 +1135,12 @@
   <x:String x:Key="Text.RepositoryTags.MoveDown" xml:space="preserve">下移</x:String>
   <x:String x:Key="Text.RepositoryTags.Remove" xml:space="preserve">移除</x:String>
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">主要 Tag 會以強調色顯示。使用上下箭頭調整順序。</x:String>
+  <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">倉庫排序</x:String>
+  <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">新增時間</x:String>
+  <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">名稱</x:String>
+  <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">更新時間</x:String>
+  <x:String x:Key="Text.RepositorySort.Custom" xml:space="preserve">自訂（拖動排序）</x:String>
+  <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">倒序</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">依主要 Tag 分組</x:String>
+  <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">無 Tag</x:String>
 </ResourceDictionary>

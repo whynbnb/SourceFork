@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -11,9 +12,21 @@ namespace SourceFork.Views
 {
     public partial class WorkspaceSidebar : UserControl
     {
+        private PointerPressedEventArgs _dragStart;
+        private bool _dragStarted;
+        private readonly DataFormat<string> _dragData = DataFormat.CreateStringApplicationFormat("sourcefork-sidebar-repo");
+
         public WorkspaceSidebar()
         {
             InitializeComponent();
+        }
+
+        private void OnSortMenu(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+                RepositorySortMenu.Show(this, button);
+
+            e.Handled = true;
         }
 
         private void OnTagFilterMenu(object sender, RoutedEventArgs e)
@@ -89,16 +102,93 @@ namespace SourceFork.Views
 
         private void OnClosePage(object sender, RoutedEventArgs e)
         {
-            if (sender is Button { DataContext: ViewModels.LauncherPage page } &&
+            if (sender is Button { DataContext: ViewModels.RepositoryListRow row } &&
+                row.Page != null &&
                 DataContext is ViewModels.Launcher launcher)
-                launcher.CloseTab(page);
+                launcher.CloseTab(row.Page);
 
+            e.Handled = true;
+        }
+
+        private void OnRowPointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            if (e.GetCurrentPoint(sender as Avalonia.Visual).Properties.IsLeftButtonPressed)
+            {
+                _dragStart = e;
+                _dragStarted = false;
+            }
+            else
+            {
+                _dragStart = null;
+                _dragStarted = false;
+            }
+        }
+
+        private void OnRowPointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            _dragStart = null;
+            _dragStarted = false;
+        }
+
+        private async void OnRowPointerMoved(object sender, PointerEventArgs e)
+        {
+            if (_dragStart == null || _dragStarted)
+                return;
+
+            if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Page: { Node.IsRepository: true } page } } grid)
+                return;
+
+            var delta = e.GetPosition(grid) - _dragStart.GetPosition(grid);
+            if (delta.X * delta.X + delta.Y * delta.Y < 64)
+                return;
+
+            _dragStarted = true;
+            var data = new DataTransfer();
+            data.Add(DataTransferItem.Create(_dragData, page.Node.Id));
+            await DragDrop.DoDragDropAsync(_dragStart, data, DragDropEffects.Move);
+        }
+
+        private void OnPagesDragOver(object sender, DragEventArgs e)
+        {
+            if (e.DataTransfer.Contains(_dragData))
+            {
+                e.DragEffects = DragDropEffects.Move;
+                e.Handled = true;
+            }
+        }
+
+        private void OnPagesDrop(object sender, DragEventArgs e)
+        {
+            if (e.DataTransfer.TryGetValue(_dragData) is not { Length: > 0 } sourceId)
+                return;
+
+            var target = e.Source is Control { DataContext: ViewModels.RepositoryListRow row } &&
+                row.Node is { IsRepository: true }
+                    ? row.Node.Id
+                    : null;
+
+            if (DataContext is ViewModels.Launcher launcher)
+                ViewModels.Preferences.Instance.CaptureRepositoryOrder(launcher.VisiblePages
+                    .Where(x => x.Node != null)
+                    .Select(x => x.Node.Id));
+
+            if (!string.IsNullOrEmpty(target))
+                ViewModels.Preferences.Instance.MoveRepositoryNodeBefore(sourceId, target);
+            else
+                ViewModels.Preferences.Instance.MoveRepositoryNodeToEnd(sourceId);
+
+            ViewModels.Preferences.Instance.RepositorySort = Models.RepositorySortMode.Custom;
+            ViewModels.RepositoryListSorter.NotifyChanged();
+
+            _dragStart = null;
+            _dragStarted = false;
             e.Handled = true;
         }
 
         private void OnItemContextRequested(object sender, ContextRequestedEventArgs e)
         {
-            if (sender is not Control { DataContext: ViewModels.LauncherPage page } control ||
+            if (sender is not Control { DataContext: ViewModels.RepositoryListRow row } control ||
+                row.Page is not { } page ||
                 DataContext is not ViewModels.Launcher launcher)
                 return;
 

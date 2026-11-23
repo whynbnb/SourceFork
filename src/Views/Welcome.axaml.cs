@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 using Avalonia;
@@ -51,7 +52,7 @@ namespace SourceFork.Views
                 }
                 else if (e.Key == Key.Enter)
                 {
-                    if (TreeContainer.SelectedItem is ViewModels.RepositoryNode node)
+                    if (TreeContainer.SelectedItem is ViewModels.RepositoryListRow { Node: { } node })
                     {
                         node.Open();
                         e.Handled = true;
@@ -59,7 +60,7 @@ namespace SourceFork.Views
                 }
                 else if (e.Key == Key.Delete || e.Key == Key.Back)
                 {
-                    if (TreeContainer.SelectedItem is ViewModels.RepositoryNode node)
+                    if (TreeContainer.SelectedItem is ViewModels.RepositoryListRow { Node: { } node })
                     {
                         node.Delete();
                         e.Handled = true;
@@ -78,6 +79,14 @@ namespace SourceFork.Views
         {
             ViewModels.Welcome.Instance.ClearSearchFilter();
             SearchBox.Focus(NavigationMethod.Directional);
+            e.Handled = true;
+        }
+
+        private void OnSortMenu(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+                RepositorySortMenu.Show(this, button);
+
             e.Handled = true;
         }
 
@@ -146,7 +155,7 @@ namespace SourceFork.Views
 
         private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs ev)
         {
-            if (sender is not Grid { DataContext: ViewModels.RepositoryNode node } grid)
+            if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Node: { } node } } grid)
                 return;
 
             var menu = new ContextMenu();
@@ -226,13 +235,58 @@ namespace SourceFork.Views
             ev.Handled = true;
         }
 
+        private void OnRowPointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            if (e.GetCurrentPoint(sender as Visual).Properties.IsLeftButtonPressed)
+            {
+                _dragStart = e;
+                _dragStarted = false;
+            }
+            else
+            {
+                _dragStart = null;
+                _dragStarted = false;
+            }
+        }
+
+        private void OnRowPointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            _dragStart = null;
+            _dragStarted = false;
+        }
+
+        private async void OnRowPointerMoved(object sender, PointerEventArgs e)
+        {
+            if (_dragStart == null || _dragStarted)
+                return;
+
+            if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Node: { } node } } grid)
+                return;
+
+            var delta = e.GetPosition(grid) - _dragStart.GetPosition(grid);
+            if (delta.X * delta.X + delta.Y * delta.Y < 64)
+                return;
+
+            _dragStarted = true;
+            var data = new DataTransfer();
+            data.Add(DataTransferItem.Create(_dragData, node.Id));
+            await DragDrop.DoDragDropAsync(_dragStart, data, DragDropEffects.Move);
+        }
+
         private void OnTreeViewLostFocus(object _1, RoutedEventArgs _2)
         {
+            _dragStart = null;
+            _dragStarted = false;
         }
 
         private void DragOverTreeView(object sender, DragEventArgs e)
         {
-            if (e.DataTransfer.Contains(DataFormat.File))
+            if (e.DataTransfer.Contains(_dragData))
+            {
+                e.DragEffects = DragDropEffects.Move;
+                e.Handled = true;
+            }
+            else if (e.DataTransfer.Contains(DataFormat.File))
             {
                 e.DragEffects = DragDropEffects.Copy;
                 e.Handled = true;
@@ -246,6 +300,30 @@ namespace SourceFork.Views
 
         private async void DropOnTreeView(object sender, DragEventArgs e)
         {
+            if (e.DataTransfer.TryGetValue(_dragData) is { Length: > 0 } sourceId)
+            {
+                var target = e.Source is Control { DataContext: ViewModels.RepositoryListRow { Node.IsRepository: true } row }
+                    ? row.Node.Id
+                    : null;
+
+                ViewModels.Preferences.Instance.CaptureRepositoryOrder(ViewModels.Welcome.Instance.Rows
+                    .Where(x => x.Node != null)
+                    .Select(x => x.Node.Id));
+
+                if (!string.IsNullOrEmpty(target))
+                    ViewModels.Preferences.Instance.MoveRepositoryNodeBefore(sourceId, target);
+                else
+                    ViewModels.Preferences.Instance.MoveRepositoryNodeToEnd(sourceId);
+
+                ViewModels.Preferences.Instance.RepositorySort = Models.RepositorySortMode.Custom;
+                ViewModels.RepositoryListSorter.NotifyChanged();
+
+                _dragStart = null;
+                _dragStarted = false;
+                e.Handled = true;
+                return;
+            }
+
             if (!e.DataTransfer.Contains(DataFormat.File))
                 return;
 
@@ -292,13 +370,16 @@ namespace SourceFork.Views
 
         private void OnDoubleTappedTreeNode(object sender, TappedEventArgs e)
         {
-            if (sender is Grid { DataContext: ViewModels.RepositoryNode node })
+            if (sender is Grid { DataContext: ViewModels.RepositoryListRow { Node: { } node } })
             {
                 node.Open();
                 e.Handled = true;
             }
         }
 
+        private PointerPressedEventArgs _dragStart;
+        private bool _dragStarted;
+        private readonly DataFormat<string> _dragData = DataFormat.CreateStringApplicationFormat("sourcefork-welcome-repo");
         private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
     }
 }

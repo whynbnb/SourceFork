@@ -498,6 +498,24 @@ namespace SourceFork.ViewModels
             set;
         } = string.Empty;
 
+        public Models.RepositorySortMode RepositorySort
+        {
+            get;
+            set;
+        } = Models.RepositorySortMode.Custom;
+
+        public bool RepositorySortDescending
+        {
+            get;
+            set;
+        } = false;
+
+        public bool RepositoryGroupByPrimaryTag
+        {
+            get;
+            set;
+        } = false;
+
         public AvaloniaList<Models.CustomAction> CustomActions
         {
             get;
@@ -576,6 +594,7 @@ namespace SourceFork.ViewModels
                     Name = Path.GetFileName(normalized),
                     Bookmark = 0,
                     IsRepository = true,
+                    CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                 };
 
                 AddNode(node, save);
@@ -626,6 +645,54 @@ namespace SourceFork.ViewModels
                 if (!OpenRepositories.Contains(repo))
                     OpenRepositories.Add(repo);
             }
+        }
+
+        public void CaptureRepositoryOrder(IEnumerable<string> orderedIds)
+        {
+            var order = new Dictionary<string, int>(StringComparer.Ordinal);
+            var index = 0;
+            foreach (var id in orderedIds)
+            {
+                if (!order.ContainsKey(id))
+                    order[id] = index++;
+            }
+
+            var sorted = RepositoryNodes
+                .Select((node, idx) => (node, idx))
+                .OrderBy(x => order.TryGetValue(x.node.Id, out var pos) ? pos : int.MaxValue)
+                .ThenBy(x => x.idx)
+                .Select(x => x.node)
+                .ToList();
+
+            RepositoryNodes.Clear();
+            RepositoryNodes.AddRange(sorted);
+        }
+
+        public void MoveRepositoryNodeBefore(string sourceId, string targetId)
+        {
+            var source = FindNode(sourceId);
+            var target = FindNode(targetId);
+            if (source == null || target == null || source == target)
+                return;
+
+            RepositoryNodes.Remove(source);
+            var index = RepositoryNodes.IndexOf(target);
+            if (index < 0)
+                index = RepositoryNodes.Count;
+
+            RepositoryNodes.Insert(index, source);
+            Save();
+        }
+
+        public void MoveRepositoryNodeToEnd(string sourceId)
+        {
+            var source = FindNode(sourceId);
+            if (source == null)
+                return;
+
+            RepositoryNodes.Remove(source);
+            RepositoryNodes.Add(source);
+            Save();
         }
 
         public void Save()
@@ -821,6 +888,13 @@ namespace SourceFork.ViewModels
             Collect(RepositoryNodes);
             RepositoryNodes = flattened;
 
+            var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            for (var i = 0; i < RepositoryNodes.Count; i++)
+            {
+                if (RepositoryNodes[i].CreateTime <= 0)
+                    RepositoryNodes[i].CreateTime = now - RepositoryNodes.Count + i;
+            }
+
             foreach (var path in _legacyRepositories)
             {
                 if (seen.Add(path))
@@ -830,6 +904,7 @@ namespace SourceFork.ViewModels
                         Id = path,
                         Name = Path.GetFileName(path),
                         IsRepository = true,
+                        CreateTime = now - RepositoryNodes.Count,
                     });
                 }
             }

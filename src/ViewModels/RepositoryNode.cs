@@ -17,6 +17,7 @@ namespace SourceFork.ViewModels
         public int Bookmark { get; set; } = 0;
         public List<string> Tags { get; set; } = [];
         public string PrimaryTag { get; set; } = string.Empty;
+        public long CreateTime { get; set; } = 0;
     }
 
     public class RepositoryTagItem : ObservableObject
@@ -75,6 +76,12 @@ namespace SourceFork.ViewModels
             get => _isRepository;
             set => SetProperty(ref _isRepository, value);
         }
+
+        public long CreateTime
+        {
+            get;
+            set;
+        } = 0;
 
         public List<string> Tags
         {
@@ -198,6 +205,20 @@ namespace SourceFork.ViewModels
             return true;
         }
 
+        public DateTime GetLastUpdatedTime()
+        {
+            try
+            {
+                var gitDir = Path.Combine(_id, ".git");
+                var target = Directory.Exists(gitDir) ? gitDir : _id;
+                return Directory.Exists(target) ? Directory.GetLastWriteTimeUtc(target) : DateTime.MinValue;
+            }
+            catch
+            {
+                return DateTime.MinValue;
+            }
+        }
+
         public bool MatchesSearch(string filter)
         {
             if (string.IsNullOrWhiteSpace(filter))
@@ -284,6 +305,8 @@ namespace SourceFork.ViewModels
                 if (!string.IsNullOrEmpty(minimalInfo.FriendlyName))
                     Name = minimalInfo.FriendlyName;
                 Bookmark = minimalInfo.Bookmark;
+                if (minimalInfo.CreateTime > 0)
+                    CreateTime = minimalInfo.CreateTime;
                 SetTags(minimalInfo.Tags ?? [], minimalInfo.PrimaryTag);
             }
             catch
@@ -303,7 +326,8 @@ namespace SourceFork.ViewModels
                 FriendlyName = Name,
                 Bookmark = Bookmark,
                 Tags = _tags,
-                PrimaryTag = _primaryTag
+                PrimaryTag = _primaryTag,
+                CreateTime = CreateTime
             };
 
             try

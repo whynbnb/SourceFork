@@ -19,10 +19,30 @@ namespace SourceFork.ViewModels
             private set;
         }
 
-        public AvaloniaList<LauncherPage> VisiblePages
+        public AvaloniaList<RepositoryListRow> VisiblePages
         {
             get;
         } = new();
+
+        public RepositoryListRow SelectedRow
+        {
+            get => _selectedRow;
+            set
+            {
+                if (!SetProperty(ref _selectedRow, value))
+                    return;
+
+                if (value?.Page != null)
+                {
+                    ActivePage = value.Page;
+                }
+                else if (value is { IsGroupHeader: true })
+                {
+                    _selectedRow = VisiblePages.FirstOrDefault(x => x.Page == _activePage);
+                    OnPropertyChanged(nameof(SelectedRow));
+                }
+            }
+        }
 
         public LauncherPage ActivePage
         {
@@ -423,21 +443,39 @@ namespace SourceFork.ViewModels
             var filter = _repositoryFilter?.Trim();
             VisiblePages.Clear();
 
+            var nonRepositories = new List<LauncherPage>();
+            var repositories = new List<RepositoryNode>();
+            var pagesByNode = new Dictionary<string, LauncherPage>(StringComparer.Ordinal);
+
             foreach (var page in Pages)
             {
                 if (page.Data is not Repository)
                 {
                     if (string.IsNullOrEmpty(filter) && _tagFilters.Count == 0)
-                        VisiblePages.Add(page);
+                        nonRepositories.Add(page);
                     continue;
                 }
 
                 if (page.Node.MatchesSearch(filter) && page.Node.HasAllTags(_tagFilters))
-                    VisiblePages.Add(page);
+                {
+                    repositories.Add(page.Node);
+                    pagesByNode[page.Node.Id] = page;
+                }
             }
 
-            if (_activePage != null && VisiblePages.Contains(_activePage))
-                OnPropertyChanged(nameof(ActivePage));
+            foreach (var page in nonRepositories)
+                VisiblePages.Add(new RepositoryListRow(page.Node, page));
+
+            foreach (var row in RepositoryListSorter.Build(repositories, node => pagesByNode.TryGetValue(node.Id, out var page) ? page : null))
+                VisiblePages.Add(row);
+
+            SyncSelectedRow();
+        }
+
+        private void SyncSelectedRow()
+        {
+            _selectedRow = VisiblePages.FirstOrDefault(x => x.Page == _activePage);
+            OnPropertyChanged(nameof(SelectedRow));
         }
 
         private void DispatchNotification(Models.Notification notification)
@@ -526,6 +564,7 @@ namespace SourceFork.ViewModels
                 Preferences.Instance.Save();
             }
 
+            SyncSelectedRow();
             CommandPalette = null;
         }
 
@@ -610,6 +649,7 @@ namespace SourceFork.ViewModels
         }
 
         private readonly List<string> _tagFilters = [];
+        private RepositoryListRow _selectedRow;
         private LauncherPage _activePage;
         private bool _ignoreIndexChange;
         private string _repositoryFilter = string.Empty;

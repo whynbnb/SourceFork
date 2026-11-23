@@ -26,6 +26,7 @@ SourceFork keeps SourceGit's Git client and rebuilds the main window around a pe
 
 - **Flat repository sidebar** — opened repositories are listed flat on the left instead of in top tabs. The sidebar is searchable, collapsible, and remembers its width.
 - **Tags** — give each repository multiple ordered tags with a primary tag, then filter the sidebar or Welcome page by any combination of tags.
+- **Sorting and grouping** — sort repositories by added time, name, or updated time in either direction, drag to define a custom order, and group the list by primary tag.
 - **No groups or workspaces** — repository groups and workspaces were removed; all repositories are shown as a flat list.
 - **Preferences** — left-side navigation and a resizable window.
 - **Icon** — orange replaced with blue.
