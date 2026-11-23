@@ -1013,9 +1013,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pàgina de benvinguda</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clona un repositori</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Suprimeix</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">S'ADMET ARROSSEGAR I DEIXAR ANAR CARPETES. S'ADMET L'AGRUPAMENT PERSONALITZAT.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Edita</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Obre tots els repositoris</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Obre el repositori</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Obre el terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Torna a escanejar els repositoris al directori de clonació per defecte</x:String>

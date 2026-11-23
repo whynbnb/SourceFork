@@ -920,9 +920,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Page d'accueil</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Cloner un dépôt</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Supprimer</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">GLISSER / DEPOSER DE DOSSIER SUPPORTÉ. GROUPAGE PERSONNALISÉ SUPPORTÉ.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Éditer</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Ouvrir tous les dépôts</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Ouvrir un dépôt</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Ouvrir le terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Réanalyser les repositories dans le dossier de clonage par défaut</x:String>

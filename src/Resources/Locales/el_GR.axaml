@@ -959,9 +959,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Σελίδα υποδοχής</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Κλωνοποίηση αποθετηρίου</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Διαγραφή</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ΥΠΟΣΤΗΡΙΖΕΤΑΙ ΜΕΤΑΦΟΡΑ &amp; ΑΠΟΘΕΣΗ ΦΑΚΕΛΟΥ. ΥΠΟΣΤΗΡΙΖΕΤΑΙ ΠΡΟΣΑΡΜΟΣΜΕΝΗ ΟΜΑΔΟΠΟΙΗΣΗ.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Επεξεργασία</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Άνοιγμα όλων των αποθετηρίων</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Άνοιγμα αποθετηρίου</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Άνοιγμα τερματικού</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Επανασάρωση αποθετηρίων στον προεπιλεγμένο φάκελο κλωνοποίησης</x:String>

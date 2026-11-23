@@ -963,9 +963,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Halaman Selamat Datang</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clone Repositori</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Hapus</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">DRAG &amp; DROP FOLDER DIDUKUNG. PENGELOMPOKAN KUSTOM DIDUKUNG.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Sunting</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Buka Semua Repositori</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Buka Repositori</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Buka Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Pindai Ulang Repositori di Direktori Clone Default</x:String>

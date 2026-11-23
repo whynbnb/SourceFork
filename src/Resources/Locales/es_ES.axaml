@@ -1029,9 +1029,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Página de Bienvenida</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clonar Repositorio</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Eliminar</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">SOPORTA ARRASTRAR Y SOLTAR CARPETAS. SOPORTA AGRUPACIÓN PERSONALIZADA.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Editar</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Abrir Todos Los Repositorios</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Abrir Repositorio</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Abrir Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Reescanear Repositorios en el Directorio de Clonado por Defecto</x:String>

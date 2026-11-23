@@ -9,7 +9,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SourceFork.Views.Welcome"
              x:DataType="vm:Welcome">
-  <Grid RowDefinitions="*,Auto" Margin="8">
+  <Grid RowDefinitions="*" Margin="8">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*"/>
       <ColumnDefinition Width="2*" MinWidth="600"/>
@@ -208,15 +208,5 @@
       </ListBox>
     </Grid>
 
-    <!-- Tips -->
-    <Border Grid.Row="1" Grid.Column="1"
-            Margin="0,8,0,0"
-            HorizontalAlignment="Center" VerticalAlignment="Center"
-            IsVisible="{OnPlatform True, Linux=False}">
-      <TextBlock Classes="italic"
-                 FontSize="12"
-                 Text="{DynamicResource Text.Welcome.DragDropTip}"
-                 Opacity=".5"/>
-    </Border>
   </Grid>
 </UserControl>

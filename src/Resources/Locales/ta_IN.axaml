@@ -607,9 +607,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">வரவேற்பு பக்கம்</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">நகலி களஞ்சியம்</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">நீக்கு</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">கோப்புறையை இழுத்து &amp; விடு ஆதரிக்கப்படுகிறது. தனிப்பயன் குழுவாக்க ஆதரவு.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">திருத்து</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">அனைத்து களஞ்சியங்களையும் திற</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">களஞ்சியத்தைத் திற</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">முனையத்தைத் திற</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">இயல்புநிலை நகலி அடைவில் களஞ்சியங்களை மீண்டும் வருடு</x:String>

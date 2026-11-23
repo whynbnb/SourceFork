@@ -1042,9 +1042,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Приветствие</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Клонировать репозиторий</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Удалить...</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ПОДДЕРЖИВАЕТСЯ: ПЕРЕТАСКИВАНИЕ КАТАЛОГОВ, ПОЛЬЗОВАТЕЛЬСКАЯ ГРУППИРОВКА.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Редактировать...</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Открыть все репозитории</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Открыть репозиторий</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Открыть терминал</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Обнаружить репозитории в каталоге клонирования по умолчанию</x:String>

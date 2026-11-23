@@ -920,9 +920,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">דף פתח</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">שכפל מאגר</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">מחק</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">נתמכת גרירה ושחרור של תיקיות. נתמך קיבוץ מותאם אישית.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">ערוך</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">פתח כל המאגרים</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">פתח מאגר</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">פתח טרמינל</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">סרוק מחדש של מאגרים בתיקיית ה־Clone ברירת מחדל</x:String>

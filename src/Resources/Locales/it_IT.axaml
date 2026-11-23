@@ -859,9 +859,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pagina di Benvenuto</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clona Repository</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Elimina</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">TRASCINA E RILASCIA CARTELLA SUPPORTATO. RAGGRUPPAMENTI PERSONALIZZATI SUPPORTATI.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Modifica</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Apri Tutti i Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Apri Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Apri Terminale</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Riscansiona Repository nella Cartella Clone Predefinita</x:String>

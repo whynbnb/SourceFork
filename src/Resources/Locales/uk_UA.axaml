@@ -613,9 +613,7 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Вітальна сторінка</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Клонувати сховище</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Видалити</x:String>
-  <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">ПІДТРИМУЄТЬСЯ ПЕРЕТЯГУВАННЯ ТЕК. МОЖЛИВЕ ГРУПУВАННЯ.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Редагувати</x:String>
-  <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Відкрити всі сховища</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Відкрити сховище</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Відкрити термінал</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Пересканувати сховища у теці клонування за замовчуванням</x:String>
