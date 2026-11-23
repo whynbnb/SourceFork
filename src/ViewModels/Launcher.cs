@@ -149,7 +149,7 @@ namespace SourceFork.ViewModels
             _ignoreIndexChange = true;
 
             foreach (var one in Pages)
-                CloseRepositoryInTab(one);
+                CloseRepositoryInTab(one, false);
 
             _ignoreIndexChange = false;
         }
@@ -170,6 +170,7 @@ namespace SourceFork.ViewModels
             Pages.Move(fromIdx, toIdx);
 
             PersistOpenRepositories();
+            Preferences.Instance.Save();
 
             _ignoreIndexChange = false;
             ActivePage = from;
@@ -215,6 +216,7 @@ namespace SourceFork.ViewModels
                     last.Popup?.Cleanup();
                     last.Popup = null;
 
+                    Preferences.Instance.Save();
                     PostActivePageChanged();
                     GC.Collect();
                 }
@@ -235,6 +237,7 @@ namespace SourceFork.ViewModels
 
             CloseRepositoryInTab(page);
             Pages.RemoveAt(removeIdx);
+            Preferences.Instance.Save();
             GC.Collect();
         }
 
@@ -258,6 +261,7 @@ namespace SourceFork.ViewModels
             RefreshVisiblePages();
 
             PersistOpenRepositories();
+            Preferences.Instance.Save();
             _ignoreIndexChange = false;
             GC.Collect();
         }
@@ -273,6 +277,7 @@ namespace SourceFork.ViewModels
                 Pages.Remove(Pages[i]);
             }
 
+            Preferences.Instance.Save();
             _ignoreIndexChange = false;
             GC.Collect();
         }
@@ -536,11 +541,12 @@ namespace SourceFork.ViewModels
             return new Commands.QueryGitDir(repo).GetResult();
         }
 
-        private void CloseRepositoryInTab(LauncherPage page)
+        private void CloseRepositoryInTab(LauncherPage page, bool removeFromOpenRepositories = true)
         {
             if (page.Data is Repository repo)
             {
-                Preferences.Instance.OpenRepositories.Remove(repo.FullPath);
+                if (removeFromOpenRepositories)
+                    Preferences.Instance.OpenRepositories.Remove(repo.FullPath);
 
                 if (page.Node.IsUnmanaged)
                     page.Node.SaveMinimalInfo(repo.GitDir);
