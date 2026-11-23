@@ -25,7 +25,7 @@
 - 左侧仓库侧边栏：`src/Views/WorkspaceSidebar.axaml`，把当前打开的仓库平铺显示，替代顶部 tab。
 - 仓库列表完全扁平化：不再有分组、子分组、移动分组或工作区（Workspace）概念；Welcome 页和侧边栏都只显示平铺的仓库。
 - 侧边栏顶部是仓库搜索框（按名称、路径和 tag 过滤），右侧按钮可多选 tag 进行筛选（多个 tag 取交集）。
-- 每个仓库支持多个 tag；在 Welcome 页或侧边栏右键 `Edit` 中用逗号分隔填写。tag 会随偏好设置和仓库内的 `sourcefork.node` 一起保存。
+- 每个仓库支持多个 tag；在 Welcome 页或侧边栏右键 `Edit Tags...` 打开 Tag 编辑器，可逐个添加/删除、上下调整顺序，并指定主要 Tag（默认第一个，选中后以强调色显示）。tag 会随偏好设置和仓库内的 `sourcefork.node` 一起保存。
 - 首次启动时会读取旧偏好中的分组/工作区数据，把所有仓库路径扁平化迁移到新的仓库列表；旧的分组和工作区层级直接丢弃。
 - 侧边栏可折叠/展开，状态保存在 `LayoutInfo.WorkspaceSidebarCollapsed`。折叠后 macOS 红绿灯/Windows 菜单会移到内容区顶栏最左侧，工具栏按钮紧随其后。
 - 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`；拖动分隔线结束、折叠/展开时会立即保存偏好，避免异常退出丢失宽度。

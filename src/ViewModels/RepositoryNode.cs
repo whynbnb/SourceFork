@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -15,6 +16,34 @@ namespace SourceFork.ViewModels
         public string FriendlyName { get; set; } = string.Empty;
         public int Bookmark { get; set; } = 0;
         public List<string> Tags { get; set; } = [];
+        public string PrimaryTag { get; set; } = string.Empty;
+    }
+
+    public class RepositoryTagItem : ObservableObject
+    {
+        public string Name
+        {
+            get;
+        }
+
+        public string DisplayName
+        {
+            get => $"#{Name}";
+        }
+
+        public bool IsPrimary
+        {
+            get => _isPrimary;
+            set => SetProperty(ref _isPrimary, value);
+        }
+
+        public RepositoryTagItem(string name, bool isPrimary)
+        {
+            Name = name;
+            _isPrimary = isPrimary;
+        }
+
+        private bool _isPrimary;
     }
 
     public class RepositoryNode : ObservableObject
@@ -54,17 +83,27 @@ namespace SourceFork.ViewModels
             {
                 if (SetProperty(ref _tags, NormalizeTags(value)))
                 {
-                    OnPropertyChanged(nameof(TagsDisplay));
-                    OnPropertyChanged(nameof(HasTags));
+                    _primaryTag = NormalizePrimary(_primaryTag);
+                    RebuildTagItems();
                 }
             }
         }
 
-        [JsonIgnore]
-        public string TagsDisplay
+        public string PrimaryTag
         {
-            get => string.Join("  ", _tags.Select(t => $"#{t}"));
+            get => _primaryTag;
+            set
+            {
+                if (SetProperty(ref _primaryTag, NormalizePrimary(value)))
+                    RebuildTagItems();
+            }
         }
+
+        [JsonIgnore]
+        public ObservableCollection<RepositoryTagItem> TagItems
+        {
+            get;
+        } = [];
 
         [JsonIgnore]
         public bool HasTags
@@ -109,9 +148,40 @@ namespace SourceFork.ViewModels
             set => SetProperty(ref _status, value);
         }
 
-        public void SetTags(IEnumerable<string> tags)
+        public void SetTags(IEnumerable<string> tags, string primary = null)
         {
-            Tags = [.. tags];
+            _tags = NormalizeTags(tags);
+            _primaryTag = NormalizePrimary(primary);
+            OnPropertyChanged(nameof(Tags));
+            RebuildTagItems();
+        }
+
+        public bool AddTag(string tag)
+        {
+            var normalized = NormalizeTag(tag);
+            if (string.IsNullOrEmpty(normalized))
+                return false;
+
+            if (_tags.Any(x => x.Equals(normalized, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            _tags.Add(normalized);
+            _primaryTag = NormalizePrimary(_primaryTag);
+            OnPropertyChanged(nameof(Tags));
+            RebuildTagItems();
+            return true;
+        }
+
+        public void RemoveTag(string tag)
+        {
+            var index = _tags.FindIndex(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
+            if (index < 0)
+                return;
+
+            _tags.RemoveAt(index);
+            _primaryTag = NormalizePrimary(_primaryTag);
+            OnPropertyChanged(nameof(Tags));
+            RebuildTagItems();
         }
 
         public bool HasAllTags(IReadOnlyCollection<string> filters)
@@ -151,6 +221,13 @@ namespace SourceFork.ViewModels
             var activePage = App.GetLauncher().ActivePage;
             if (activePage != null && activePage.CanCreatePopup())
                 activePage.Popup = new EditRepositoryNode(this);
+        }
+
+        public void EditTags()
+        {
+            var activePage = App.GetLauncher().ActivePage;
+            if (activePage != null && activePage.CanCreatePopup())
+                activePage.Popup = new EditRepositoryTags(this);
         }
 
         public void OpenInFileManager()
@@ -207,7 +284,7 @@ namespace SourceFork.ViewModels
                 if (!string.IsNullOrEmpty(minimalInfo.FriendlyName))
                     Name = minimalInfo.FriendlyName;
                 Bookmark = minimalInfo.Bookmark;
-                Tags = minimalInfo.Tags ?? [];
+                SetTags(minimalInfo.Tags ?? [], minimalInfo.PrimaryTag);
             }
             catch
             {
@@ -225,7 +302,8 @@ namespace SourceFork.ViewModels
             {
                 FriendlyName = Name,
                 Bookmark = Bookmark,
-                Tags = _tags
+                Tags = _tags,
+                PrimaryTag = _primaryTag
             };
 
             try
@@ -238,6 +316,38 @@ namespace SourceFork.ViewModels
             }
         }
 
+        private void RebuildTagItems()
+        {
+            TagItems.Clear();
+            foreach (var tag in _tags)
+                TagItems.Add(new RepositoryTagItem(tag, tag.Equals(_primaryTag, StringComparison.OrdinalIgnoreCase)));
+
+            OnPropertyChanged(nameof(HasTags));
+        }
+
+        private string NormalizePrimary(string primary)
+        {
+            if (_tags.Count == 0)
+                return string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(primary))
+            {
+                var found = _tags.Find(x => x.Equals(primary, StringComparison.OrdinalIgnoreCase));
+                if (!string.IsNullOrEmpty(found))
+                    return found;
+            }
+
+            return _tags[0];
+        }
+
+        private static string NormalizeTag(string tag)
+        {
+            if (string.IsNullOrWhiteSpace(tag))
+                return string.Empty;
+
+            return tag.Trim().TrimStart('#').Trim();
+        }
+
         private static List<string> NormalizeTags(IEnumerable<string> tags)
         {
             var normalized = new List<string>();
@@ -246,10 +356,7 @@ namespace SourceFork.ViewModels
 
             foreach (var tag in tags)
             {
-                if (string.IsNullOrWhiteSpace(tag))
-                    continue;
-
-                var value = tag.Trim().TrimStart('#').Trim();
+                var value = NormalizeTag(tag);
                 if (string.IsNullOrEmpty(value))
                     continue;
 
@@ -265,6 +372,7 @@ namespace SourceFork.ViewModels
         private bool _isRepository = false;
         private int _bookmark = 0;
         private List<string> _tags = [];
+        private string _primaryTag = string.Empty;
         private bool _isVisible = true;
         private Models.RepositoryStatus _status = null;
         private DateTime _lastUpdateStatus = DateTime.UnixEpoch.ToLocalTime();

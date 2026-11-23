@@ -19,7 +19,7 @@
                  Text="{DynamicResource Text.EditRepositoryNode.TitleForRepository}"/>
     </StackPanel>
 
-    <Grid Margin="8,16,0,0" RowDefinitions="32,32,32,32" ColumnDefinitions="120,*">
+    <Grid Margin="8,16,0,0" RowDefinitions="32,32,32" ColumnDefinitions="120,*">
       <TextBlock Grid.Row="0" Grid.Column="0"
                  HorizontalAlignment="Right" VerticalAlignment="Center"
                  Margin="0,0,8,0"
@@ -46,25 +46,8 @@
       <TextBlock Grid.Row="2" Grid.Column="0"
                  HorizontalAlignment="Right" VerticalAlignment="Center"
                  Margin="0,0,8,0"
-                 Text="{DynamicResource Text.EditRepositoryNode.Tags}"/>
-      <TextBox Grid.Row="2" Grid.Column="1"
-               Height="28"
-               CornerRadius="3"
-               PlaceholderText="{DynamicResource Text.EditRepositoryNode.Tags.Placeholder}"
-               Text="{Binding TagsText, Mode=TwoWay}">
-        <TextBox.InnerLeftContent>
-          <Path Width="12" Height="12"
-                Margin="4,0,2,0"
-                Data="{StaticResource Icons.Tags}"
-                Fill="{DynamicResource Brush.FG1}"/>
-        </TextBox.InnerLeftContent>
-      </TextBox>
-
-      <TextBlock Grid.Row="3" Grid.Column="0"
-                 HorizontalAlignment="Right" VerticalAlignment="Center"
-                 Margin="0,0,8,0"
                  Text="{DynamicResource Text.EditRepositoryNode.Bookmark}"/>
-      <v:BookmarkSelector Grid.Row="3" Grid.Column="1"
+      <v:BookmarkSelector Grid.Row="2" Grid.Column="1"
                           HorizontalAlignment="Left" VerticalAlignment="Center"
                           Bookmark="{Binding Bookmark, Mode=TwoWay}"/>
     </Grid>

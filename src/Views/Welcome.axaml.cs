@@ -151,6 +151,15 @@ namespace SourceFork.Views
 
             var menu = new ContextMenu();
 
+            var tags = new MenuItem();
+            tags.Header = App.Text("RepositoryTags.Edit");
+            tags.Icon = this.CreateMenuIcon("Icons.Tags");
+            tags.Click += (_, e) =>
+            {
+                node.EditTags();
+                e.Handled = true;
+            };
+
             var edit = new MenuItem();
             edit.Header = App.Text("Welcome.Edit");
             edit.Icon = this.CreateMenuIcon("Icons.Edit");
@@ -203,6 +212,7 @@ namespace SourceFork.Views
                 menu.Items.Add(explore);
                 menu.Items.Add(terminal);
                 menu.Items.Add(new MenuItem() { Header = "-" });
+                menu.Items.Add(tags);
                 menu.Items.Add(edit);
                 menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(delete);

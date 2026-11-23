@@ -985,6 +985,13 @@
   <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">Filter by tags</x:String>
   <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">No tags</x:String>
   <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">Clear tag filter</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tags:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">Separate multiple tags with commas</x:String>
+  <x:String x:Key="Text.RepositoryTags.Edit" xml:space="preserve">Edit Tags</x:String>
+  <x:String x:Key="Text.RepositoryTags.Add" xml:space="preserve">Add</x:String>
+  <x:String x:Key="Text.RepositoryTags.Add.Placeholder" xml:space="preserve">Enter a tag name</x:String>
+  <x:String x:Key="Text.RepositoryTags.SetPrimary" xml:space="preserve">Set as primary tag</x:String>
+  <x:String x:Key="Text.RepositoryTags.Primary" xml:space="preserve">PRIMARY</x:String>
+  <x:String x:Key="Text.RepositoryTags.MoveUp" xml:space="preserve">Move up</x:String>
+  <x:String x:Key="Text.RepositoryTags.MoveDown" xml:space="preserve">Move down</x:String>
+  <x:String x:Key="Text.RepositoryTags.Remove" xml:space="preserve">Remove</x:String>
+  <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
 </ResourceDictionary>

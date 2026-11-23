@@ -148,12 +148,34 @@
                     </MultiBinding>
                   </TextBlock.IsVisible>
                 </TextBlock>
-                <TextBlock Margin="12,0,0,0"
-                           VerticalAlignment="Center"
-                           FontSize="11"
-                           Foreground="{DynamicResource Brush.Accent}"
-                           Text="{Binding TagsDisplay}"
-                           IsVisible="{Binding HasTags}"/>
+                <ItemsControl Margin="12,0,0,0"
+                              VerticalAlignment="Center"
+                              ItemsSource="{Binding TagItems}"
+                              IsVisible="{Binding HasTags}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:RepositoryTagItem">
+                      <TextBlock Margin="6,0,0,0"
+                                 FontSize="11"
+                                 Text="{Binding DisplayName}"
+                                 Classes.primary="{Binding IsPrimary}">
+                        <TextBlock.Styles>
+                          <Style Selector="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
+                          </Style>
+                          <Style Selector="TextBlock.primary">
+                            <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                          </Style>
+                        </TextBlock.Styles>
+                      </TextBlock>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 <Path Margin="2,0,0,0"
                       Width="12" Height="12"
                       Data="{StaticResource Icons.Error}"

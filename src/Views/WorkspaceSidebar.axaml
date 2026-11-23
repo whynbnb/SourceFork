@@ -175,13 +175,35 @@
                            Foreground="{DynamicResource Brush.FG2}"
                            Text="{Binding Node.Id}"
                            TextTrimming="CharacterEllipsis"/>
-                <TextBlock Grid.Column="1"
-                           Margin="8,0,0,0"
-                           FontSize="10"
-                           Foreground="{DynamicResource Brush.Accent}"
-                           Text="{Binding Node.TagsDisplay}"
-                           TextTrimming="CharacterEllipsis"
-                           IsVisible="{Binding Node.HasTags}"/>
+                <ItemsControl Grid.Column="1"
+                              Margin="8,0,0,0"
+                              VerticalAlignment="Center"
+                              ItemsSource="{Binding Node.TagItems}"
+                              IsVisible="{Binding Node.HasTags}">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:RepositoryTagItem">
+                      <TextBlock Margin="4,0,0,0"
+                                 FontSize="10"
+                                 Text="{Binding DisplayName}"
+                                 Classes.primary="{Binding IsPrimary}">
+                        <TextBlock.Styles>
+                          <Style Selector="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
+                          </Style>
+                          <Style Selector="TextBlock.primary">
+                            <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                          </Style>
+                        </TextBlock.Styles>
+                      </TextBlock>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
               </Grid>
             </Grid>
 

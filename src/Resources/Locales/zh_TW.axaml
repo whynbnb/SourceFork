@@ -1126,6 +1126,13 @@
   <x:String x:Key="Text.Sidebar.FilterByTags" xml:space="preserve">依 Tag 篩選</x:String>
   <x:String x:Key="Text.Sidebar.NoTags" xml:space="preserve">尚無 Tag</x:String>
   <x:String x:Key="Text.Tags.ClearFilter" xml:space="preserve">清除 Tag 篩選</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Tags" xml:space="preserve">Tag ：</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Tags.Placeholder" xml:space="preserve">多個 Tag 以英文逗號分隔</x:String>
+  <x:String x:Key="Text.RepositoryTags.Edit" xml:space="preserve">編輯 Tag</x:String>
+  <x:String x:Key="Text.RepositoryTags.Add" xml:space="preserve">新增</x:String>
+  <x:String x:Key="Text.RepositoryTags.Add.Placeholder" xml:space="preserve">輸入 Tag 名稱</x:String>
+  <x:String x:Key="Text.RepositoryTags.SetPrimary" xml:space="preserve">設為主要 Tag</x:String>
+  <x:String x:Key="Text.RepositoryTags.Primary" xml:space="preserve">主要</x:String>
+  <x:String x:Key="Text.RepositoryTags.MoveUp" xml:space="preserve">上移</x:String>
+  <x:String x:Key="Text.RepositoryTags.MoveDown" xml:space="preserve">下移</x:String>
+  <x:String x:Key="Text.RepositoryTags.Remove" xml:space="preserve">移除</x:String>
+  <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">主要 Tag 會以強調色顯示。使用上下箭頭調整順序。</x:String>
 </ResourceDictionary>
