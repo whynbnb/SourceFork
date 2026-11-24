@@ -42,8 +42,7 @@ namespace SourceFork.ViewModels
             else
                 Preferences.Instance.Save();
 
-            Welcome.Instance.Refresh();
-            App.GetLauncher()?.RefreshRepositoryFilters();
+            RepositoryListSorter.NotifyChanged();
             return Task.FromResult(true);
         }
 

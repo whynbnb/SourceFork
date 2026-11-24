@@ -951,4 +951,5 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.ScanFolders.Mode" xml:space="preserve">Auto scan</x:String>
   <x:String x:Key="Text.ScanFolders.Cancel" xml:space="preserve">Stop</x:String>
   <x:String x:Key="Text.ScanFolders.Canceled" xml:space="preserve">Scan canceled.</x:String>
+  <x:String x:Key="Text.Repository.RemoveFromList" xml:space="preserve">Remove from List</x:String>
 </ResourceDictionary>

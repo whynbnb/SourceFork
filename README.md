@@ -24,7 +24,7 @@ SourceFork keeps SourceGit's Git client and rebuilds the main window around a pe
 
 ## What's different
 
-- **Flat repository sidebar** — opened repositories are listed flat on the left instead of in top tabs. The sidebar is searchable, collapsible, and remembers its width.
+- **Flat repository sidebar** — all registered repositories are listed flat on the left and stay in sync with the Welcome page instead of using top tabs. The sidebar is searchable, collapsible, and remembers its width.
 - **Tags** — give each repository multiple ordered tags with a primary tag, then filter the sidebar or Welcome page by any combination of tags.
 - **Sorting and grouping** — sort repositories by added time, name, or updated time in either direction, drag to define a custom order, and group the list by primary tag.
 - **Auto-scan folders** — register multiple folders and keep them forever. Each folder can scan only its direct children or recurse into subdirectories, and can scan on startup, only manually, or watch for changes in real time. Discovery runs on a background thread and can be stopped at any time; discovered repositories are added to the repository list without being opened.

@@ -91,8 +91,7 @@ namespace SourceFork.ViewModels
             var primary = Tags.FirstOrDefault(x => x.IsPrimary)?.Name ?? Tags.FirstOrDefault()?.Name;
             _node.SetTags(Tags.Select(x => x.Name), primary);
             Preferences.Instance.Save();
-            Welcome.Instance.Refresh();
-            App.GetLauncher()?.RefreshRepositoryFilters();
+            RepositoryListSorter.NotifyChanged();
             return Task.FromResult(true);
         }
 

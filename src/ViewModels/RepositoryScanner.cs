@@ -279,10 +279,7 @@ namespace SourceFork.ViewModels
             finally
             {
                 if (added > 0)
-                {
-                    Preferences.Instance.Save();
-                    Welcome.Instance.Refresh();
-                }
+                    RepositoryListSorter.NotifyChanged();
             }
 
             return added;

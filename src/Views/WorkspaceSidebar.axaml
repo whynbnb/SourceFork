@@ -163,10 +163,11 @@
                   IsVisible="{Binding !IsGroupHeader}">
               <ToolTip.Tip>
                 <Grid>
-                  <TextBlock Text="{DynamicResource Text.Welcome}" IsVisible="{Binding !Page.Node.IsRepository}"/>
-                  <StackPanel IsVisible="{Binding Page.Node.IsRepository}">
-                    <TextBlock Text="{Binding Page.Node.Id}"/>
-                    <TextBlock Text="{Binding Page.DirtyState, Converter={x:Static c:DirtyStateConverters.ToDesc}}"
+                  <TextBlock Text="{DynamicResource Text.Welcome}" IsVisible="{Binding !Node.IsRepository}"/>
+                  <StackPanel IsVisible="{Binding Node.IsRepository}">
+                    <TextBlock Text="{Binding Node.Id}"/>
+                    <TextBlock Text="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToDesc}}"
+                               IsVisible="{Binding IsDirty}"
                                Foreground="{DynamicResource Brush.FG2}"/>
                   </StackPanel>
                 </Grid>
@@ -176,38 +177,38 @@
                           Width="12" Height="12"
                           Margin="10,0,8,0"
                           VerticalAlignment="Center"
-                          Value="{Binding Page.Node.Bookmark, Mode=OneWay}"
-                          IsVisible="{Binding Page.Node.IsRepository}"/>
+                          Value="{Binding Node.Bookmark, Mode=OneWay}"
+                          IsVisible="{Binding Node.IsRepository}"/>
               <Path Grid.Column="0"
                     Width="12" Height="12"
                     Margin="10,0,8,0"
                     VerticalAlignment="Center"
                     Fill="{DynamicResource Brush.FG1}"
                     Data="{StaticResource Icons.Repositories}"
-                    IsVisible="{Binding !Page.Node.IsRepository}"
+                    IsVisible="{Binding !Node.IsRepository}"
                     IsHitTestVisible="False"/>
 
               <Grid Grid.Column="1" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
                 <TextBlock Grid.Row="0"
                            FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
-                           Text="{Binding Page.Node.Name}"
+                           Text="{Binding Node.Name}"
                            TextTrimming="CharacterEllipsis"
-                           IsVisible="{Binding Page.Node.IsRepository}"/>
+                           IsVisible="{Binding Node.IsRepository}"/>
                 <TextBlock Grid.Row="0"
                            FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
                            Text="{DynamicResource Text.PageTabBar.Welcome.Title}"
-                           IsVisible="{Binding !Page.Node.IsRepository}"/>
-                <Grid Grid.Row="1" ColumnDefinitions="*,Auto" IsVisible="{Binding Page.Node.IsRepository}">
+                           IsVisible="{Binding !Node.IsRepository}"/>
+                <Grid Grid.Row="1" ColumnDefinitions="*,Auto" IsVisible="{Binding Node.IsRepository}">
                   <TextBlock Grid.Column="0"
                              FontSize="10"
                              Foreground="{DynamicResource Brush.FG2}"
-                             Text="{Binding Page.Node.Id}"
+                             Text="{Binding Node.Id}"
                              TextTrimming="CharacterEllipsis"/>
                   <ItemsControl Grid.Column="1"
                                 Margin="8,0,0,0"
                                 VerticalAlignment="Center"
-                                ItemsSource="{Binding Page.Node.TagItems}"
-                                IsVisible="{Binding Page.Node.HasTags}">
+                                ItemsSource="{Binding Node.TagItems}"
+                                IsVisible="{Binding Node.HasTags}">
                     <ItemsControl.ItemsPanel>
                       <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
@@ -239,8 +240,8 @@
                        Width="8" Height="8"
                        Margin="6,0"
                        VerticalAlignment="Center"
-                       IsVisible="{Binding Page.DirtyState, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static m:DirtyState.None}}"
-                       Fill="{Binding Page.DirtyState, Converter={x:Static c:DirtyStateConverters.ToBrush}}"/>
+                       IsVisible="{Binding IsDirty}"
+                       Fill="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToBrush}}"/>
 
               <Button Grid.Column="3"
                       Classes="icon_button page_close"
@@ -248,7 +249,7 @@
                       Margin="0,0,6,0"
                       VerticalAlignment="Center"
                       Click="OnClosePage"
-                      IsVisible="{Binding Page.Node.IsRepository}"
+                      IsVisible="{Binding CanClose}"
                       ToolTip.Tip="{DynamicResource Text.PageTabBar.Tab.Close}">
                 <Path Width="8" Height="8" Data="{StaticResource Icons.Close}"/>
               </Button>

@@ -1164,4 +1164,5 @@
   <x:String x:Key="Text.ScanFolders.Mode" xml:space="preserve">自動掃描</x:String>
   <x:String x:Key="Text.ScanFolders.Cancel" xml:space="preserve">停止掃描</x:String>
   <x:String x:Key="Text.ScanFolders.Canceled" xml:space="preserve">掃描已取消。</x:String>
+  <x:String x:Key="Text.Repository.RemoveFromList" xml:space="preserve">從清單中移除</x:String>
 </ResourceDictionary>

@@ -160,7 +160,7 @@ namespace SourceFork.ViewModels
                 }
             }
 
-            Welcome.Instance.Refresh();
+            RepositoryListSorter.NotifyChanged();
             launcher.OpenRepositoryInTab(node, page);
 
             _cancellation = null;

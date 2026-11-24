@@ -365,7 +365,7 @@ namespace SourceFork.Views
             }
 
             if (refresh)
-                ViewModels.Welcome.Instance.Refresh();
+                ViewModels.RepositoryListSorter.NotifyChanged();
         }
 
         private void OnDoubleTappedTreeNode(object sender, TappedEventArgs e)

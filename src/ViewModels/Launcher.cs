@@ -36,6 +36,11 @@ namespace SourceFork.ViewModels
                 {
                     ActivePage = value.Page;
                 }
+                else if (value?.Node is { IsRepository: true } node)
+                {
+                    node.Open();
+                    SyncSelectedRow();
+                }
                 else if (value is { IsGroupHeader: true })
                 {
                     _selectedRow = VisiblePages.FirstOrDefault(x => x.Page == _activePage);
@@ -113,7 +118,7 @@ namespace SourceFork.ViewModels
                 if (isBare)
                 {
                     var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repo, false);
-                    Welcome.Instance.Refresh();
+                    RepositoryListSorter.NotifyChanged();
                     OpenRepositoryInTab(node, null);
                     return true;
                 }
@@ -122,7 +127,7 @@ namespace SourceFork.ViewModels
                 if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
                 {
                     var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(test.StdOut.Trim(), false);
-                    Welcome.Instance.Refresh();
+                    RepositoryListSorter.NotifyChanged();
                     OpenRepositoryInTab(node, null);
                     return true;
                 }
@@ -218,6 +223,7 @@ namespace SourceFork.ViewModels
 
                     Preferences.Instance.Save();
                     PostActivePageChanged();
+                    RefreshVisiblePages();
                     GC.Collect();
                 }
                 else
@@ -364,6 +370,8 @@ namespace SourceFork.ViewModels
                 PostActivePageChanged();
             else
                 ActivePage = page;
+
+            RefreshVisiblePages();
         }
 
         public void OpenSubRepository(LauncherPage ownerPage, string fullpath)
@@ -446,10 +454,13 @@ namespace SourceFork.ViewModels
         private void RefreshVisiblePages()
         {
             var filter = _repositoryFilter?.Trim();
+
+            foreach (var row in VisiblePages)
+                row.Detach();
+
             VisiblePages.Clear();
 
             var nonRepositories = new List<LauncherPage>();
-            var repositories = new List<RepositoryNode>();
             var pagesByNode = new Dictionary<string, LauncherPage>(StringComparer.Ordinal);
 
             foreach (var page in Pages)
@@ -461,20 +472,40 @@ namespace SourceFork.ViewModels
                     continue;
                 }
 
-                if (page.Node.MatchesSearch(filter) && page.Node.HasAllTags(_tagFilters))
-                {
-                    repositories.Add(page.Node);
-                    pagesByNode[page.Node.Id] = page;
-                }
+                pagesByNode[page.Node.Id] = page;
             }
 
             foreach (var page in nonRepositories)
                 VisiblePages.Add(new RepositoryListRow(page.Node, page));
 
-            foreach (var row in RepositoryListSorter.Build(repositories, node => pagesByNode.TryGetValue(node.Id, out var page) ? page : null))
+            var repositories = EnumerateRepositoryNodes()
+                .Where(x => x.MatchesSearch(filter) && x.HasAllTags(_tagFilters))
+                .ToList();
+
+            foreach (var row in RepositoryListSorter.Build(repositories,
+                node => pagesByNode.TryGetValue(node.Id, out var page) ? page : null))
                 VisiblePages.Add(row);
 
             SyncSelectedRow();
+        }
+
+        private IEnumerable<RepositoryNode> EnumerateRepositoryNodes()
+        {
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+
+            foreach (var node in Preferences.Instance.RepositoryNodes)
+            {
+                if (!node.IsRepository || !ids.Add(node.Id))
+                    continue;
+
+                yield return node;
+            }
+
+            foreach (var page in Pages)
+            {
+                if (page.Data is Repository && page.Node is { IsRepository: true } && ids.Add(page.Node.Id))
+                    yield return page.Node;
+            }
         }
 
         private void SyncSelectedRow()
@@ -592,12 +623,9 @@ namespace SourceFork.ViewModels
         public List<string> GetAvailableTags()
         {
             var tags = new List<string>();
-            foreach (var page in Pages)
+            foreach (var node in EnumerateRepositoryNodes())
             {
-                if (page.Data is not Repository)
-                    continue;
-
-                foreach (var tag in page.Node.Tags)
+                foreach (var tag in node.Tags)
                 {
                     if (!tags.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase)))
                         tags.Add(tag);

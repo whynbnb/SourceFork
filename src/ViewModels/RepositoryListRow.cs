@@ -1,6 +1,10 @@
+using System.ComponentModel;
+
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace SourceFork.ViewModels
 {
-    public class RepositoryListRow
+    public class RepositoryListRow : ObservableObject
     {
         public bool IsGroupHeader
         {
@@ -27,6 +31,31 @@ namespace SourceFork.ViewModels
             get => !IsGroupHeader;
         }
 
+        public bool IsRepository
+        {
+            get => Node is { IsRepository: true };
+        }
+
+        public bool IsOpen
+        {
+            get => Page != null;
+        }
+
+        public bool CanClose
+        {
+            get => IsRepository && Page != null;
+        }
+
+        public Models.DirtyState DirtyState
+        {
+            get => Page?.DirtyState ?? Models.DirtyState.None;
+        }
+
+        public bool IsDirty
+        {
+            get => DirtyState != Models.DirtyState.None;
+        }
+
         public RepositoryListRow(string groupName)
         {
             IsGroupHeader = true;
@@ -37,6 +66,24 @@ namespace SourceFork.ViewModels
         {
             Node = node;
             Page = page;
+
+            if (page != null)
+                page.PropertyChanged += OnPagePropertyChanged;
+        }
+
+        public void Detach()
+        {
+            if (Page != null)
+                Page.PropertyChanged -= OnPagePropertyChanged;
+        }
+
+        private void OnPagePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(LauncherPage.DirtyState))
+            {
+                OnPropertyChanged(nameof(DirtyState));
+                OnPropertyChanged(nameof(IsDirty));
+            }
         }
     }
 }

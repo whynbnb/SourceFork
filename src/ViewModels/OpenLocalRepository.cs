@@ -78,7 +78,7 @@ namespace SourceFork.ViewModels
             var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repoRoot);
             node.Bookmark = _bookmark;
             await node.UpdateStatusAsync(false, null);
-            Welcome.Instance.Refresh();
+            RepositoryListSorter.NotifyChanged();
             node.Open();
             return true;
         }

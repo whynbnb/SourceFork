@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+using Avalonia.Threading;
 
 namespace SourceFork.ViewModels
 {
@@ -16,8 +19,15 @@ namespace SourceFork.ViewModels
 
         public override Task<bool> Sure()
         {
+            var launcher = App.GetLauncher();
+            var page = launcher?.Pages.FirstOrDefault(x => x.Node.Id == Node.Id && x.Data is Repository);
+
             Preferences.Instance.RemoveNode(Node, true);
-            Welcome.Instance.Refresh();
+            RepositoryListSorter.NotifyChanged();
+
+            if (page != null)
+                Dispatcher.UIThread.Post(() => launcher.CloseTab(page), DispatcherPriority.Background);
+
             return Task.FromResult(true);
         }
     }

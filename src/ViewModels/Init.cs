@@ -45,7 +45,7 @@ namespace SourceFork.ViewModels
                 node.Bookmark = _bookmark;
                 await node.UpdateStatusAsync(false, null);
 
-                Welcome.Instance.Refresh();
+                RepositoryListSorter.NotifyChanged();
             }
             return succ;
         }

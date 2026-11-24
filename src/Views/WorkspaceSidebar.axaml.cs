@@ -135,7 +135,7 @@ namespace SourceFork.Views
             if (_dragStart == null || _dragStarted)
                 return;
 
-            if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Page: { Node.IsRepository: true } page } } grid)
+            if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Node.IsRepository: true } row } grid)
                 return;
 
             var delta = e.GetPosition(grid) - _dragStart.GetPosition(grid);
@@ -144,7 +144,7 @@ namespace SourceFork.Views
 
             _dragStarted = true;
             var data = new DataTransfer();
-            data.Add(DataTransferItem.Create(_dragData, page.Node.Id));
+            data.Add(DataTransferItem.Create(_dragData, row.Node.Id));
             await DragDrop.DoDragDropAsync(_dragStart, data, DragDropEffects.Move);
         }
 
@@ -188,41 +188,57 @@ namespace SourceFork.Views
         private void OnItemContextRequested(object sender, ContextRequestedEventArgs e)
         {
             if (sender is not Control { DataContext: ViewModels.RepositoryListRow row } control ||
-                row.Page is not { } page ||
-                DataContext is not ViewModels.Launcher launcher)
+                DataContext is not ViewModels.Launcher launcher ||
+                row.Node is not { } node)
                 return;
 
             var menu = new ContextMenu();
+            var page = row.Page;
 
-            if (page.Data is ViewModels.Repository repo)
+            if (node.IsRepository)
             {
-                var refresh = new MenuItem();
-                refresh.Header = App.Text("PageTabBar.Tab.Refresh");
-                refresh.Icon = this.CreateMenuIcon("Icons.Loading");
-                refresh.Click += (_, ev) =>
+                if (page?.Data is ViewModels.Repository repo)
                 {
-                    repo.RefreshAll();
-                    ev.Handled = true;
-                };
-                menu.Items.Add(refresh);
+                    var refresh = new MenuItem();
+                    refresh.Header = App.Text("PageTabBar.Tab.Refresh");
+                    refresh.Icon = this.CreateMenuIcon("Icons.Loading");
+                    refresh.Click += (_, ev) =>
+                    {
+                        repo.RefreshAll();
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(refresh);
 
-                var copyPath = new MenuItem();
-                copyPath.Header = App.Text("PageTabBar.Tab.CopyPath");
-                copyPath.Icon = this.CreateMenuIcon("Icons.Copy");
-                copyPath.Click += async (_, ev) =>
+                    var copyPath = new MenuItem();
+                    copyPath.Header = App.Text("PageTabBar.Tab.CopyPath");
+                    copyPath.Icon = this.CreateMenuIcon("Icons.Copy");
+                    copyPath.Click += async (_, ev) =>
+                    {
+                        var dir = new DirectoryInfo(repo.FullPath);
+                        await this.CopyTextAsync(dir.FullName);
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(copyPath);
+                }
+                else
                 {
-                    var dir = new DirectoryInfo(repo.FullPath);
-                    await this.CopyTextAsync(dir.FullName);
-                    ev.Handled = true;
-                };
-                menu.Items.Add(copyPath);
+                    var open = new MenuItem();
+                    open.Header = App.Text("Open");
+                    open.Icon = this.CreateMenuIcon("Icons.Repositories");
+                    open.Click += (_, ev) =>
+                    {
+                        node.Open();
+                        ev.Handled = true;
+                    };
+                    menu.Items.Add(open);
+                }
 
                 var tags = new MenuItem();
                 tags.Header = App.Text("RepositoryTags.Edit");
                 tags.Icon = this.CreateMenuIcon("Icons.Tags");
                 tags.Click += (_, ev) =>
                 {
-                    page.Node.EditTags();
+                    node.EditTags();
                     ev.Handled = true;
                 };
                 menu.Items.Add(tags);
@@ -232,16 +248,29 @@ namespace SourceFork.Views
                 edit.Icon = this.CreateMenuIcon("Icons.Edit");
                 edit.Click += (_, ev) =>
                 {
-                    page.Node.Edit();
+                    node.Edit();
                     ev.Handled = true;
                 };
                 menu.Items.Add(edit);
 
                 menu.Items.Add(new MenuItem() { Header = "-" });
+
+                var remove = new MenuItem();
+                remove.Header = App.Text("Repository.RemoveFromList");
+                remove.Icon = this.CreateMenuIcon("Icons.Minus");
+                remove.Click += (_, ev) =>
+                {
+                    node.Delete();
+                    ev.Handled = true;
+                };
+                menu.Items.Add(remove);
             }
 
-            if (page.Node.IsRepository || launcher.Pages.Count > 1)
+            if (page != null && (node.IsRepository || launcher.Pages.Count > 1))
             {
+                if (menu.Items.Count > 0)
+                    menu.Items.Add(new MenuItem() { Header = "-" });
+
                 var close = new MenuItem();
                 close.Header = App.Text("PageTabBar.Tab.Close");
                 close.Tag = OperatingSystem.IsMacOS() ? "⌘+W" : "Ctrl+W";
@@ -253,7 +282,7 @@ namespace SourceFork.Views
                 menu.Items.Add(close);
             }
 
-            if (launcher.Pages.Count > 1)
+            if (page != null && launcher.Pages.Count > 1)
             {
                 var closeOthers = new MenuItem();
                 closeOthers.Header = App.Text("PageTabBar.Tab.CloseOther");
