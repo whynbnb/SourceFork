@@ -15,11 +15,22 @@ namespace SourceFork.Views
             InitializeComponent();
         }
 
-        private void OnExclude(object sender, RoutedEventArgs e)
+        private async void OnExclude(object sender, RoutedEventArgs e)
         {
             if (sender is Control { DataContext: ViewModels.RepositoryHistoryItem item } &&
                 DataContext is ViewModels.RepositoryHistory vm)
             {
+                if (item.HasTags)
+                {
+                    var confirm = new Confirm();
+                    confirm.SetData(App.Text("RepositoryHistory.ExcludeTaggedConfirm", item.Name), Models.ConfirmButtonType.OkCancel);
+                    if (!await confirm.ShowDialog<bool>(this))
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
                 // Defer the collection rebuild until after this click has been fully handled.
                 Dispatcher.UIThread.Post(() =>
                 {

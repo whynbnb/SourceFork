@@ -711,7 +711,7 @@
   <x:String x:Key="Text.RepositoryHistory.RestoredOne" xml:space="preserve">Restored {0}.</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoredMissing" xml:space="preserve">Repository does not exist: {0}</x:String>
   <x:String x:Key="Text.RepositoryHistory.ExcludeAll" xml:space="preserve">Exclude All</x:String>
-  <x:String x:Key="Text.RepositoryHistory.ConfirmExcludeAll" xml:space="preserve">Process all {0} listed repositories? Scanned repositories will be added to the hidden list; repositories with no scan source will only be removed.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ConfirmExcludeAll" xml:space="preserve">Process all {0} listed repositories? Tagged repositories will be skipped. Scanned repositories will be added to the hidden list; repositories with no scan source will only be removed.</x:String>
   <x:String x:Key="Text.RepositoryHistory.ExcludedAll" xml:space="preserve">Processed {0} repositories.</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoreAll" xml:space="preserve">Restore All</x:String>
   <x:String x:Key="Text.RepositoryHistory.ConfirmRestoreAll" xml:space="preserve">Restore all {0} excluded repositories? They will be added back to the repository list.</x:String>
@@ -725,6 +725,11 @@
   <x:String x:Key="Text.RepositoryHistory.Remove" xml:space="preserve">Remove</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedOne" xml:space="preserve">Removed {0}.</x:String>
   <x:String x:Key="Text.RepositoryHistory.CleanUnknown" xml:space="preserve">Clean Unknown</x:String>
-  <x:String x:Key="Text.RepositoryHistory.ConfirmCleanUnknown" xml:space="preserve">Clean up all {0} repositories with no known scan source? They will be removed from the repository list and the hidden list.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ConfirmCleanUnknown" xml:space="preserve">Clean up all unknown-origin entries? {0} entries match; tagged repositories will be skipped.</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknown" xml:space="preserve">Cleaned {0} unknown-origin entries.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Tagged" xml:space="preserve">Important</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludeTaggedConfirm" xml:space="preserve">Repository "{0}" has tags and is treated as important. Remove it from the list anyway?</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludedAllSkipped" xml:space="preserve">Processed {0} repositories. Skipped {1} tagged repositories.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">Cleaned {0} unknown-origin entries. Skipped {1} tagged repositories.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">Nothing to clean. Skipped {0} tagged repositories.</x:String>
 </ResourceDictionary>

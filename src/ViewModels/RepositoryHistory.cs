@@ -37,6 +37,11 @@ namespace SourceFork.ViewModels
             get;
         }
 
+        public bool HasTags
+        {
+            get => Node?.HasTags == true;
+        }
+
         public string SourceFolder
         {
             get;
@@ -124,6 +129,16 @@ namespace SourceFork.ViewModels
             get => _unknownCount > 0;
         }
 
+        public bool CanExcludeAll
+        {
+            get => Repositories.Any(x => x.Node is { HasTags: false });
+        }
+
+        public bool CanCleanUnknown
+        {
+            get => _canCleanUnknown;
+        }
+
         public string Status
         {
             get => _status;
@@ -143,9 +158,15 @@ namespace SourceFork.ViewModels
             Repositories.Clear();
             HiddenRepositories.Clear();
 
-            _unknownCount =
-                Preferences.Instance.RepositoryNodes.Count(x => x.IsRepository && string.IsNullOrEmpty(FindSource(sources, x.Id))) +
-                Preferences.Instance.HiddenRepositories.Count(x => string.IsNullOrEmpty(FindSource(sources, x)));
+            var unknownNodes = Preferences.Instance.RepositoryNodes
+                .Where(x => x.IsRepository && string.IsNullOrEmpty(FindSource(sources, x.Id)))
+                .ToList();
+            var unknownHidden = Preferences.Instance.HiddenRepositories
+                .Where(x => string.IsNullOrEmpty(FindSource(sources, x)))
+                .ToList();
+
+            _unknownCount = unknownNodes.Count + unknownHidden.Count;
+            _canCleanUnknown = unknownNodes.Any(x => !x.HasTags) || unknownHidden.Count > 0;
 
             foreach (var node in Preferences.Instance.RepositoryNodes)
             {
@@ -172,6 +193,8 @@ namespace SourceFork.ViewModels
             OnPropertyChanged(nameof(IsHiddenEmpty));
             OnPropertyChanged(nameof(HasHidden));
             OnPropertyChanged(nameof(HasUnknown));
+            OnPropertyChanged(nameof(CanExcludeAll));
+            OnPropertyChanged(nameof(CanCleanUnknown));
         }
 
         public void Exclude(RepositoryHistoryItem item)
@@ -206,13 +229,21 @@ namespace SourceFork.ViewModels
 
         public void ExcludeAll()
         {
-            var nodes = Repositories
+            var allNodes = Repositories
                 .Where(x => x.Node != null)
                 .Select(x => x.Node)
                 .ToList();
 
+            var nodes = allNodes.Where(x => !x.HasTags).ToList();
+            var skippedTagged = allNodes.Count - nodes.Count;
+
             if (nodes.Count == 0)
+            {
+                if (skippedTagged > 0)
+                    Status = App.Text("RepositoryHistory.NothingToCleanTagged", skippedTagged);
+
                 return;
+            }
 
             var launcher = App.GetLauncher();
             if (launcher != null)
@@ -236,23 +267,34 @@ namespace SourceFork.ViewModels
                 RepositoryListSorter.NotifyChanged();
             }
 
-            Status = App.Text("RepositoryHistory.ExcludedAll", nodes.Count);
+            Status = skippedTagged > 0
+                ? App.Text("RepositoryHistory.ExcludedAllSkipped", nodes.Count, skippedTagged)
+                : App.Text("RepositoryHistory.ExcludedAll", nodes.Count);
+
             Reload();
         }
 
         public void CleanUnknown()
         {
             var sources = BuildSourceMap();
-            var unknownNodes = Preferences.Instance.RepositoryNodes
+            var allUnknownNodes = Preferences.Instance.RepositoryNodes
                 .Where(x => x.IsRepository && string.IsNullOrEmpty(FindSource(sources, x.Id)))
                 .ToList();
+
+            var unknownNodes = allUnknownNodes.Where(x => !x.HasTags).ToList();
+            var skippedTagged = allUnknownNodes.Count - unknownNodes.Count;
 
             var hiddenUnknown = Preferences.Instance.HiddenRepositories
                 .Where(x => string.IsNullOrEmpty(FindSource(sources, x)))
                 .ToList();
 
             if (unknownNodes.Count == 0 && hiddenUnknown.Count == 0)
+            {
+                if (skippedTagged > 0)
+                    Status = App.Text("RepositoryHistory.NothingToCleanTagged", skippedTagged);
+
                 return;
+            }
 
             var launcher = App.GetLauncher();
             if (launcher != null && unknownNodes.Count > 0)
@@ -271,7 +313,10 @@ namespace SourceFork.ViewModels
             Preferences.Instance.Save();
             RepositoryListSorter.NotifyChanged();
 
-            Status = App.Text("RepositoryHistory.RemovedUnknown", unknownNodes.Count + hiddenUnknown.Count);
+            Status = skippedTagged > 0
+                ? App.Text("RepositoryHistory.RemovedUnknownSkipped", unknownNodes.Count + hiddenUnknown.Count, skippedTagged)
+                : App.Text("RepositoryHistory.RemovedUnknown", unknownNodes.Count + hiddenUnknown.Count);
+
             Reload();
         }
 
@@ -352,5 +397,6 @@ namespace SourceFork.ViewModels
         private string _searchFilter = string.Empty;
         private string _status = string.Empty;
         private int _unknownCount = 0;
+        private bool _canCleanUnknown = false;
     }
 }

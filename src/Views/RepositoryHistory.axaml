@@ -96,7 +96,20 @@
                               Data="{StaticResource Icons.Repositories}"
                               Fill="{DynamicResource Brush.FG1}"/>
                         <StackPanel Grid.Column="1">
-                          <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                          <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
+                            <Border Height="16"
+                                    Margin="8,0,0,0"
+                                    Padding="6,0"
+                                    CornerRadius="8"
+                                    Background="{DynamicResource Brush.Badge}"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding HasTags}">
+                              <TextBlock Text="{DynamicResource Text.RepositoryHistory.Tagged}"
+                                         FontSize="10"
+                                         Foreground="{DynamicResource Brush.BadgeFG}"/>
+                            </Border>
+                          </StackPanel>
                           <TextBlock FontSize="10"
                                      Foreground="{DynamicResource Brush.FG2}"
                                      Text="{Binding Path}"
@@ -226,7 +239,7 @@
                 Height="28"
                 Padding="12,0"
                 Click="OnCleanUnknown"
-                IsEnabled="{Binding HasUnknown}">
+                IsEnabled="{Binding CanCleanUnknown}">
           <StackPanel Orientation="Horizontal">
             <Path Width="12" Height="12" Data="{StaticResource Icons.Clean}" Fill="{DynamicResource Brush.FG1}"/>
             <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.RepositoryHistory.CleanUnknown}"/>
@@ -238,7 +251,7 @@
                 Padding="12,0"
                 Margin="8,0,0,0"
                 Click="OnExcludeAll"
-                IsEnabled="{Binding !IsEmpty}">
+                IsEnabled="{Binding CanExcludeAll}">
           <StackPanel Orientation="Horizontal">
             <Path Width="12" Height="12" Data="{StaticResource Icons.RemoveAll}" Fill="{DynamicResource Brush.FG1}"/>
             <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.RepositoryHistory.ExcludeAll}"/>

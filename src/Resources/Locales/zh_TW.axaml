@@ -1180,7 +1180,7 @@
   <x:String x:Key="Text.RepositoryHistory.RestoredOne" xml:space="preserve">已恢復 {0}。</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoredMissing" xml:space="preserve">倉庫不存在：{0}</x:String>
   <x:String x:Key="Text.RepositoryHistory.ExcludeAll" xml:space="preserve">全部排除</x:String>
-  <x:String x:Key="Text.RepositoryHistory.ConfirmExcludeAll" xml:space="preserve">確定要處理清單中的 {0} 個倉庫嗎？有掃描來源的會加入隱藏清單，沒有來源的只會從清單中移除。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ConfirmExcludeAll" xml:space="preserve">確定要處理清單中的 {0} 個倉庫嗎？帶 Tag 的重要倉庫會被跳過；有掃描來源的會加入隱藏清單，沒有來源的只會從清單中移除。</x:String>
   <x:String x:Key="Text.RepositoryHistory.ExcludedAll" xml:space="preserve">已處理 {0} 個倉庫。</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoreAll" xml:space="preserve">全部恢復</x:String>
   <x:String x:Key="Text.RepositoryHistory.ConfirmRestoreAll" xml:space="preserve">確定要恢復全部 {0} 個已排除的倉庫嗎？它們會重新加入倉庫清單。</x:String>
@@ -1194,6 +1194,11 @@
   <x:String x:Key="Text.RepositoryHistory.Remove" xml:space="preserve">移除</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedOne" xml:space="preserve">已移除 {0}。</x:String>
   <x:String x:Key="Text.RepositoryHistory.CleanUnknown" xml:space="preserve">清理未知來源</x:String>
-  <x:String x:Key="Text.RepositoryHistory.ConfirmCleanUnknown" xml:space="preserve">確定要清理全部 {0} 個未知來源的倉庫嗎？它們會從倉庫清單和隱藏清單中移除。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ConfirmCleanUnknown" xml:space="preserve">確定要清理所有未知來源項目嗎？共 {0} 項，帶 Tag 的重要倉庫會被跳過。</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknown" xml:space="preserve">已清理 {0} 個未知來源項目。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Tagged" xml:space="preserve">重要</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludeTaggedConfirm" xml:space="preserve">倉庫「{0}」已打 Tag，被視為重要或高頻使用的倉庫。確定要從清單中移除嗎？</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludedAllSkipped" xml:space="preserve">已處理 {0} 個倉庫，跳過 {1} 個帶 Tag 的重要倉庫。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">已清理 {0} 個未知來源項目，跳過 {1} 個帶 Tag 的重要倉庫。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">沒有可清理的項目，跳過了 {0} 個帶 Tag 的重要倉庫。</x:String>
 </ResourceDictionary>

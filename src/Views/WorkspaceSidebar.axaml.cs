@@ -100,12 +100,23 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private void OnClosePage(object sender, RoutedEventArgs e)
+        private async void OnClosePage(object sender, RoutedEventArgs e)
         {
             if (sender is Button { DataContext: ViewModels.RepositoryListRow row } &&
                 row.Node is { IsRepository: true } node &&
                 DataContext is ViewModels.Launcher launcher)
             {
+                if (node.HasTags && TopLevel.GetTopLevel(this) is Window owner)
+                {
+                    var confirm = new Confirm();
+                    confirm.SetData(App.Text("RepositoryHistory.ExcludeTaggedConfirm", node.Name), Models.ConfirmButtonType.OkCancel);
+                    if (!await confirm.ShowDialog<bool>(owner))
+                    {
+                        e.Handled = true;
+                        return;
+                    }
+                }
+
                 var index = launcher.VisiblePages.IndexOf(row);
                 launcher.RemoveRepositoryFromList(node, index);
             }
