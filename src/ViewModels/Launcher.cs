@@ -108,6 +108,16 @@ namespace SourceFork.ViewModels
 
             PostActivePageChanged();
             RefreshVisiblePages();
+
+            Dispatcher.UIThread.Post(async () =>
+            {
+                var nodes = Preferences.Instance.RepositoryNodes.ToArray();
+                foreach (var node in nodes)
+                {
+                    if (node.IsRepository)
+                        await node.UpdateStatusAsync(false, null);
+                }
+            }, DispatcherPriority.Background);
         }
 
         public bool TryOpenRepositoryFromPath(string repo)

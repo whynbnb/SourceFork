@@ -25,6 +25,7 @@ SourceFork keeps SourceGit's Git client and rebuilds the main window around a pe
 ## What's different
 
 - **Flat repository sidebar** — all registered repositories are listed flat on the left and stay in sync with the Welcome page instead of using top tabs. The sidebar is searchable, collapsible, and remembers its width.
+- **Repository status in the sidebar** — each row shows its tags, current branch, ahead/behind commit counts, and the number of local changes. Statuses are refreshed in the background after startup.
 - **Single Welcome page** — there is no blank-page or new-tab concept. The sidebar lists only repositories, and a dedicated button at the bottom opens the one Welcome page.
 - **Tags** — give each repository multiple ordered tags with a primary tag, then filter the sidebar or Welcome page by any combination of tags.
 - **Sorting and grouping** — sort repositories by added time, name, or updated time in either direction, drag to define a custom order, and group the list by primary tag.
