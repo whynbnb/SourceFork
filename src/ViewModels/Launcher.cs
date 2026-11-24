@@ -249,7 +249,7 @@ namespace SourceFork.ViewModels
             GC.Collect();
         }
 
-        public void RemoveRepositoryFromList(RepositoryNode node, int focusIndex = -1)
+        public void RemoveRepositoryFromList(RepositoryNode node, int focusIndex = -1, bool? hide = null)
         {
             if (node == null)
                 return;
@@ -269,8 +269,15 @@ namespace SourceFork.ViewModels
             var page = Pages.FirstOrDefault(x => x.Node.Id == node.Id && x.Data is Repository);
             var wasActive = page != null && page == _activePage;
 
+            var shouldHide = hide ?? Preferences.Instance.HasScannedSource(node.Id);
+
             Preferences.Instance.RemoveNode(node, false);
-            Preferences.Instance.HideRepository(node.Id, false);
+
+            if (shouldHide)
+                Preferences.Instance.HideRepository(node.Id, false);
+            else
+                Preferences.Instance.RemoveScannedRepository(node.Id, false);
+
             Preferences.Instance.Save();
 
             if (page != null)
@@ -284,7 +291,7 @@ namespace SourceFork.ViewModels
                 SyncSelectedRow();
         }
 
-        public void RemoveRepositoriesFromList(IReadOnlyList<RepositoryNode> nodes)
+        public void RemoveRepositoriesFromList(IReadOnlyList<RepositoryNode> nodes, bool? hide = null)
         {
             if (nodes == null || nodes.Count == 0)
                 return;
@@ -309,8 +316,14 @@ namespace SourceFork.ViewModels
                 if (node == null)
                     continue;
 
+                var shouldHide = hide ?? Preferences.Instance.HasScannedSource(node.Id);
+
                 Preferences.Instance.RemoveNode(node, false);
-                Preferences.Instance.HideRepository(node.Id, false);
+
+                if (shouldHide)
+                    Preferences.Instance.HideRepository(node.Id, false);
+                else
+                    Preferences.Instance.RemoveScannedRepository(node.Id, false);
             }
 
             Preferences.Instance.Save();

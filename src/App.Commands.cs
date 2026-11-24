@@ -47,6 +47,15 @@ namespace SourceFork
             }
         }
 
+        public static async Task OpenScanFoldersAsync()
+        {
+            if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
+            {
+                var dialog = new Views.ScanFolders();
+                await dialog.ShowDialog(owner);
+            }
+        }
+
         public static readonly Command OpenPreferencesCommand = new Command(async _ => await OpenPreferencesAsync());
 
         public static readonly Command OpenHotkeysCommand = new Command(async _ =>

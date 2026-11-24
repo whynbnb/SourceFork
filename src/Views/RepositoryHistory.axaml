@@ -102,13 +102,17 @@
                                      Text="{Binding Path}"
                                      TextTrimming="CharacterEllipsis"
                                      ToolTip.Tip="{Binding Path}"/>
+                          <TextBlock FontSize="10"
+                                     Foreground="{DynamicResource Brush.FG2}"
+                                     Text="{Binding SourceText}"
+                                     TextTrimming="CharacterEllipsis"/>
                         </StackPanel>
                         <Button Grid.Column="2"
                                 Classes="flat"
                                 Height="26"
                                 Padding="10,0"
                                 VerticalAlignment="Center"
-                                Content="{DynamicResource Text.RepositoryHistory.Exclude}"
+                                Content="{Binding ActionText}"
                                 Click="OnExclude"/>
                       </Grid>
                     </Border>
@@ -181,6 +185,10 @@
                                    Text="{Binding Path}"
                                    TextTrimming="CharacterEllipsis"
                                    ToolTip.Tip="{Binding Path}"/>
+                        <TextBlock FontSize="10"
+                                   Foreground="{DynamicResource Brush.FG2}"
+                                   Text="{Binding SourceText}"
+                                   TextTrimming="CharacterEllipsis"/>
                       </StackPanel>
                       <Button Grid.Column="2"
                               Classes="flat"
@@ -217,6 +225,18 @@
         <Button Classes="flat"
                 Height="28"
                 Padding="12,0"
+                Click="OnCleanUnknown"
+                IsEnabled="{Binding HasUnknown}">
+          <StackPanel Orientation="Horizontal">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.Clean}" Fill="{DynamicResource Brush.FG1}"/>
+            <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.RepositoryHistory.CleanUnknown}"/>
+          </StackPanel>
+        </Button>
+
+        <Button Classes="flat"
+                Height="28"
+                Padding="12,0"
+                Margin="8,0,0,0"
                 Click="OnExcludeAll"
                 IsEnabled="{Binding !IsEmpty}">
           <StackPanel Orientation="Horizontal">

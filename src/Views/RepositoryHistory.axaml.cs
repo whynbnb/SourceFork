@@ -58,6 +58,31 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
+        private async void OnCleanUnknown(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.RepositoryHistory vm && vm.HasUnknown)
+            {
+                var confirm = new Confirm();
+                confirm.SetData(App.Text("RepositoryHistory.ConfirmCleanUnknown", vm.UnknownCount), Models.ConfirmButtonType.OkCancel);
+                if (await confirm.ShowDialog<bool>(this))
+                {
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        try
+                        {
+                            vm.CleanUnknown();
+                        }
+                        catch (Exception ex)
+                        {
+                            Models.Notification.Send(null, ex.Message, true);
+                        }
+                    }, DispatcherPriority.Background);
+                }
+            }
+
+            e.Handled = true;
+        }
+
         private async void OnExcludeAll(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.RepositoryHistory vm && vm.Repositories.Count > 0)

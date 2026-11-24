@@ -31,6 +31,7 @@ namespace SourceFork.ViewModels
                 _instance.PrepareOpenRepositories();
                 _instance.PrepareScanFolders();
                 _instance.PrepareHiddenRepositories();
+                _instance.PrepareScannedRepositories();
 
                 return _instance;
             }
@@ -501,6 +502,12 @@ namespace SourceFork.ViewModels
         } = [];
 
         public List<string> HiddenRepositories
+        {
+            get;
+            set;
+        } = [];
+
+        public List<Models.ScannedRepository> ScannedRepositories
         {
             get;
             set;
@@ -1002,6 +1009,72 @@ namespace SourceFork.ViewModels
                 if (!seen.Add(key) || RepositoryNodes.Any(x => IsSamePath(x.Id, path)))
                     HiddenRepositories.RemoveAt(i);
             }
+        }
+
+        private void PrepareScannedRepositories()
+        {
+            ScannedRepositories ??= [];
+
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = ScannedRepositories.Count - 1; i >= 0; i--)
+            {
+                var entry = ScannedRepositories[i];
+                if (entry == null || string.IsNullOrWhiteSpace(entry.Path))
+                {
+                    ScannedRepositories.RemoveAt(i);
+                    continue;
+                }
+
+                entry.Path = RepositoryScanner.NormalizePath(entry.Path);
+                entry.ScanFolder = RepositoryScanner.NormalizePath(entry.ScanFolder);
+
+                var key = OperatingSystem.IsLinux() ? entry.Path : entry.Path.ToLowerInvariant();
+                if (!seen.Add(key) ||
+                    (!RepositoryNodes.Any(x => IsSamePath(x.Id, entry.Path)) && !IsRepositoryHidden(entry.Path)))
+                    ScannedRepositories.RemoveAt(i);
+            }
+        }
+
+        public bool HasScannedSource(string path)
+        {
+            return ScannedRepositories.Any(x => IsSamePath(x.Path, path));
+        }
+
+        public void RecordScannedRepository(string path, string scanFolder, bool save = true)
+        {
+            if (string.IsNullOrWhiteSpace(path) || string.IsNullOrWhiteSpace(scanFolder))
+                return;
+
+            var normalizedPath = RepositoryScanner.NormalizePath(path);
+            var normalizedFolder = RepositoryScanner.NormalizePath(scanFolder);
+
+            foreach (var entry in ScannedRepositories)
+            {
+                if (IsSamePath(entry.Path, normalizedPath))
+                {
+                    entry.ScanFolder = normalizedFolder;
+                    if (save)
+                        Save();
+                    return;
+                }
+            }
+
+            ScannedRepositories.Add(new Models.ScannedRepository()
+            {
+                Path = normalizedPath,
+                ScanFolder = normalizedFolder,
+            });
+
+            if (save)
+                Save();
+        }
+
+        public void RemoveScannedRepository(string path, bool save = true)
+        {
+            ScannedRepositories.RemoveAll(x => IsSamePath(x.Path, path));
+
+            if (save)
+                Save();
         }
 
         public bool IsRepositoryHidden(string path)

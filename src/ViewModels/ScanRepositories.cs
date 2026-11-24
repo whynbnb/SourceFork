@@ -242,6 +242,12 @@ namespace SourceFork.ViewModels
 
         private string GetScanResultText(ScanFolderResult result)
         {
+            if (result.Hidden > 0 && result.Removed > 0)
+                return App.Text("ScanFolders.ResultWithHiddenAndRemoved", result.Added, result.Removed, result.Hidden);
+
+            if (result.Removed > 0)
+                return App.Text("ScanFolders.ResultWithRemoved", result.Added, result.Removed);
+
             if (result.Added == 0 && result.Hidden > 0)
                 return App.Text("ScanFolders.ResultAllHidden", result.Hidden);
 

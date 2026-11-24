@@ -175,7 +175,7 @@ namespace SourceFork.ViewModels
                 Native.OS.OpenTerminal(null);
         }
 
-        public async void ScanDefaultCloneDir()
+        public async void ManageScanFolders()
         {
             if (!Preferences.Instance.IsGitConfigured())
             {
@@ -183,7 +183,7 @@ namespace SourceFork.ViewModels
                 return;
             }
 
-            await App.OpenPreferencesAsync(3);
+            await App.OpenScanFoldersAsync();
         }
 
         public void ClearSearchFilter()

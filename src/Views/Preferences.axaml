@@ -456,13 +456,6 @@
 
         <TabItem>
           <TabItem.Header>
-            <TextBlock Classes="tab_header" Text="{DynamicResource Text.Preferences.Scanning}"/>
-          </TabItem.Header>
-          <v:ScanRepositories x:Name="ScanFoldersPanel" Margin="8"/>
-        </TabItem>
-
-        <TabItem>
-          <TabItem.Header>
             <TextBlock Classes="tab_header" Text="{DynamicResource Text.Preferences.GPG}"/>
           </TabItem.Header>
 

@@ -17,6 +17,7 @@ namespace SourceFork.ViewModels
         public bool Queued { get; set; } = false;
         public bool Canceled { get; set; } = false;
         public int Hidden { get; set; } = 0;
+        public int Removed { get; set; } = 0;
     }
 
     /// <summary>
@@ -177,7 +178,9 @@ namespace SourceFork.ViewModels
                     result.Untrusted = discovery.Untrusted;
                     result.Hidden = discovery.Hidden;
                     token.ThrowIfCancellationRequested();
-                    result.Added = await RegisterAsync(discovery.Paths, token);
+                    result.Added = await RegisterAsync(discovery.Paths, folder.Path, token);
+                    token.ThrowIfCancellationRequested();
+                    result.Removed = PruneMissingScannedRepositories(folder.Path);
                 }
             }
             catch (OperationCanceledException)
@@ -238,6 +241,7 @@ namespace SourceFork.ViewModels
                     result.FolderExists |= one.FolderExists;
                     result.Canceled |= one.Canceled;
                     result.Hidden += one.Hidden;
+                    result.Removed += one.Removed;
 
                     if (token.IsCancellationRequested)
                     {
@@ -260,7 +264,7 @@ namespace SourceFork.ViewModels
             return result;
         }
 
-        private async Task<int> RegisterAsync(List<string> found, CancellationToken token)
+        private async Task<int> RegisterAsync(List<string> found, string scanFolder, CancellationToken token)
         {
             var added = 0;
             try
@@ -278,6 +282,7 @@ namespace SourceFork.ViewModels
                     if (!existed)
                     {
                         added++;
+                        Preferences.Instance.RecordScannedRepository(normalized, scanFolder, false);
                         await node.UpdateStatusAsync(false, token);
                     }
                 }
@@ -289,6 +294,68 @@ namespace SourceFork.ViewModels
             }
 
             return added;
+        }
+
+        private int PruneMissingScannedRepositories(string scanFolder)
+        {
+            var normalizedFolder = NormalizePath(scanFolder);
+            var stale = new List<Models.ScannedRepository>();
+            var nodes = new List<RepositoryNode>();
+
+            foreach (var entry in Preferences.Instance.ScannedRepositories.ToList())
+            {
+                if (!Preferences.IsSamePath(entry.ScanFolder, normalizedFolder) ||
+                    IsRepositoryAlive(entry.Path))
+                    continue;
+
+                stale.Add(entry);
+
+                var node = Preferences.Instance.RepositoryNodes.FirstOrDefault(x => Preferences.IsSamePath(x.Id, entry.Path));
+                if (node != null && !nodes.Contains(node))
+                    nodes.Add(node);
+            }
+
+            if (stale.Count == 0)
+                return 0;
+
+            foreach (var entry in stale)
+                Preferences.Instance.RemoveScannedRepository(entry.Path, false);
+
+            if (nodes.Count == 0)
+            {
+                Preferences.Instance.Save();
+                return 0;
+            }
+
+            var launcher = App.GetLauncher();
+            if (launcher != null)
+            {
+                launcher.RemoveRepositoriesFromList(nodes, false);
+            }
+            else
+            {
+                foreach (var node in nodes)
+                    Preferences.Instance.RemoveNode(node, false);
+
+                Preferences.Instance.Save();
+                RepositoryListSorter.NotifyChanged();
+            }
+
+            return nodes.Count;
+        }
+
+        private static bool IsRepositoryAlive(string path)
+        {
+            if (!Directory.Exists(path))
+                return false;
+
+            var gitDir = Path.Combine(path, ".git");
+            if (Directory.Exists(gitDir) || File.Exists(gitDir))
+                return true;
+
+            return Directory.Exists(Path.Combine(path, "refs")) &&
+                Directory.Exists(Path.Combine(path, "objects")) &&
+                File.Exists(Path.Combine(path, "HEAD"));
         }
 
         private async Task<DiscoveryResult> FindRepositoriesAsync(Models.ScanFolder folder, CancellationToken token)
