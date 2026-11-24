@@ -71,5 +71,13 @@ namespace SourceFork.Views
 
             e.Handled = true;
         }
+
+        private void OnCancelScan(object _, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.ScanRepositories vm)
+                vm.CancelScan();
+
+            e.Handled = true;
+        }
     }
 }

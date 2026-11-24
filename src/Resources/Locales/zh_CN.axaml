@@ -1142,4 +1142,6 @@
   <x:String x:Key="Text.Welcome.ManageScanFolders" xml:space="preserve">管理自动扫描目录</x:String>
   <x:String x:Key="Text.ScanFolders.Depth" xml:space="preserve">扫描深度</x:String>
   <x:String x:Key="Text.ScanFolders.Mode" xml:space="preserve">自动扫描</x:String>
+  <x:String x:Key="Text.ScanFolders.Cancel" xml:space="preserve">停止扫描</x:String>
+  <x:String x:Key="Text.ScanFolders.Canceled" xml:space="preserve">扫描已取消。</x:String>
 </ResourceDictionary>

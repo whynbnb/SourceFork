@@ -115,17 +115,29 @@
                    IsVisible="{Binding IsScanning}"/>
       </StackPanel>
 
-      <Button Grid.Column="1"
-              Classes="flat primary"
-              Height="28"
-              Padding="16,0"
-              Click="OnScanAll"
-              IsEnabled="{Binding !IsScanning}">
-        <StackPanel Orientation="Horizontal">
-          <Path Width="12" Height="12" Data="{StaticResource Icons.Scan}" Fill="{DynamicResource AccentButtonForeground}"/>
-          <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.ScanFolders.ScanAll}"/>
-        </StackPanel>
-      </Button>
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <Button Classes="flat"
+                Height="28"
+                Padding="16,0"
+                Click="OnCancelScan"
+                IsVisible="{Binding IsScanning}">
+          <StackPanel Orientation="Horizontal">
+            <Path Width="10" Height="10" Data="{StaticResource Icons.Close}" Fill="{DynamicResource Brush.FG1}"/>
+            <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.ScanFolders.Cancel}"/>
+          </StackPanel>
+        </Button>
+
+        <Button Classes="flat primary"
+                Height="28"
+                Padding="16,0"
+                Click="OnScanAll"
+                IsVisible="{Binding !IsScanning}">
+          <StackPanel Orientation="Horizontal">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.Scan}" Fill="{DynamicResource AccentButtonForeground}"/>
+            <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.ScanFolders.ScanAll}"/>
+          </StackPanel>
+        </Button>
+      </StackPanel>
     </Grid>
   </Grid>
 </UserControl>

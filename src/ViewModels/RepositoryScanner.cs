@@ -15,6 +15,7 @@ namespace SourceFork.ViewModels
         public int Untrusted { get; set; } = 0;
         public bool FolderExists { get; set; } = false;
         public bool Queued { get; set; } = false;
+        public bool Canceled { get; set; } = false;
     }
 
     /// <summary>
@@ -60,6 +61,8 @@ namespace SourceFork.ViewModels
 
         public void Stop()
         {
+            CancelAllScans();
+
             foreach (var debounce in _debounces.Values)
             {
                 debounce.Cancel();
@@ -69,6 +72,32 @@ namespace SourceFork.ViewModels
             _debounces.Clear();
             DisposeWatchers();
             _started = false;
+        }
+
+        public void CancelAllScans()
+        {
+            try
+            {
+                _scanSession?.Cancel();
+            }
+            catch
+            {
+                // Cancellation callbacks may fail; the scans still stop.
+            }
+
+            foreach (var cts in _scanCancellations.Values.ToArray())
+            {
+                try
+                {
+                    cts.Cancel();
+                }
+                catch
+                {
+                    // Already finished.
+                }
+            }
+
+            _pendingFolders.Clear();
         }
 
         public void RefreshWatchers()
@@ -107,11 +136,17 @@ namespace SourceFork.ViewModels
             }
         }
 
-        public async Task<ScanFolderResult> ScanFolderAsync(Models.ScanFolder folder)
+        public async Task<ScanFolderResult> ScanFolderAsync(Models.ScanFolder folder, CancellationToken sessionToken = default)
         {
             var result = new ScanFolderResult();
             if (folder == null || string.IsNullOrWhiteSpace(folder.Path))
                 return result;
+
+            if (sessionToken.IsCancellationRequested)
+            {
+                result.Canceled = true;
+                return result;
+            }
 
             var key = NormalizePath(folder.Path);
             if (!_activeFolders.Add(key))
@@ -124,6 +159,12 @@ namespace SourceFork.ViewModels
                 return result;
             }
 
+            var cancellation = sessionToken.CanBeCanceled
+                ? CancellationTokenSource.CreateLinkedTokenSource(sessionToken)
+                : new CancellationTokenSource();
+            var token = cancellation.Token;
+            _scanCancellations[key] = cancellation;
+
             StateChanged?.Invoke();
             try
             {
@@ -131,19 +172,30 @@ namespace SourceFork.ViewModels
                 if (result.FolderExists)
                 {
                     ProgressDescription = App.Text("ScanFolders.Scanning", folder.Path);
-                    var found = await FindRepositoriesAsync(folder);
-                    result.Untrusted = _untrusted;
-                    result.Added = await RegisterAsync(found);
+                    var discovery = await FindRepositoriesAsync(folder, token);
+                    result.Untrusted = discovery.Untrusted;
+                    token.ThrowIfCancellationRequested();
+                    result.Added = await RegisterAsync(discovery.Paths, token);
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                result.Canceled = true;
             }
             catch (Exception e)
             {
-                Models.Notification.Send(null, e.Message, true);
+                if (!token.IsCancellationRequested)
+                    Models.Notification.Send(null, e.Message, true);
             }
             finally
             {
                 _activeFolders.Remove(key);
-                ProgressDescription = string.Empty;
+                _scanCancellations.Remove(key);
+                cancellation.Dispose();
+
+                if (_activeFolders.Count == 0)
+                    ProgressDescription = string.Empty;
+
                 StateChanged?.Invoke();
             }
 
@@ -160,16 +212,43 @@ namespace SourceFork.ViewModels
         public async Task<ScanFolderResult> ScanAllAsync(Func<Models.ScanFolder, bool> predicate = null)
         {
             var result = new ScanFolderResult();
-            var folders = Preferences.Instance.ScanFolders.ToList();
-            foreach (var folder in folders)
-            {
-                if (predicate != null && !predicate(folder))
-                    continue;
+            var session = new CancellationTokenSource();
+            var token = session.Token;
+            _scanSession = session;
 
-                var one = await ScanFolderAsync(folder);
-                result.Added += one.Added;
-                result.Untrusted += one.Untrusted;
-                result.FolderExists |= one.FolderExists;
+            try
+            {
+                var folders = Preferences.Instance.ScanFolders.ToList();
+                foreach (var folder in folders)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        result.Canceled = true;
+                        break;
+                    }
+
+                    if (predicate != null && !predicate(folder))
+                        continue;
+
+                    var one = await ScanFolderAsync(folder, token);
+                    result.Added += one.Added;
+                    result.Untrusted += one.Untrusted;
+                    result.FolderExists |= one.FolderExists;
+                    result.Canceled |= one.Canceled;
+
+                    if (token.IsCancellationRequested)
+                    {
+                        result.Canceled = true;
+                        break;
+                    }
+                }
+            }
+            finally
+            {
+                if (_scanSession == session)
+                    _scanSession = null;
+
+                session.Dispose();
             }
 
             if (result.Untrusted > 0)
@@ -178,70 +257,92 @@ namespace SourceFork.ViewModels
             return result;
         }
 
-        private async Task<int> RegisterAsync(List<string> found)
+        private async Task<int> RegisterAsync(List<string> found, CancellationToken token)
         {
             var added = 0;
-            foreach (var path in found)
+            try
             {
-                var normalized = NormalizePath(path);
-                var existed = Preferences.Instance.FindNode(normalized) != null;
-                var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(normalized, false);
-                if (!existed)
+                foreach (var path in found)
                 {
-                    added++;
-                    await node.UpdateStatusAsync(false, null);
+                    token.ThrowIfCancellationRequested();
+
+                    var normalized = NormalizePath(path);
+                    var existed = Preferences.Instance.FindNode(normalized) != null;
+                    var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(normalized, false);
+                    if (!existed)
+                    {
+                        added++;
+                        await node.UpdateStatusAsync(false, token);
+                    }
                 }
             }
-
-            if (added > 0)
+            finally
             {
-                Preferences.Instance.Save();
-                Welcome.Instance.Refresh();
+                if (added > 0)
+                {
+                    Preferences.Instance.Save();
+                    Welcome.Instance.Refresh();
+                }
             }
 
             return added;
         }
 
-        private async Task<List<string>> FindRepositoriesAsync(Models.ScanFolder folder)
+        private async Task<DiscoveryResult> FindRepositoriesAsync(Models.ScanFolder folder, CancellationToken token)
         {
-            var found = new List<string>();
-            var seen = new HashSet<string>(StringComparer.Ordinal);
+            // Snapshot registered repositories before leaving the UI thread.
+            var managed = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var node in Preferences.Instance.RepositoryNodes)
+                managed.Add(NormalizePath(node.Id));
 
-            _untrusted = 0;
-
-            var root = new DirectoryInfo(folder.Path);
-            var options = new EnumerationOptions()
+            return await Task.Run(async () =>
             {
-                AttributesToSkip = FileAttributes.Hidden | FileAttributes.System,
-                IgnoreInaccessible = true,
-                RecurseSubdirectories = false,
-            };
-
-            var rootGitDir = Path.Combine(root.FullName, ".git");
-            if (Directory.Exists(rootGitDir) || File.Exists(rootGitDir))
-            {
-                var rootPath = await QueryRepositoryAsync(root.FullName);
-                if (!string.IsNullOrEmpty(rootPath))
+                var discovery = new DiscoveryResult();
+                var seen = new HashSet<string>(StringComparer.Ordinal);
+                var root = new DirectoryInfo(folder.Path);
+                var options = new EnumerationOptions()
                 {
-                    found.Add(rootPath);
-                    seen.Add(NormalizePath(rootPath));
-                }
-            }
+                    AttributesToSkip = FileAttributes.Hidden | FileAttributes.System,
+                    IgnoreInaccessible = true,
+                    RecurseSubdirectories = false,
+                };
 
-            await WalkAsync(root, folder.Recursive, found, seen, options);
-            return found;
+                token.ThrowIfCancellationRequested();
+
+                var rootGitDir = Path.Combine(root.FullName, ".git");
+                if (Directory.Exists(rootGitDir) || File.Exists(rootGitDir))
+                {
+                    var rootPath = await QueryRepositoryAsync(root.FullName, discovery, token);
+                    if (!string.IsNullOrEmpty(rootPath))
+                    {
+                        discovery.Paths.Add(rootPath);
+                        seen.Add(NormalizePath(rootPath));
+                    }
+                }
+
+                await WalkAsync(root, folder.Recursive, discovery, seen, managed, options, token);
+                return discovery;
+            }, token);
         }
 
         private async Task WalkAsync(DirectoryInfo dir,
             bool recursive,
-            List<string> found,
+            DiscoveryResult discovery,
             HashSet<string> seen,
-            EnumerationOptions options)
+            HashSet<string> managed,
+            EnumerationOptions options,
+            CancellationToken token)
         {
+            token.ThrowIfCancellationRequested();
+
             DirectoryInfo[] subdirs;
             try
             {
                 subdirs = dir.GetDirectories("*", options);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
             }
             catch
             {
@@ -250,49 +351,54 @@ namespace SourceFork.ViewModels
 
             foreach (var subdir in subdirs)
             {
+                token.ThrowIfCancellationRequested();
+
                 if (subdir.Name.StartsWith(".", StringComparison.Ordinal) ||
-                    subdir.Name.Equals("node_modules", StringComparison.Ordinal) ||
-                    subdir.Name.Equals("Library", StringComparison.Ordinal))
+                    subdir.Name.Equals("node_modules", StringComparison.Ordinal))
                     continue;
 
                 if ((subdir.Attributes & FileAttributes.ReparsePoint) != 0)
                     continue;
 
                 var normalized = NormalizePath(subdir.FullName);
-                if (Preferences.Instance.FindNode(normalized) != null)
+                if (managed.Contains(normalized))
                     continue;
 
                 var gitDir = Path.Combine(subdir.FullName, ".git");
                 if (Directory.Exists(gitDir) || File.Exists(gitDir))
                 {
-                    var repoPath = await QueryRepositoryAsync(subdir.FullName);
+                    var repoPath = await QueryRepositoryAsync(subdir.FullName, discovery, token);
                     if (!string.IsNullOrEmpty(repoPath) && seen.Add(NormalizePath(repoPath)))
-                        found.Add(repoPath);
+                        discovery.Paths.Add(repoPath);
 
                     continue;
                 }
 
-                if (await new Commands.IsBareRepository(subdir.FullName).GetResultAsync())
+                var bare = new Commands.IsBareRepository(subdir.FullName) { CancellationToken = token };
+                if (await bare.GetResultAsync())
                 {
                     if (seen.Add(normalized))
-                        found.Add(normalized);
+                        discovery.Paths.Add(normalized);
 
                     continue;
                 }
 
                 if (recursive)
-                    await WalkAsync(subdir, true, found, seen, options);
+                    await WalkAsync(subdir, true, discovery, seen, managed, options, token);
             }
         }
 
-        private async Task<string> QueryRepositoryAsync(string path)
+        private async Task<string> QueryRepositoryAsync(string path, DiscoveryResult discovery, CancellationToken token)
         {
-            var test = await new Commands.QueryRepositoryRootPath(path).GetResultAsync();
+            token.ThrowIfCancellationRequested();
+
+            var query = new Commands.QueryRepositoryRootPath(path) { CancellationToken = token };
+            var test = await query.GetResultAsync();
             if (test.IsSuccess && !string.IsNullOrEmpty(test.StdOut))
                 return NormalizePath(test.StdOut.Trim());
 
             if (Models.SafeDirectories.IsUntrustedRepository(test.StdErr))
-                _untrusted++;
+                discovery.Untrusted++;
 
             return null;
         }
@@ -367,12 +473,19 @@ namespace SourceFork.ViewModels
             return path.Replace('\\', '/').TrimEnd('/');
         }
 
+        private class DiscoveryResult
+        {
+            public List<string> Paths { get; } = [];
+            public int Untrusted { get; set; } = 0;
+        }
+
         private readonly Dictionary<string, FileSystemWatcher> _watchers = new(StringComparer.Ordinal);
         private readonly Dictionary<string, CancellationTokenSource> _debounces = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, CancellationTokenSource> _scanCancellations = new(StringComparer.Ordinal);
         private readonly HashSet<string> _activeFolders = new(StringComparer.Ordinal);
         private readonly HashSet<string> _pendingFolders = new(StringComparer.Ordinal);
         private string _progressDescription = string.Empty;
-        private int _untrusted = 0;
+        private CancellationTokenSource _scanSession = null;
         private bool _started = false;
     }
 }

@@ -160,7 +160,7 @@ namespace SourceFork.ViewModels
                 var folder = new Models.ScanFolder()
                 {
                     Path = normalized,
-                    Recursive = true,
+                    Recursive = false,
                     Mode = Models.ScanFolderMode.OnStartup,
                 };
 
@@ -204,9 +204,16 @@ namespace SourceFork.ViewModels
             if (item == null)
                 return;
 
+            Status = string.Empty;
             var result = await RepositoryScanner.Instance.ScanFolderAsync(item.Folder);
             if (result.Queued)
                 return;
+
+            if (result.Canceled)
+            {
+                Status = App.Text("ScanFolders.Canceled");
+                return;
+            }
 
             if (!result.FolderExists)
                 Status = App.Text("ScanFolders.FolderMissing", item.Path);
@@ -216,8 +223,21 @@ namespace SourceFork.ViewModels
 
         public async Task ScanAllNowAsync()
         {
+            Status = string.Empty;
             var result = await RepositoryScanner.Instance.ScanAllAsync();
+            if (result.Canceled)
+            {
+                Status = App.Text("ScanFolders.Canceled");
+                return;
+            }
+
             Status = App.Text("ScanFolders.Result", result.Added);
+        }
+
+        public void CancelScan()
+        {
+            RepositoryScanner.Instance.CancelAllScans();
+            Status = App.Text("ScanFolders.Canceled");
         }
 
         private ScanFolderItem CreateItem(Models.ScanFolder folder)

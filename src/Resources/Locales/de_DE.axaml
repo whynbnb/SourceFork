@@ -1058,4 +1058,6 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Welcome.ManageScanFolders" xml:space="preserve">Manage auto-scan folders</x:String>
   <x:String x:Key="Text.ScanFolders.Depth" xml:space="preserve">Depth</x:String>
   <x:String x:Key="Text.ScanFolders.Mode" xml:space="preserve">Auto scan</x:String>
+  <x:String x:Key="Text.ScanFolders.Cancel" xml:space="preserve">Stop</x:String>
+  <x:String x:Key="Text.ScanFolders.Canceled" xml:space="preserve">Scan canceled.</x:String>
 </ResourceDictionary>
