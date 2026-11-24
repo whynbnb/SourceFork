@@ -548,7 +548,7 @@
   <x:String x:Key="Text.Hotkeys.Global.CloseTab" xml:space="preserve">关闭当前页面</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">切换到下一个页面</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">切换到上一个页面</x:String>
-  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">新建页面</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">打开欢迎页</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">打开本地仓库</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">打开偏好设置面板</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">显示工作区下拉菜单</x:String>
@@ -655,7 +655,7 @@
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">复制仓库路径</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">编辑</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">刷新</x:String>
-  <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">新标签页</x:String>
+  <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">欢迎页</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">粘贴</x:String>
   <x:String x:Key="Text.Period.DaysAgo" xml:space="preserve">{0}天前</x:String>
   <x:String x:Key="Text.Period.HourAgo" xml:space="preserve">1小时前</x:String>
@@ -1181,4 +1181,5 @@
   <x:String x:Key="Text.RepositoryHistory.ExcludedAllSkipped" xml:space="preserve">已处理 {0} 个仓库，跳过 {1} 个带 Tag 的重要仓库。</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">已清理 {0} 个未知来源条目，跳过 {1} 个带 Tag 的重要仓库。</x:String>
   <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">没有可清理的条目，跳过了 {0} 个带 Tag 的重要仓库。</x:String>
+  <x:String x:Key="Text.Sidebar.OpenWelcome" xml:space="preserve">欢迎页</x:String>
 </ResourceDictionary>

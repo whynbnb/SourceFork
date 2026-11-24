@@ -211,7 +211,7 @@ namespace SourceFork.Views
                 if (e.Key == Key.R)
                 {
                     if (vm.ActivePage.Data is not ViewModels.Welcome)
-                        vm.AddNewTab();
+                        vm.ShowWelcomePage();
 
                     ViewModels.Welcome.Instance.Clone();
                     e.Handled = true;
@@ -221,7 +221,7 @@ namespace SourceFork.Views
                 if (e.Key == Key.L)
                 {
                     if (vm.ActivePage.Data is not ViewModels.Welcome)
-                        vm.AddNewTab();
+                        vm.ShowWelcomePage();
 
                     ViewModels.Welcome.Instance.OpenLocalRepository();
                     e.Handled = true;
@@ -230,7 +230,7 @@ namespace SourceFork.Views
 
                 if (e.Key == Key.T && e.KeyModifiers == cmdKey)
                 {
-                    vm.AddNewTab();
+                    vm.ShowWelcomePage();
                     e.Handled = true;
                     return;
                 }

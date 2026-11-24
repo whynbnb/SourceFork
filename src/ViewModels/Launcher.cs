@@ -91,7 +91,7 @@ namespace SourceFork.ViewModels
 
             Pages = new AvaloniaList<LauncherPage>();
             AttachPagesEvents();
-            AddNewTab();
+            ShowWelcomePage();
 
             var repos = Preferences.Instance.OpenRepositories.ToArray();
             foreach (var repo in repos)
@@ -134,7 +134,7 @@ namespace SourceFork.ViewModels
                 else
                 {
                     if (ActivePage is not { Data: Welcome { }, Popup: null })
-                        AddNewTab();
+                        ShowWelcomePage();
 
                     if (Models.SafeDirectories.IsUntrustedRepository(test.StdErr) &&
                         Models.SafeDirectories.TryGetSafeDirectoryValue(repo, test.StdErr, out var safeDirectory))
@@ -159,10 +159,15 @@ namespace SourceFork.ViewModels
             _ignoreIndexChange = false;
         }
 
-        public void AddNewTab()
+        public void ShowWelcomePage()
         {
-            var page = new LauncherPage();
-            Pages.Add(page);
+            var page = Pages.FirstOrDefault(x => x.Data is Welcome);
+            if (page == null)
+            {
+                page = new LauncherPage();
+                Pages.Add(page);
+            }
+
             ActivePage = page;
         }
 
@@ -474,17 +479,8 @@ namespace SourceFork.ViewModels
 
             if (page == null)
             {
-                if (_activePage == null || _activePage.Node.IsRepository)
-                {
-                    page = new LauncherPage(node, repo);
-                    Pages.Add(page);
-                }
-                else
-                {
-                    page = _activePage;
-                    page.Node = node;
-                    page.Data = repo;
-                }
+                page = new LauncherPage(node, repo);
+                Pages.Add(page);
             }
             else
             {
@@ -588,23 +584,13 @@ namespace SourceFork.ViewModels
 
             VisiblePages.Clear();
 
-            var nonRepositories = new List<LauncherPage>();
             var pagesByNode = new Dictionary<string, LauncherPage>(StringComparer.Ordinal);
 
             foreach (var page in Pages)
             {
-                if (page.Data is not Repository)
-                {
-                    if (string.IsNullOrEmpty(filter) && _tagFilters.Count == 0)
-                        nonRepositories.Add(page);
-                    continue;
-                }
-
-                pagesByNode[page.Node.Id] = page;
+                if (page.Data is Repository)
+                    pagesByNode[page.Node.Id] = page;
             }
-
-            foreach (var page in nonRepositories)
-                VisiblePages.Add(new RepositoryListRow(page.Node, page));
 
             var repositories = EnumerateRepositoryNodes()
                 .Where(x => x.MatchesSearch(filter) && x.HasAllTags(_tagFilters))

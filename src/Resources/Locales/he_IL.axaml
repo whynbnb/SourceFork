@@ -497,7 +497,7 @@
   <x:String x:Key="Text.Hotkeys.Global.CloseTab" xml:space="preserve">סגור הלשונית הנוכחית</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">עבור ללשונית הבאה</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">עבור ללשונית הקודמת</x:String>
-  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">צור לשונית חדשה</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">Open Welcome page</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">פתח מאגר מקומי</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">פתח חלון ההעדפות</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">הצג תפריט נפתח של סביבת העבודה</x:String>
@@ -1052,4 +1052,5 @@
   <x:String x:Key="Text.RepositoryHistory.ExcludedAllSkipped" xml:space="preserve">Processed {0} repositories. Skipped {1} tagged repositories.</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">Cleaned {0} unknown-origin entries. Skipped {1} tagged repositories.</x:String>
   <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">Nothing to clean. Skipped {0} tagged repositories.</x:String>
+  <x:String x:Key="Text.Sidebar.OpenWelcome" xml:space="preserve">Welcome</x:String>
 </ResourceDictionary>

@@ -497,7 +497,7 @@
   <x:String x:Key="Text.Hotkeys.Global.CloseTab" xml:space="preserve">Fermer la page en cours</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">Aller à la page suivante</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">Aller à la page précédente</x:String>
-  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">Créer une nouvelle page</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">Open Welcome page</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">Ouvrir un dépôt local</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">Ouvrir le dialogue des préférences</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">Afficher le menu des espaces de travail</x:String>
@@ -1052,4 +1052,5 @@
   <x:String x:Key="Text.RepositoryHistory.ExcludedAllSkipped" xml:space="preserve">Processed {0} repositories. Skipped {1} tagged repositories.</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">Cleaned {0} unknown-origin entries. Skipped {1} tagged repositories.</x:String>
   <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">Nothing to clean. Skipped {0} tagged repositories.</x:String>
+  <x:String x:Key="Text.Sidebar.OpenWelcome" xml:space="preserve">Welcome</x:String>
 </ResourceDictionary>

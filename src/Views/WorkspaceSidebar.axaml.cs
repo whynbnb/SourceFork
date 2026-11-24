@@ -95,7 +95,7 @@ namespace SourceFork.Views
         private void OnAddPage(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Launcher launcher)
-                launcher.AddNewTab();
+                launcher.ShowWelcomePage();
 
             e.Handled = true;
         }

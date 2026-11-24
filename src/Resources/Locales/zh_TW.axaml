@@ -551,7 +551,7 @@
   <x:String x:Key="Text.Hotkeys.Global.CloseTab" xml:space="preserve">關閉目前頁面</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoNextTab" xml:space="preserve">切換到下一個頁面</x:String>
   <x:String x:Key="Text.Hotkeys.Global.GotoPrevTab" xml:space="preserve">切換到上一個頁面</x:String>
-  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">新增頁面</x:String>
+  <x:String x:Key="Text.Hotkeys.Global.NewTab" xml:space="preserve">開啟歡迎頁</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenLocalRepository" xml:space="preserve">開啟本機存放庫</x:String>
   <x:String x:Key="Text.Hotkeys.Global.OpenPreferences" xml:space="preserve">開啟偏好設定面板</x:String>
   <x:String x:Key="Text.Hotkeys.Global.ShowWorkspaceDropdownMenu" xml:space="preserve">顯示工作區的下拉式選單</x:String>
@@ -663,7 +663,7 @@
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">複製存放庫路徑</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">編輯</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">重新整理</x:String>
-  <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">新分頁</x:String>
+  <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">歡迎頁</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">貼上</x:String>
   <x:String x:Key="Text.Period.DaysAgo" xml:space="preserve">{0} 天前</x:String>
   <x:String x:Key="Text.Period.HourAgo" xml:space="preserve">1 小時前</x:String>
@@ -1201,4 +1201,5 @@
   <x:String x:Key="Text.RepositoryHistory.ExcludedAllSkipped" xml:space="preserve">已處理 {0} 個倉庫，跳過 {1} 個帶 Tag 的重要倉庫。</x:String>
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">已清理 {0} 個未知來源項目，跳過 {1} 個帶 Tag 的重要倉庫。</x:String>
   <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">沒有可清理的項目，跳過了 {0} 個帶 Tag 的重要倉庫。</x:String>
+  <x:String x:Key="Text.Sidebar.OpenWelcome" xml:space="preserve">歡迎頁</x:String>
 </ResourceDictionary>
