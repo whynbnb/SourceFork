@@ -8,13 +8,26 @@
              x:Class="SourceFork.Views.ScanRepositories"
              x:DataType="vm:ScanRepositories">
   <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="8">
-    <StackPanel Grid.Row="0" Orientation="Horizontal">
-      <Path Width="16" Height="16" Data="{StaticResource Icons.Scan}"/>
-      <TextBlock Margin="8,0,0,0"
-                 Classes="bold"
-                 FontSize="16"
-                 Text="{DynamicResource Text.ScanFolders.Title}"/>
-    </StackPanel>
+    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+      <StackPanel Grid.Column="0" Orientation="Horizontal">
+        <Path Width="16" Height="16" Data="{StaticResource Icons.Scan}"/>
+        <TextBlock Margin="8,0,0,0"
+                   Classes="bold"
+                   FontSize="16"
+                   Text="{DynamicResource Text.ScanFolders.Title}"/>
+      </StackPanel>
+
+      <Button Grid.Column="1"
+              Classes="flat"
+              Height="28"
+              Padding="12,0"
+              Click="OnCleanHistory">
+        <StackPanel Orientation="Horizontal">
+          <Path Width="12" Height="12" Data="{StaticResource Icons.Clean}" Fill="{DynamicResource Brush.FG1}"/>
+          <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.RepositoryHistory.Open}"/>
+        </StackPanel>
+      </Button>
+    </Grid>
 
     <TextBlock Grid.Row="1"
                Margin="0,6,0,12"

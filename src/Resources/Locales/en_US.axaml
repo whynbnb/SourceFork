@@ -1133,4 +1133,18 @@
   <x:String x:Key="Text.ScanFolders.Cancel" xml:space="preserve">Stop</x:String>
   <x:String x:Key="Text.ScanFolders.Canceled" xml:space="preserve">Scan canceled.</x:String>
   <x:String x:Key="Text.Repository.RemoveFromList" xml:space="preserve">Remove from List</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Title" xml:space="preserve">Clean Repository History</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Description" xml:space="preserve">Exclude repositories that should no longer appear. Excluded repositories are added to a hidden list and automatic scans will not add them again.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Search" xml:space="preserve">Search repositories...</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Repositories" xml:space="preserve">Repositories</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Exclude" xml:space="preserve">Exclude</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Excluded" xml:space="preserve">Excluded repositories</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Restore" xml:space="preserve">Restore</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Empty" xml:space="preserve">No repositories.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.NoExcluded" xml:space="preserve">No excluded repositories.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Open" xml:space="preserve">Clean history...</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Close" xml:space="preserve">Close</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludedOne" xml:space="preserve">Excluded {0}.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RestoredOne" xml:space="preserve">Restored {0}.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RestoredMissing" xml:space="preserve">Repository does not exist: {0}</x:String>
 </ResourceDictionary>

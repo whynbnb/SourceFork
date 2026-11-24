@@ -1145,4 +1145,18 @@
   <x:String x:Key="Text.ScanFolders.Cancel" xml:space="preserve">停止扫描</x:String>
   <x:String x:Key="Text.ScanFolders.Canceled" xml:space="preserve">扫描已取消。</x:String>
   <x:String x:Key="Text.Repository.RemoveFromList" xml:space="preserve">从列表中移除</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Title" xml:space="preserve">清理仓库历史</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Description" xml:space="preserve">排除不再需要显示的仓库。被排除的仓库会加入隐藏列表，自动扫描不会再次添加它们。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Search" xml:space="preserve">搜索仓库...</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Repositories" xml:space="preserve">仓库列表</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Exclude" xml:space="preserve">排除</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Excluded" xml:space="preserve">已排除的仓库</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Restore" xml:space="preserve">恢复</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Empty" xml:space="preserve">没有仓库。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.NoExcluded" xml:space="preserve">没有已排除的仓库。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Open" xml:space="preserve">清理历史记录...</x:String>
+  <x:String x:Key="Text.RepositoryHistory.Close" xml:space="preserve">关闭</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludedOne" xml:space="preserve">已排除 {0}。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RestoredOne" xml:space="preserve">已恢复 {0}。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RestoredMissing" xml:space="preserve">仓库不存在：{0}</x:String>
 </ResourceDictionary>

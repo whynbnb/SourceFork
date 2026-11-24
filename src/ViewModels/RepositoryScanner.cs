@@ -267,6 +267,9 @@ namespace SourceFork.ViewModels
                     token.ThrowIfCancellationRequested();
 
                     var normalized = NormalizePath(path);
+                    if (Preferences.Instance.IsRepositoryHidden(normalized))
+                        continue;
+
                     var existed = Preferences.Instance.FindNode(normalized) != null;
                     var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(normalized, false);
                     if (!existed)
@@ -287,10 +290,15 @@ namespace SourceFork.ViewModels
 
         private async Task<DiscoveryResult> FindRepositoriesAsync(Models.ScanFolder folder, CancellationToken token)
         {
-            // Snapshot registered repositories before leaving the UI thread.
-            var managed = new HashSet<string>(StringComparer.Ordinal);
+            // Snapshot registered repositories and hidden paths before leaving the UI thread.
+            var comparer = OperatingSystem.IsLinux() ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
+            var managed = new HashSet<string>(comparer);
             foreach (var node in Preferences.Instance.RepositoryNodes)
                 managed.Add(NormalizePath(node.Id));
+
+            var hidden = new HashSet<string>(comparer);
+            foreach (var path in Preferences.Instance.HiddenRepositories)
+                hidden.Add(NormalizePath(path));
 
             return await Task.Run(async () =>
             {
@@ -306,6 +314,10 @@ namespace SourceFork.ViewModels
 
                 token.ThrowIfCancellationRequested();
 
+                var rootNormalized = NormalizePath(root.FullName);
+                if (hidden.Contains(rootNormalized))
+                    return discovery;
+
                 var rootGitDir = Path.Combine(root.FullName, ".git");
                 if (Directory.Exists(rootGitDir) || File.Exists(rootGitDir))
                 {
@@ -317,7 +329,7 @@ namespace SourceFork.ViewModels
                     }
                 }
 
-                await WalkAsync(root, folder.Recursive, discovery, seen, managed, options, token);
+                await WalkAsync(root, folder.Recursive, discovery, seen, managed, hidden, options, token);
                 return discovery;
             }, token);
         }
@@ -327,6 +339,7 @@ namespace SourceFork.ViewModels
             DiscoveryResult discovery,
             HashSet<string> seen,
             HashSet<string> managed,
+            HashSet<string> hidden,
             EnumerationOptions options,
             CancellationToken token)
         {
@@ -358,7 +371,7 @@ namespace SourceFork.ViewModels
                     continue;
 
                 var normalized = NormalizePath(subdir.FullName);
-                if (managed.Contains(normalized))
+                if (managed.Contains(normalized) || hidden.Contains(normalized))
                     continue;
 
                 var gitDir = Path.Combine(subdir.FullName, ".git");
@@ -381,7 +394,7 @@ namespace SourceFork.ViewModels
                 }
 
                 if (recursive)
-                    await WalkAsync(subdir, true, discovery, seen, managed, options, token);
+                    await WalkAsync(subdir, true, discovery, seen, managed, hidden, options, token);
             }
         }
 

@@ -30,6 +30,7 @@ namespace SourceFork.ViewModels
                 _instance.PrepareRepositoryNodes();
                 _instance.PrepareOpenRepositories();
                 _instance.PrepareScanFolders();
+                _instance.PrepareHiddenRepositories();
 
                 return _instance;
             }
@@ -499,6 +500,12 @@ namespace SourceFork.ViewModels
             set;
         } = [];
 
+        public List<string> HiddenRepositories
+        {
+            get;
+            set;
+        } = [];
+
         public string ActiveRepositoryPath
         {
             get;
@@ -606,6 +613,9 @@ namespace SourceFork.ViewModels
 
                 AddNode(node, save);
             }
+
+            if (HiddenRepositories.RemoveAll(x => IsSamePath(x, normalized)) > 0 && save)
+                Save();
 
             return node;
         }
@@ -969,6 +979,73 @@ namespace SourceFork.ViewModels
                 if (!Enum.IsDefined(folder.Mode))
                     folder.Mode = Models.ScanFolderMode.OnStartup;
             }
+        }
+
+        private void PrepareHiddenRepositories()
+        {
+            HiddenRepositories ??= [];
+
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = HiddenRepositories.Count - 1; i >= 0; i--)
+            {
+                var path = HiddenRepositories[i];
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    HiddenRepositories.RemoveAt(i);
+                    continue;
+                }
+
+                path = RepositoryScanner.NormalizePath(path);
+                HiddenRepositories[i] = path;
+
+                var key = OperatingSystem.IsLinux() ? path : path.ToLowerInvariant();
+                if (!seen.Add(key) || RepositoryNodes.Any(x => IsSamePath(x.Id, path)))
+                    HiddenRepositories.RemoveAt(i);
+            }
+        }
+
+        public bool IsRepositoryHidden(string path)
+        {
+            if (HiddenRepositories.Count == 0 || string.IsNullOrWhiteSpace(path))
+                return false;
+
+            foreach (var hidden in HiddenRepositories)
+            {
+                if (IsSamePath(hidden, path))
+                    return true;
+            }
+
+            return false;
+        }
+
+        public void HideRepository(string path, bool save = true)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return;
+
+            var normalized = RepositoryScanner.NormalizePath(path);
+            if (!IsRepositoryHidden(normalized))
+                HiddenRepositories.Add(normalized);
+
+            if (save)
+                Save();
+        }
+
+        public void ShowRepository(string path, bool save = true)
+        {
+            HiddenRepositories.RemoveAll(x => IsSamePath(x, path));
+
+            if (save)
+                Save();
+        }
+
+        public static bool IsSamePath(string left, string right)
+        {
+            var l = RepositoryScanner.NormalizePath(left);
+            var r = RepositoryScanner.NormalizePath(right);
+            return OperatingSystem.IsLinux()
+                ? l.Equals(r, StringComparison.Ordinal)
+                : l.Equals(r, StringComparison.OrdinalIgnoreCase);
         }
 
         private void ReadLegacyWorkspaces(string json)

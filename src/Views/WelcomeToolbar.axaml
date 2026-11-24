@@ -43,6 +43,12 @@
     </StackPanel>
 
     <StackPanel Grid.Column="2" Orientation="Horizontal">
+      <Button Classes="icon_button" Width="32"
+              Click="OnCleanHistory"
+              ToolTip.Tip="{DynamicResource Text.RepositoryHistory.Open}">
+        <Path Width="14" Height="14" Data="{StaticResource Icons.Clean}"/>
+      </Button>
+
       <Button Classes="icon_button" Width="32" Command="{Binding ScanDefaultCloneDir}" ToolTip.Tip="{DynamicResource Text.Welcome.ManageScanFolders}">
         <Path Width="14" Height="14" Data="{StaticResource Icons.Scan}"/>
       </Button>

@@ -46,6 +46,14 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
+        private async void OnCleanHistory(object _, RoutedEventArgs e)
+        {
+            if (TopLevel.GetTopLevel(this) is Window owner)
+                await new RepositoryHistory().ShowDialog(owner);
+
+            e.Handled = true;
+        }
+
         private void OnRemoveFolder(object sender, RoutedEventArgs e)
         {
             if (sender is Control { DataContext: ViewModels.ScanFolderItem item } &&
