@@ -250,7 +250,7 @@
                       VerticalAlignment="Center"
                       Click="OnClosePage"
                       IsVisible="{Binding CanClose}"
-                      ToolTip.Tip="{DynamicResource Text.PageTabBar.Tab.Close}">
+                      ToolTip.Tip="{DynamicResource Text.Repository.RemoveFromList}">
                 <Path Width="8" Height="8" Data="{StaticResource Icons.Close}"/>
               </Button>
             </Grid>

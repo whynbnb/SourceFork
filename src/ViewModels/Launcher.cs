@@ -203,6 +203,10 @@ namespace SourceFork.ViewModels
 
         public void CloseTab(LauncherPage page)
         {
+            page ??= _activePage;
+            if (page == null || Pages.IndexOf(page) < 0)
+                return;
+
             if (Pages.Count == 1)
             {
                 var last = Pages[0];
@@ -234,8 +238,6 @@ namespace SourceFork.ViewModels
                 return;
             }
 
-            page ??= _activePage;
-
             var removeIdx = Pages.IndexOf(page);
             var activeIdx = Pages.IndexOf(_activePage);
             if (removeIdx == activeIdx)
@@ -245,6 +247,74 @@ namespace SourceFork.ViewModels
             Pages.RemoveAt(removeIdx);
             Preferences.Instance.Save();
             GC.Collect();
+        }
+
+        public void RemoveRepositoryFromList(RepositoryNode node, int focusIndex = -1)
+        {
+            if (node == null)
+                return;
+
+            if (focusIndex < 0)
+            {
+                for (var i = 0; i < VisiblePages.Count; i++)
+                {
+                    if (VisiblePages[i].Node?.Id == node.Id)
+                    {
+                        focusIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            var page = Pages.FirstOrDefault(x => x.Node.Id == node.Id && x.Data is Repository);
+            var wasActive = page != null && page == _activePage;
+
+            Preferences.Instance.RemoveNode(node, false);
+            Preferences.Instance.HideRepository(node.Id, false);
+            Preferences.Instance.Save();
+
+            if (page != null)
+                CloseTab(page);
+
+            RepositoryListSorter.NotifyChanged();
+
+            if (wasActive)
+                SelectNearestRow(focusIndex);
+            else
+                SyncSelectedRow();
+        }
+
+        private void SelectNearestRow(int index)
+        {
+            if (VisiblePages.Count == 0)
+                return;
+
+            RepositoryListRow target = null;
+            for (var i = Math.Clamp(index, 0, VisiblePages.Count - 1); i < VisiblePages.Count; i++)
+            {
+                if (VisiblePages[i].Node is { IsRepository: true })
+                {
+                    target = VisiblePages[i];
+                    break;
+                }
+            }
+
+            if (target == null)
+            {
+                for (var i = Math.Min(index, VisiblePages.Count - 1) - 1; i >= 0; i--)
+                {
+                    if (VisiblePages[i].Node is { IsRepository: true })
+                    {
+                        target = VisiblePages[i];
+                        break;
+                    }
+                }
+            }
+
+            if (target == null)
+                SyncSelectedRow();
+            else
+                SelectedRow = target;
         }
 
         public void CloseOtherTabs()

@@ -103,9 +103,12 @@ namespace SourceFork.Views
         private void OnClosePage(object sender, RoutedEventArgs e)
         {
             if (sender is Button { DataContext: ViewModels.RepositoryListRow row } &&
-                row.Page != null &&
+                row.Node is { IsRepository: true } node &&
                 DataContext is ViewModels.Launcher launcher)
-                launcher.CloseTab(row.Page);
+            {
+                var index = launcher.VisiblePages.IndexOf(row);
+                launcher.RemoveRepositoryFromList(node, index);
+            }
 
             e.Handled = true;
         }

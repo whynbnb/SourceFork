@@ -135,17 +135,9 @@ namespace SourceFork.ViewModels
                 return;
 
             var launcher = App.GetLauncher();
-            var page = launcher?.Pages.FirstOrDefault(x => x.Node.Id == node.Id && x.Data is Repository);
-
-            Preferences.Instance.RemoveNode(node, false);
-            Preferences.Instance.HideRepository(node.Id, false);
-            Preferences.Instance.Save();
-
-            if (page != null)
-                launcher.CloseTab(page);
+            launcher?.RemoveRepositoryFromList(node);
 
             Status = App.Text("RepositoryHistory.ExcludedOne", node.Name);
-            RepositoryListSorter.NotifyChanged();
             Reload();
         }
 
