@@ -182,6 +182,32 @@ namespace SourceFork.ViewModels
             Reload();
         }
 
+        public void RestoreAll()
+        {
+            var paths = HiddenRepositories.Select(x => x.Path).ToList();
+            if (paths.Count == 0)
+                return;
+
+            var restored = 0;
+            foreach (var path in paths)
+            {
+                if (!Directory.Exists(path))
+                    continue;
+
+                var existed = Preferences.Instance.FindNode(path) != null;
+                var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path, false);
+                if (node != null && !existed)
+                    restored++;
+            }
+
+            Preferences.Instance.HiddenRepositories.Clear();
+            Preferences.Instance.Save();
+            RepositoryListSorter.NotifyChanged();
+
+            Status = App.Text("RepositoryHistory.RestoredAll", restored);
+            Reload();
+        }
+
         public async Task RestoreAsync(RepositoryHistoryItem item)
         {
             if (item == null)

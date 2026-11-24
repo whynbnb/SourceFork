@@ -127,20 +127,34 @@
         </Grid>
       </Border>
 
-      <StackPanel Grid.Row="2" Margin="0,12,0,0" Orientation="Horizontal">
-        <TextBlock Text="{DynamicResource Text.RepositoryHistory.Excluded}" FontWeight="Bold"/>
-        <Border Height="16"
-                Margin="8,0,0,0"
-                Padding="6,0"
-                CornerRadius="8"
-                Background="{DynamicResource Brush.Badge}"
-                VerticalAlignment="Center"
-                IsVisible="{Binding HasHidden}">
-          <TextBlock Text="{Binding HiddenCount}"
-                     FontSize="10"
-                     Foreground="{DynamicResource Brush.BadgeFG}"/>
-        </Border>
-      </StackPanel>
+      <Grid Grid.Row="2" Margin="0,12,0,0" ColumnDefinitions="*,Auto">
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+          <TextBlock Text="{DynamicResource Text.RepositoryHistory.Excluded}" FontWeight="Bold"/>
+          <Border Height="16"
+                  Margin="8,0,0,0"
+                  Padding="6,0"
+                  CornerRadius="8"
+                  Background="{DynamicResource Brush.Badge}"
+                  VerticalAlignment="Center"
+                  IsVisible="{Binding HasHidden}">
+            <TextBlock Text="{Binding HiddenCount}"
+                       FontSize="10"
+                       Foreground="{DynamicResource Brush.BadgeFG}"/>
+          </Border>
+        </StackPanel>
+
+        <Button Grid.Column="1"
+                Classes="flat"
+                Height="26"
+                Padding="10,0"
+                Click="OnRestoreAll"
+                IsEnabled="{Binding HasHidden}">
+          <StackPanel Orientation="Horizontal">
+            <Path Width="11" Height="11" Data="{StaticResource Icons.Undo}" Fill="{DynamicResource Brush.FG1}"/>
+            <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.RepositoryHistory.RestoreAll}"/>
+          </StackPanel>
+        </Button>
+      </Grid>
 
       <Border Grid.Row="3"
               Margin="0,6,0,0"

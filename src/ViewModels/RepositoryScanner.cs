@@ -16,6 +16,7 @@ namespace SourceFork.ViewModels
         public bool FolderExists { get; set; } = false;
         public bool Queued { get; set; } = false;
         public bool Canceled { get; set; } = false;
+        public int Hidden { get; set; } = 0;
     }
 
     /// <summary>
@@ -174,6 +175,7 @@ namespace SourceFork.ViewModels
                     ProgressDescription = App.Text("ScanFolders.Scanning", folder.Path);
                     var discovery = await FindRepositoriesAsync(folder, token);
                     result.Untrusted = discovery.Untrusted;
+                    result.Hidden = discovery.Hidden;
                     token.ThrowIfCancellationRequested();
                     result.Added = await RegisterAsync(discovery.Paths, token);
                 }
@@ -235,6 +237,7 @@ namespace SourceFork.ViewModels
                     result.Untrusted += one.Untrusted;
                     result.FolderExists |= one.FolderExists;
                     result.Canceled |= one.Canceled;
+                    result.Hidden += one.Hidden;
 
                     if (token.IsCancellationRequested)
                     {
@@ -316,7 +319,10 @@ namespace SourceFork.ViewModels
 
                 var rootNormalized = NormalizePath(root.FullName);
                 if (hidden.Contains(rootNormalized))
+                {
+                    discovery.Hidden++;
                     return discovery;
+                }
 
                 var rootGitDir = Path.Combine(root.FullName, ".git");
                 if (Directory.Exists(rootGitDir) || File.Exists(rootGitDir))
@@ -371,7 +377,13 @@ namespace SourceFork.ViewModels
                     continue;
 
                 var normalized = NormalizePath(subdir.FullName);
-                if (managed.Contains(normalized) || hidden.Contains(normalized))
+                if (hidden.Contains(normalized))
+                {
+                    discovery.Hidden++;
+                    continue;
+                }
+
+                if (managed.Contains(normalized))
                     continue;
 
                 var gitDir = Path.Combine(subdir.FullName, ".git");
@@ -487,6 +499,7 @@ namespace SourceFork.ViewModels
         {
             public List<string> Paths { get; } = [];
             public int Untrusted { get; set; } = 0;
+            public int Hidden { get; set; } = 0;
         }
 
         private readonly Dictionary<string, FileSystemWatcher> _watchers = new(StringComparer.Ordinal);

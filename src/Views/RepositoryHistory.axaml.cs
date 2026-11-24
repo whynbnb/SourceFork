@@ -83,6 +83,31 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
+        private async void OnRestoreAll(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.RepositoryHistory vm && vm.HiddenRepositories.Count > 0)
+            {
+                var confirm = new Confirm();
+                confirm.SetData(App.Text("RepositoryHistory.ConfirmRestoreAll", vm.HiddenRepositories.Count), Models.ConfirmButtonType.OkCancel);
+                if (await confirm.ShowDialog<bool>(this))
+                {
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        try
+                        {
+                            vm.RestoreAll();
+                        }
+                        catch (Exception ex)
+                        {
+                            Models.Notification.Send(null, ex.Message, true);
+                        }
+                    }, DispatcherPriority.Background);
+                }
+            }
+
+            e.Handled = true;
+        }
+
         private void OnClose(object _, RoutedEventArgs e)
         {
             Close();

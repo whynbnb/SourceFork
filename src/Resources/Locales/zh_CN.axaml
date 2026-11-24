@@ -1162,4 +1162,9 @@
   <x:String x:Key="Text.RepositoryHistory.ExcludeAll" xml:space="preserve">全部排除</x:String>
   <x:String x:Key="Text.RepositoryHistory.ConfirmExcludeAll" xml:space="preserve">确定要排除列表中的 {0} 个仓库吗？它们会加入隐藏列表，之后可以恢复。</x:String>
   <x:String x:Key="Text.RepositoryHistory.ExcludedAll" xml:space="preserve">已排除 {0} 个仓库。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RestoreAll" xml:space="preserve">全部恢复</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ConfirmRestoreAll" xml:space="preserve">确定要恢复全部 {0} 个已排除的仓库吗？它们会重新加入仓库列表。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.RestoredAll" xml:space="preserve">已恢复 {0} 个仓库。</x:String>
+  <x:String x:Key="Text.ScanFolders.ResultAllHidden" xml:space="preserve">已添加 0 个仓库。{0} 个仓库因已被排除而跳过。</x:String>
+  <x:String x:Key="Text.ScanFolders.ResultWithHidden" xml:space="preserve">已添加 {0} 个仓库，跳过 {1} 个已排除的仓库。</x:String>
 </ResourceDictionary>

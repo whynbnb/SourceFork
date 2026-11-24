@@ -218,7 +218,7 @@ namespace SourceFork.ViewModels
             if (!result.FolderExists)
                 Status = App.Text("ScanFolders.FolderMissing", item.Path);
             else
-                Status = App.Text("ScanFolders.Result", result.Added);
+                Status = GetScanResultText(result);
         }
 
         public async Task ScanAllNowAsync()
@@ -231,13 +231,24 @@ namespace SourceFork.ViewModels
                 return;
             }
 
-            Status = App.Text("ScanFolders.Result", result.Added);
+            Status = GetScanResultText(result);
         }
 
         public void CancelScan()
         {
             RepositoryScanner.Instance.CancelAllScans();
             Status = App.Text("ScanFolders.Canceled");
+        }
+
+        private string GetScanResultText(ScanFolderResult result)
+        {
+            if (result.Added == 0 && result.Hidden > 0)
+                return App.Text("ScanFolders.ResultAllHidden", result.Hidden);
+
+            if (result.Hidden > 0)
+                return App.Text("ScanFolders.ResultWithHidden", result.Added, result.Hidden);
+
+            return App.Text("ScanFolders.Result", result.Added);
         }
 
         private ScanFolderItem CreateItem(Models.ScanFolder folder)
