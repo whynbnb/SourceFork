@@ -1119,4 +1119,7 @@
   <x:String x:Key="Text.RepositoryHistory.ExcludedOne" xml:space="preserve">Excluded {0}.</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoredOne" xml:space="preserve">Restored {0}.</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoredMissing" xml:space="preserve">Repository does not exist: {0}</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludeAll" xml:space="preserve">Exclude All</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ConfirmExcludeAll" xml:space="preserve">Exclude all {0} listed repositories? They will be added to the hidden list and can be restored later.</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludedAll" xml:space="preserve">Excluded {0} repositories.</x:String>
 </ResourceDictionary>

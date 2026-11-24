@@ -28,7 +28,7 @@ SourceFork keeps SourceGit's Git client and rebuilds the main window around a pe
 - **Tags** — give each repository multiple ordered tags with a primary tag, then filter the sidebar or Welcome page by any combination of tags.
 - **Sorting and grouping** — sort repositories by added time, name, or updated time in either direction, drag to define a custom order, and group the list by primary tag.
 - **Auto-scan folders** — register multiple folders and keep them forever. Each folder can scan only its direct children or recurse into subdirectories, and can scan on startup, only manually, or watch for changes in real time. Discovery runs on a background thread and can be stopped at any time; discovered repositories are added to the repository list without being opened.
-- **Clean repository history** — review the repository list and exclude entries one by one. Excluded repositories are kept in a hidden list, skipped by automatic scans, and can be restored later.
+- **Clean repository history** — review the repository list and exclude entries one by one, or exclude all listed entries with one confirmed action. Excluded repositories are kept in a hidden list, skipped by automatic scans, and can be restored later.
 - **Sidebar remove button** — the close button on a sidebar row removes that repository from the list, closes its page, adds it to the hidden list, and keeps focus on the adjacent repository.
 - **No groups or workspaces** — repository groups and workspaces were removed; all repositories are shown as a flat list.
 - **Preferences** — left-side navigation and a resizable window.

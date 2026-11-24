@@ -135,9 +135,50 @@ namespace SourceFork.ViewModels
                 return;
 
             var launcher = App.GetLauncher();
-            launcher?.RemoveRepositoryFromList(node);
+            if (launcher != null)
+            {
+                launcher.RemoveRepositoryFromList(node);
+            }
+            else
+            {
+                Preferences.Instance.RemoveNode(node, false);
+                Preferences.Instance.HideRepository(node.Id, false);
+                Preferences.Instance.Save();
+                RepositoryListSorter.NotifyChanged();
+            }
 
             Status = App.Text("RepositoryHistory.ExcludedOne", node.Name);
+            Reload();
+        }
+
+        public void ExcludeAll()
+        {
+            var nodes = Repositories
+                .Where(x => x.Node != null)
+                .Select(x => x.Node)
+                .ToList();
+
+            if (nodes.Count == 0)
+                return;
+
+            var launcher = App.GetLauncher();
+            if (launcher != null)
+            {
+                launcher.RemoveRepositoriesFromList(nodes);
+            }
+            else
+            {
+                foreach (var node in nodes)
+                {
+                    Preferences.Instance.RemoveNode(node, false);
+                    Preferences.Instance.HideRepository(node.Id, false);
+                }
+
+                Preferences.Instance.Save();
+                RepositoryListSorter.NotifyChanged();
+            }
+
+            Status = App.Text("RepositoryHistory.ExcludedAll", nodes.Count);
             Reload();
         }
 

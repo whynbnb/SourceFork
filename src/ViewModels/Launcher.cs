@@ -284,6 +284,51 @@ namespace SourceFork.ViewModels
                 SyncSelectedRow();
         }
 
+        public void RemoveRepositoriesFromList(IReadOnlyList<RepositoryNode> nodes)
+        {
+            if (nodes == null || nodes.Count == 0)
+                return;
+
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var node in nodes)
+            {
+                if (node != null)
+                    ids.Add(node.Id);
+            }
+
+            if (ids.Count == 0)
+                return;
+
+            var wasActive = _activePage is { Data: Repository } && ids.Contains(_activePage.Node.Id);
+            var pagesToClose = Pages
+                .Where(x => x.Data is Repository && ids.Contains(x.Node.Id))
+                .ToList();
+
+            foreach (var node in nodes)
+            {
+                if (node == null)
+                    continue;
+
+                Preferences.Instance.RemoveNode(node, false);
+                Preferences.Instance.HideRepository(node.Id, false);
+            }
+
+            Preferences.Instance.Save();
+
+            foreach (var page in pagesToClose)
+            {
+                if (Pages.IndexOf(page) >= 0)
+                    CloseTab(page);
+            }
+
+            RepositoryListSorter.NotifyChanged();
+
+            if (wasActive)
+                SelectNearestRow(0);
+            else
+                SyncSelectedRow();
+        }
+
         private void SelectNearestRow(int index)
         {
             if (VisiblePages.Count == 0)

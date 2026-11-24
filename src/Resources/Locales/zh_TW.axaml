@@ -1179,4 +1179,7 @@
   <x:String x:Key="Text.RepositoryHistory.ExcludedOne" xml:space="preserve">已排除 {0}。</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoredOne" xml:space="preserve">已恢復 {0}。</x:String>
   <x:String x:Key="Text.RepositoryHistory.RestoredMissing" xml:space="preserve">倉庫不存在：{0}</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludeAll" xml:space="preserve">全部排除</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ConfirmExcludeAll" xml:space="preserve">確定要排除清單中的 {0} 個倉庫嗎？它們會加入隱藏清單，之後可以恢復。</x:String>
+  <x:String x:Key="Text.RepositoryHistory.ExcludedAll" xml:space="preserve">已排除 {0} 個倉庫。</x:String>
 </ResourceDictionary>

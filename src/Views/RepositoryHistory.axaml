@@ -199,11 +199,24 @@
                  Text="{Binding Status}"
                  TextTrimming="CharacterEllipsis"/>
 
-      <Button Grid.Column="1"
-              Classes="flat primary"
-              Width="100" Height="28"
-              Content="{DynamicResource Text.RepositoryHistory.Close}"
-              Click="OnClose"/>
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <Button Classes="flat"
+                Height="28"
+                Padding="12,0"
+                Click="OnExcludeAll"
+                IsEnabled="{Binding !IsEmpty}">
+          <StackPanel Orientation="Horizontal">
+            <Path Width="12" Height="12" Data="{StaticResource Icons.RemoveAll}" Fill="{DynamicResource Brush.FG1}"/>
+            <TextBlock Margin="6,0,0,0" Text="{DynamicResource Text.RepositoryHistory.ExcludeAll}"/>
+          </StackPanel>
+        </Button>
+
+        <Button Classes="flat primary"
+                Width="100" Height="28"
+                Margin="8,0,0,0"
+                Content="{DynamicResource Text.RepositoryHistory.Close}"
+                Click="OnClose"/>
+      </StackPanel>
     </Grid>
   </Grid>
 </v:ChromelessWindow>
