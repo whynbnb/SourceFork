@@ -537,6 +537,24 @@ namespace SourceFork.ViewModels
             set;
         } = false;
 
+        public Models.RepositoryGroupSortMode RepositoryGroupSort
+        {
+            get;
+            set;
+        } = Models.RepositoryGroupSortMode.Name;
+
+        public bool RepositoryGroupSortDescending
+        {
+            get;
+            set;
+        } = false;
+
+        public List<string> CollapsedRepositoryGroups
+        {
+            get;
+            set;
+        } = [];
+
         public AvaloniaList<Models.CustomAction> CustomActions
         {
             get;
@@ -671,27 +689,6 @@ namespace SourceFork.ViewModels
             }
         }
 
-        public void CaptureRepositoryOrder(IEnumerable<string> orderedIds)
-        {
-            var order = new Dictionary<string, int>(StringComparer.Ordinal);
-            var index = 0;
-            foreach (var id in orderedIds)
-            {
-                if (!order.ContainsKey(id))
-                    order[id] = index++;
-            }
-
-            var sorted = RepositoryNodes
-                .Select((node, idx) => (node, idx))
-                .OrderBy(x => order.TryGetValue(x.node.Id, out var pos) ? pos : int.MaxValue)
-                .ThenBy(x => x.idx)
-                .Select(x => x.node)
-                .ToList();
-
-            RepositoryNodes.Clear();
-            RepositoryNodes.AddRange(sorted);
-        }
-
         public void MoveRepositoryNodeBefore(string sourceId, string targetId)
         {
             var source = FindNode(sourceId);
@@ -717,6 +714,35 @@ namespace SourceFork.ViewModels
             RepositoryNodes.Remove(source);
             RepositoryNodes.Add(source);
             Save();
+        }
+
+        public void MoveRepositoryNodeAfter(string sourceId, string targetId)
+        {
+            var source = FindNode(sourceId);
+            var target = FindNode(targetId);
+            if (source == null || target == null || source == target)
+                return;
+
+            RepositoryNodes.Remove(source);
+            var index = RepositoryNodes.IndexOf(target);
+            RepositoryNodes.Insert(index < 0 ? RepositoryNodes.Count : index + 1, source);
+            Save();
+        }
+
+        public bool IsRepositoryGroupCollapsed(string key)
+        {
+            var normalized = key ?? string.Empty;
+            return CollapsedRepositoryGroups.Any(x => string.Equals(x, normalized, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void ToggleRepositoryGroupCollapsed(string key)
+        {
+            var normalized = key ?? string.Empty;
+            var index = CollapsedRepositoryGroups.FindIndex(x => string.Equals(x, normalized, StringComparison.OrdinalIgnoreCase));
+            if (index >= 0)
+                CollapsedRepositoryGroups.RemoveAt(index);
+            else
+                CollapsedRepositoryGroups.Add(normalized);
         }
 
         public void Save()

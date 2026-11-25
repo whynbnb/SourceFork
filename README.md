@@ -24,16 +24,16 @@ SourceFork keeps SourceGit's Git client and rebuilds the main window around a pe
 
 ## What's different
 
-- **Flat repository sidebar** — all registered repositories are listed flat on the left and stay in sync with the Welcome page instead of using top tabs. The sidebar is searchable, collapsible, and remembers its width.
+- **Flat repository sidebar** — all registered repositories are listed flat on the left and stay in sync with the Welcome page instead of using top tabs. The sidebar is searchable, collapsible, and remembers its width. Drag reordering shows an insertion line, and right click opens the row menu without changing the selection.
 - **Repository status in the sidebar** — each row shows its tags, current branch, ahead/behind commit counts, and the number of local changes. Statuses are refreshed in the background after startup.
 - **Single Welcome page** — there is no blank-page or new-tab concept. The sidebar lists only repositories, and a dedicated button at the bottom opens the one Welcome page.
 - **Tags** — give each repository multiple ordered tags with a primary tag, then filter the sidebar or Welcome page by any combination of tags.
-- **Sorting and grouping** — sort repositories by added time, name, or updated time in either direction, drag to define a custom order, and group the list by primary tag.
+- **Sorting and grouping** — sort repositories by added time, name, or updated time in either direction, drag to define a custom order, and group the list by primary tag. Groups can be sorted by name or repository count and collapsed individually with their state remembered.
 - **Auto-scan folders** — open a standalone scan window from the Welcome toolbar and register multiple folders. Each folder can scan only its direct children or recurse into subdirectories, and can scan on startup, only manually, or watch for changes in real time. Discovery runs on a background thread and can be stopped at any time; discovered repositories are added without being opened, and scanned repositories that disappear from disk are removed automatically.
 - **Clean repository history** — review the repository list and exclude entries one by one, or exclude/restore all entries with one confirmed action. Only repositories with a recorded scan source enter the hidden list; manually added repositories without a source are simply removed. A separate action cleans up every unknown-origin entry at once.
 - **Tagged repositories are protected** — repositories with tags are treated as important. Removing one individually requires an extra confirmation, and bulk cleanup skips them automatically.
 - **Sidebar remove button** — the close button on a sidebar row removes that repository from the list, closes its page, adds it to the hidden list, and keeps focus on the adjacent repository.
-- **No groups or workspaces** — repository groups and workspaces were removed; all repositories are shown as a flat list.
+- **No repository groups or workspaces** — manual repository groups and workspaces were removed; all repositories are shown as a single list. Automatic grouping by primary tag is still available.
 - **Preferences** — left-side navigation and a resizable window.
 - **Icon** — orange replaced with blue.
 

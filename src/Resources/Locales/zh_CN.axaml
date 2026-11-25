@@ -1123,6 +1123,12 @@
   <x:String x:Key="Text.RepositorySort.Custom" xml:space="preserve">自定义（拖动排序）</x:String>
   <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">倒序</x:String>
   <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">按主要 Tag 分组</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort" xml:space="preserve">分组排序</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Name" xml:space="preserve">按名称</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Count" xml:space="preserve">按仓库数量</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">倒序</x:String>
+  <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">折叠分组</x:String>
+  <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">展开分组</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">无 Tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">扫描</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">自动扫描目录</x:String>

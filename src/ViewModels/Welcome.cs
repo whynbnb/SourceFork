@@ -66,13 +66,22 @@ namespace SourceFork.ViewModels
 
             _isUpdatingStatus = true;
 
-            foreach (var row in Rows)
+            try
             {
-                if (row.Node != null)
-                    await row.Node.UpdateStatusAsync(force, token);
-            }
+                // Rows can be rebuilt by tag changes, sorting or scanning while statuses update.
+                foreach (var row in Rows.ToArray())
+                {
+                    if (token?.IsCancellationRequested == true)
+                        break;
 
-            _isUpdatingStatus = false;
+                    if (row.Node != null)
+                        await row.Node.UpdateStatusAsync(force, token);
+                }
+            }
+            finally
+            {
+                _isUpdatingStatus = false;
+            }
         }
 
         public List<string> GetAvailableTags()

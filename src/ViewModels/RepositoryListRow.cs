@@ -86,4 +86,29 @@ namespace SourceFork.ViewModels
             }
         }
     }
+
+    public class RepositoryGroupRow : RepositoryListRow
+    {
+        public string GroupKey
+        {
+            get;
+        }
+
+        public bool IsExpanded
+        {
+            get;
+        }
+
+        public bool IsCollapsed
+        {
+            get => !IsExpanded;
+        }
+
+        public RepositoryGroupRow(string groupKey, string groupName, bool isCollapsed)
+            : base(groupName)
+        {
+            GroupKey = groupKey;
+            IsExpanded = !isCollapsed;
+        }
+    }
 }

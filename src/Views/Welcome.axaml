@@ -104,6 +104,7 @@
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ItemsSource="{Binding Rows}"
                SelectionMode="Single"
+               ContextRequested="OnTreeContextRequested"
                LostFocus="OnTreeViewLostFocus"
                DragDrop.AllowDrop="True"
                DragDrop.DragOver="DragOverTreeView"
@@ -135,27 +136,52 @@
           </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
 
-        <ListBox.ItemTemplate>
-          <DataTemplate DataType="vm:RepositoryListRow">
-            <Grid Background="Transparent">
-              <TextBlock Height="26"
-                         Margin="4,8,8,2"
+        <ListBox.DataTemplates>
+          <DataTemplate DataType="vm:RepositoryGroupRow">
+            <Grid Height="26"
+                  Margin="4,8,8,2"
+                  ColumnDefinitions="Auto,*"
+                  Background="Transparent">
+              <Path Grid.Column="0"
+                    Width="10" Height="10"
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    Data="{StaticResource Icons.Down}"
+                    Fill="{DynamicResource Brush.FG2}"
+                    IsVisible="{Binding IsExpanded}"/>
+              <Path Grid.Column="0"
+                    Width="10" Height="10"
+                    Margin="0,0,4,0"
+                    VerticalAlignment="Center"
+                    Data="{StaticResource Icons.TriangleRight}"
+                    Fill="{DynamicResource Brush.FG2}"
+                    IsVisible="{Binding IsCollapsed}"/>
+              <TextBlock Grid.Column="1"
                          VerticalAlignment="Center"
                          FontSize="11"
                          FontWeight="Bold"
                          Foreground="{DynamicResource Brush.FG2}"
                          Text="{Binding GroupName}"
-                         IsVisible="{Binding IsGroupHeader}"/>
+                         TextTrimming="CharacterEllipsis"/>
+              <ToolTip.Tip>
+                <Panel>
+                  <TextBlock Text="{DynamicResource Text.RepositorySort.CollapseGroup}" IsVisible="{Binding IsExpanded}"/>
+                  <TextBlock Text="{DynamicResource Text.RepositorySort.ExpandGroup}" IsVisible="{Binding IsCollapsed}"/>
+                </Panel>
+              </ToolTip.Tip>
+            </Grid>
+          </DataTemplate>
 
+          <DataTemplate DataType="vm:RepositoryListRow">
+            <Grid Background="Transparent">
               <Grid Height="30"
                     ColumnDefinitions="18,*,Auto"
                     ClipToBounds="True"
-                    ContextRequested="OnTreeNodeContextRequested"
                     DoubleTapped="OnDoubleTappedTreeNode"
                     PointerPressed="OnRowPointerPressed"
                     PointerMoved="OnRowPointerMoved"
                     PointerReleased="OnRowPointerReleased"
-                    IsVisible="{Binding !IsGroupHeader}">
+                    PointerCaptureLost="OnRowPointerCaptureLost">
                 <v:Bookmark Grid.Column="0"
                             Width="14" Height="14"
                             HorizontalAlignment="Center"
@@ -250,7 +276,7 @@
               </Grid>
             </Grid>
           </DataTemplate>
-        </ListBox.ItemTemplate>
+        </ListBox.DataTemplates>
       </ListBox>
     </Grid>
 

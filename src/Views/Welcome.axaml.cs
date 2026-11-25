@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 
 namespace SourceFork.Views
@@ -17,6 +18,28 @@ namespace SourceFork.Views
         public Welcome()
         {
             InitializeComponent();
+            TreeContainer.AddHandler(PointerPressedEvent, OnTreePointerPressed, RoutingStrategies.Tunnel, true);
+        }
+
+        private void OnTreePointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            var item = FindListBoxItem(e.Source);
+            if (item?.DataContext is not ViewModels.RepositoryListRow row)
+                return;
+
+            var properties = e.GetCurrentPoint(TreeContainer).Properties;
+            if (properties.IsRightButtonPressed)
+            {
+                // Right click opens the item menu without changing the current selection.
+                e.Handled = true;
+                return;
+            }
+
+            if (properties.IsLeftButtonPressed && row is ViewModels.RepositoryGroupRow group)
+            {
+                e.Handled = true;
+                Dispatcher.UIThread.Post(() => ToggleGroup(group), DispatcherPriority.Background);
+            }
         }
 
         protected override async void OnLoaded(RoutedEventArgs e)
@@ -153,9 +176,29 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private void OnTreeNodeContextRequested(object sender, ContextRequestedEventArgs ev)
+        private void OnTreeContextRequested(object sender, ContextRequestedEventArgs ev)
         {
-            if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Node: { } node } } grid)
+            var item = FindListBoxItem(ev.Source);
+            if (item?.DataContext is not ViewModels.RepositoryListRow row)
+                return;
+
+            if (row is ViewModels.RepositoryGroupRow group)
+            {
+                var groupMenu = new ContextMenu();
+                var toggle = new MenuItem();
+                toggle.Header = App.Text(group.IsCollapsed ? "RepositorySort.ExpandGroup" : "RepositorySort.CollapseGroup");
+                toggle.Click += (_, e) =>
+                {
+                    ToggleGroup(group);
+                    e.Handled = true;
+                };
+                groupMenu.Items.Add(toggle);
+                groupMenu.Open(item);
+                ev.Handled = true;
+                return;
+            }
+
+            if (row.Node is not { } node)
                 return;
 
             var menu = new ContextMenu();
@@ -231,25 +274,29 @@ namespace SourceFork.Views
                 menu.Items.Add(delete);
             }
 
-            menu.Open(grid);
+            menu.Open(item);
             ev.Handled = true;
         }
 
         private void OnRowPointerPressed(object sender, PointerPressedEventArgs e)
         {
+            _dragStart = null;
+            _dragStarted = false;
+
+            if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Node: { } } })
+                return;
+
             if (e.GetCurrentPoint(sender as Visual).Properties.IsLeftButtonPressed)
-            {
                 _dragStart = e;
-                _dragStarted = false;
-            }
-            else
-            {
-                _dragStart = null;
-                _dragStarted = false;
-            }
         }
 
         private void OnRowPointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+            _dragStart = null;
+            _dragStarted = false;
+        }
+
+        private void OnRowPointerCaptureLost(object sender, PointerCaptureLostEventArgs e)
         {
             _dragStart = null;
             _dragStarted = false;
@@ -261,16 +308,48 @@ namespace SourceFork.Views
                 return;
 
             if (sender is not Grid { DataContext: ViewModels.RepositoryListRow { Node: { } node } } grid)
+            {
+                _dragStart = null;
                 return;
+            }
+
+            if (TopLevel.GetTopLevel(grid) == null ||
+                _dragStart.Source is not Visual pressSource ||
+                TopLevel.GetTopLevel(pressSource) == null)
+            {
+                _dragStart = null;
+                return;
+            }
+
+            if (!e.GetCurrentPoint(grid).Properties.IsLeftButtonPressed)
+            {
+                _dragStart = null;
+                return;
+            }
 
             var delta = e.GetPosition(grid) - _dragStart.GetPosition(grid);
             if (delta.X * delta.X + delta.Y * delta.Y < 64)
                 return;
 
             _dragStarted = true;
-            var data = new DataTransfer();
-            data.Add(DataTransferItem.Create(_dragData, node.Id));
-            await DragDrop.DoDragDropAsync(_dragStart, data, DragDropEffects.Move);
+
+            try
+            {
+                var data = new DataTransfer();
+                data.Add(DataTransferItem.Create(_dragData, node.Id));
+                await DragDrop.DoDragDropAsync(_dragStart, data, DragDropEffects.Move);
+            }
+            catch (Exception ex)
+            {
+                // The source row can be rebuilt while the pointer is still pressed.
+                // Do not let a stale drag event crash the application.
+                Console.Error.WriteLine($"Welcome drag start failed: {ex}");
+            }
+            finally
+            {
+                _dragStart = null;
+                _dragStarted = false;
+            }
         }
 
         private void OnTreeViewLostFocus(object _1, RoutedEventArgs _2)
@@ -302,18 +381,30 @@ namespace SourceFork.Views
         {
             if (e.DataTransfer.TryGetValue(_dragData) is { Length: > 0 } sourceId)
             {
-                var target = e.Source is Control { DataContext: ViewModels.RepositoryListRow { Node.IsRepository: true } row }
+                var item = FindListBoxItem(e.Source);
+                var target = item?.DataContext is ViewModels.RepositoryListRow { Node.IsRepository: true } row
                     ? row.Node.Id
                     : null;
+                var after = false;
 
-                ViewModels.Preferences.Instance.CaptureRepositoryOrder(ViewModels.Welcome.Instance.Rows
-                    .Where(x => x.Node != null)
-                    .Select(x => x.Node.Id));
+                if (target != null &&
+                    item != null &&
+                    item.TranslatePoint(new Point(0, 0), TreeContainer) is { } top)
+                {
+                    after = e.GetPosition(TreeContainer).Y > top.Y + item.Bounds.Height / 2;
+                }
 
                 if (!string.IsNullOrEmpty(target))
-                    ViewModels.Preferences.Instance.MoveRepositoryNodeBefore(sourceId, target);
+                {
+                    if (after)
+                        ViewModels.Preferences.Instance.MoveRepositoryNodeAfter(sourceId, target);
+                    else
+                        ViewModels.Preferences.Instance.MoveRepositoryNodeBefore(sourceId, target);
+                }
                 else
+                {
                     ViewModels.Preferences.Instance.MoveRepositoryNodeToEnd(sourceId);
+                }
 
                 ViewModels.Preferences.Instance.RepositorySort = Models.RepositorySortMode.Custom;
                 ViewModels.RepositoryListSorter.NotifyChanged();
@@ -375,6 +466,20 @@ namespace SourceFork.Views
                 node.Open();
                 e.Handled = true;
             }
+        }
+
+        private void ToggleGroup(ViewModels.RepositoryGroupRow group)
+        {
+            ViewModels.Preferences.Instance.ToggleRepositoryGroupCollapsed(group.GroupKey);
+            ViewModels.RepositoryListSorter.NotifyChanged();
+        }
+
+        private static ListBoxItem FindListBoxItem(object source)
+        {
+            if (source is ListBoxItem item)
+                return item;
+
+            return (source as Visual)?.FindAncestorOfType<ListBoxItem>();
         }
 
         private PointerPressedEventArgs _dragStart;

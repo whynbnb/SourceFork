@@ -90,18 +90,19 @@
     </Grid>
 
     <!-- Repositories -->
-    <ListBox x:Name="PagesList"
-             Grid.Row="1"
-             Margin="6,0"
-             Background="Transparent"
-             ItemsSource="{Binding VisiblePages}"
-             SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
-             SelectionMode="Single"
-             DragDrop.AllowDrop="True"
-             DragDrop.DragOver="OnPagesDragOver"
-             DragDrop.Drop="OnPagesDrop"
-             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-             ScrollViewer.VerticalScrollBarVisibility="Auto">
+    <Grid Grid.Row="1" Margin="6,0" ClipToBounds="True">
+      <ListBox x:Name="PagesList"
+               Background="Transparent"
+               ItemsSource="{Binding VisiblePages}"
+               SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
+               SelectionMode="Single"
+               ContextRequested="OnPagesContextRequested"
+               DragDrop.AllowDrop="True"
+               DragDrop.DragOver="OnPagesDragOver"
+               DragDrop.DragLeave="OnPagesDragLeave"
+               DragDrop.Drop="OnPagesDrop"
+               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+               ScrollViewer.VerticalScrollBarVisibility="Auto">
       <ListBox.Styles>
         <Style Selector="ListBoxItem">
           <Setter Property="Margin" Value="0,1"/>
@@ -124,12 +125,12 @@
           </Setter>
         </Style>
         <Style Selector="ListBoxItem:pointerover /template/ Border#PART_Background">
-          <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
-          <Setter Property="Opacity" Value=".08"/>
+          <Setter Property="Background" Value="{DynamicResource Brush.FG1}"/>
+          <Setter Property="Opacity" Value=".03"/>
         </Style>
         <Style Selector="ListBoxItem:selected /template/ Border#PART_Background">
           <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
-          <Setter Property="Opacity" Value=".2"/>
+          <Setter Property="Opacity" Value=".18"/>
         </Style>
         <Style Selector="ListBoxItem Button.page_close">
           <Setter Property="Opacity" Value="0"/>
@@ -141,26 +142,50 @@
         </Style>
       </ListBox.Styles>
 
-      <ListBox.ItemTemplate>
-        <DataTemplate DataType="vm:RepositoryListRow">
-          <Grid Background="Transparent">
-            <TextBlock Height="26"
-                       Margin="10,6,8,2"
+      <ListBox.DataTemplates>
+        <DataTemplate DataType="vm:RepositoryGroupRow">
+          <Grid Height="26"
+                Margin="10,6,8,2"
+                ColumnDefinitions="Auto,*"
+                Background="Transparent">
+            <Path Grid.Column="0"
+                  Width="10" Height="10"
+                  Margin="0,0,4,0"
+                  VerticalAlignment="Center"
+                  Data="{StaticResource Icons.Down}"
+                  Fill="{DynamicResource Brush.FG2}"
+                  IsVisible="{Binding IsExpanded}"/>
+            <Path Grid.Column="0"
+                  Width="10" Height="10"
+                  Margin="0,0,4,0"
+                  VerticalAlignment="Center"
+                  Data="{StaticResource Icons.TriangleRight}"
+                  Fill="{DynamicResource Brush.FG2}"
+                  IsVisible="{Binding IsCollapsed}"/>
+            <TextBlock Grid.Column="1"
                        VerticalAlignment="Center"
                        FontSize="11"
                        FontWeight="Bold"
                        Foreground="{DynamicResource Brush.FG2}"
                        Text="{Binding GroupName}"
-                       TextTrimming="CharacterEllipsis"
-                       IsVisible="{Binding IsGroupHeader}"/>
+                       TextTrimming="CharacterEllipsis"/>
+            <ToolTip.Tip>
+              <Panel>
+                <TextBlock Text="{DynamicResource Text.RepositorySort.CollapseGroup}" IsVisible="{Binding IsExpanded}"/>
+                <TextBlock Text="{DynamicResource Text.RepositorySort.ExpandGroup}" IsVisible="{Binding IsCollapsed}"/>
+              </Panel>
+            </ToolTip.Tip>
+          </Grid>
+        </DataTemplate>
 
+        <DataTemplate DataType="vm:RepositoryListRow">
+          <Grid Background="Transparent">
             <Grid MinHeight="42"
                   ColumnDefinitions="Auto,*,Auto,Auto"
-                  ContextRequested="OnItemContextRequested"
                   PointerPressed="OnRowPointerPressed"
                   PointerMoved="OnRowPointerMoved"
                   PointerReleased="OnRowPointerReleased"
-                  IsVisible="{Binding !IsGroupHeader}">
+                  PointerCaptureLost="OnRowPointerCaptureLost">
               <ToolTip.Tip>
                 <Grid>
                   <TextBlock Text="{DynamicResource Text.Welcome}" IsVisible="{Binding !Node.IsRepository}"/>
@@ -235,10 +260,10 @@
                   </ItemsControl>
                 </Grid>
                 <ContentControl Grid.Row="2"
+                                MinHeight="18"
                                 Margin="0,3,0,0"
                                 HorizontalAlignment="Left"
-                                Content="{Binding Node.Status, Mode=OneWay}"
-                                IsVisible="{Binding Node.Status, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                Content="{Binding Node.Status, Mode=OneWay}">
                   <ContentControl.DataTemplates>
                     <DataTemplate DataType="m:RepositoryStatus">
                       <StackPanel Orientation="Horizontal" ClipToBounds="True">
@@ -295,7 +320,6 @@
                       Width="20" Height="20"
                       Margin="0,0,6,0"
                       VerticalAlignment="Center"
-                      Click="OnClosePage"
                       IsVisible="{Binding CanClose}"
                       ToolTip.Tip="{DynamicResource Text.Repository.RemoveFromList}">
                 <Path Width="8" Height="8" Data="{StaticResource Icons.Close}"/>
@@ -303,8 +327,17 @@
             </Grid>
           </Grid>
         </DataTemplate>
-      </ListBox.ItemTemplate>
+      </ListBox.DataTemplates>
     </ListBox>
+
+      <Canvas x:Name="DropIndicatorLayer" IsHitTestVisible="False">
+        <Border x:Name="DropIndicator"
+                Height="2"
+                Background="{DynamicResource Brush.Accent}"
+                CornerRadius="1"
+                IsVisible="False"/>
+      </Canvas>
+    </Grid>
 
     <!-- New Page -->
     <Border Grid.Row="2"

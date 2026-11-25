@@ -1121,6 +1121,12 @@
   <x:String x:Key="Text.RepositorySort.Custom" xml:space="preserve">Custom (drag to reorder)</x:String>
   <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">Descending</x:String>
   <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">Group by primary tag</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort" xml:space="preserve">Сортировка групп</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Name" xml:space="preserve">По имени</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Count" xml:space="preserve">По количеству репозиториев</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">По убыванию</x:String>
+  <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">Свернуть группу</x:String>
+  <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">Развернуть группу</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

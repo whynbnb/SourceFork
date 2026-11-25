@@ -1039,6 +1039,12 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.RepositorySort.Custom" xml:space="preserve">Custom (drag to reorder)</x:String>
   <x:String x:Key="Text.RepositorySort.Descending" xml:space="preserve">Descending</x:String>
   <x:String x:Key="Text.RepositorySort.GroupByPrimaryTag" xml:space="preserve">Group by primary tag</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort" xml:space="preserve">Gruppensortierung</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Name" xml:space="preserve">Nach Name</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Count" xml:space="preserve">Nach Repository-Anzahl</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">Absteigend</x:String>
+  <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">Gruppe einklappen</x:String>
+  <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">Gruppe ausklappen</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

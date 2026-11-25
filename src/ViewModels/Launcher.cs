@@ -29,6 +29,9 @@ namespace SourceFork.ViewModels
             get => _selectedRow;
             set
             {
+                if (_isRefreshingVisiblePages)
+                    return;
+
                 if (!SetProperty(ref _selectedRow, value))
                     return;
 
@@ -38,8 +41,17 @@ namespace SourceFork.ViewModels
                 }
                 else if (value?.Node is { IsRepository: true } node)
                 {
-                    node.Open();
-                    SyncSelectedRow();
+                    var selected = value;
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        if (!ReferenceEquals(_selectedRow, selected) ||
+                            App.GetLauncher() == null ||
+                            Preferences.Instance.FindNode(node.Id) == null)
+                            return;
+
+                        node.Open();
+                        SyncSelectedRow();
+                    }, DispatcherPriority.Background);
                 }
                 else if (value is { IsGroupHeader: true })
                 {
@@ -504,8 +516,6 @@ namespace SourceFork.ViewModels
                 PostActivePageChanged();
             else
                 ActivePage = page;
-
-            RefreshVisiblePages();
         }
 
         public void OpenSubRepository(LauncherPage ownerPage, string fullpath)
@@ -592,23 +602,31 @@ namespace SourceFork.ViewModels
             foreach (var row in VisiblePages)
                 row.Detach();
 
-            VisiblePages.Clear();
-
-            var pagesByNode = new Dictionary<string, LauncherPage>(StringComparer.Ordinal);
-
-            foreach (var page in Pages)
+            _isRefreshingVisiblePages = true;
+            try
             {
-                if (page.Data is Repository)
-                    pagesByNode[page.Node.Id] = page;
+                VisiblePages.Clear();
+
+                var pagesByNode = new Dictionary<string, LauncherPage>(StringComparer.Ordinal);
+
+                foreach (var page in Pages)
+                {
+                    if (page.Data is Repository)
+                        pagesByNode[page.Node.Id] = page;
+                }
+
+                var repositories = EnumerateRepositoryNodes()
+                    .Where(x => x.MatchesSearch(filter) && x.HasAllTags(_tagFilters))
+                    .ToList();
+
+                foreach (var row in RepositoryListSorter.Build(repositories,
+                    node => pagesByNode.TryGetValue(node.Id, out var page) ? page : null))
+                    VisiblePages.Add(row);
             }
-
-            var repositories = EnumerateRepositoryNodes()
-                .Where(x => x.MatchesSearch(filter) && x.HasAllTags(_tagFilters))
-                .ToList();
-
-            foreach (var row in RepositoryListSorter.Build(repositories,
-                node => pagesByNode.TryGetValue(node.Id, out var page) ? page : null))
-                VisiblePages.Add(row);
+            finally
+            {
+                _isRefreshingVisiblePages = false;
+            }
 
             SyncSelectedRow();
         }
@@ -810,6 +828,7 @@ namespace SourceFork.ViewModels
         private RepositoryListRow _selectedRow;
         private LauncherPage _activePage;
         private bool _ignoreIndexChange;
+        private bool _isRefreshingVisiblePages;
         private string _repositoryFilter = string.Empty;
         private ICommandPalette _commandPalette;
         private Models.Version _newVersion = null;

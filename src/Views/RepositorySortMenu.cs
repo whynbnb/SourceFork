@@ -52,6 +52,27 @@ namespace SourceFork.Views
             };
             menu.Items.Add(group);
 
+            var groupSort = new MenuItem();
+            groupSort.Header = App.Text("RepositorySort.GroupSort");
+            groupSort.IsEnabled = prefs.RepositoryGroupByPrimaryTag;
+            AddGroupMode(owner, groupSort, App.Text("RepositorySort.GroupSort.Name"), Models.RepositoryGroupSortMode.Name);
+            AddGroupMode(owner, groupSort, App.Text("RepositorySort.GroupSort.Count"), Models.RepositoryGroupSortMode.Count);
+            groupSort.Items.Add(new MenuItem() { Header = "-" });
+
+            var groupDescending = new MenuItem();
+            groupDescending.Header = App.Text("RepositorySort.GroupSort.Descending");
+            groupDescending.IsEnabled = prefs.RepositoryGroupByPrimaryTag;
+            if (prefs.RepositoryGroupSortDescending)
+                groupDescending.Icon = owner.CreateMenuIcon("Icons.Check");
+            groupDescending.Click += (_, e) =>
+            {
+                prefs.RepositoryGroupSortDescending = !prefs.RepositoryGroupSortDescending;
+                ViewModels.RepositoryListSorter.NotifyChanged();
+                e.Handled = true;
+            };
+            groupSort.Items.Add(groupDescending);
+            menu.Items.Add(groupSort);
+
             menu.Open(anchor);
 
             void AddMode(Control control, ContextMenu target, string header, Models.RepositorySortMode mode)
@@ -63,6 +84,21 @@ namespace SourceFork.Views
                 item.Click += (_, e) =>
                 {
                     prefs.RepositorySort = mode;
+                    ViewModels.RepositoryListSorter.NotifyChanged();
+                    e.Handled = true;
+                };
+                target.Items.Add(item);
+            }
+
+            void AddGroupMode(Control control, MenuItem target, string header, Models.RepositoryGroupSortMode mode)
+            {
+                var item = new MenuItem();
+                item.Header = header;
+                if (prefs.RepositoryGroupSort == mode)
+                    item.Icon = control.CreateMenuIcon("Icons.Check");
+                item.Click += (_, e) =>
+                {
+                    prefs.RepositoryGroupSort = mode;
                     ViewModels.RepositoryListSorter.NotifyChanged();
                     e.Handled = true;
                 };

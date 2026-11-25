@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Avalonia.Threading;
+
 namespace SourceFork.ViewModels
 {
     public static class RepositoryListSorter
@@ -41,8 +43,23 @@ namespace SourceFork.ViewModels
 
             var keys = groups.Keys
                 .Where(x => !string.IsNullOrEmpty(x))
-                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
                 .ToList();
+
+            if (prefs.RepositoryGroupSort == Models.RepositoryGroupSortMode.Count)
+            {
+                keys.Sort((l, r) =>
+                {
+                    var result = groups[l].Count.CompareTo(groups[r].Count);
+                    return result != 0 ? result : string.Compare(l, r, StringComparison.OrdinalIgnoreCase);
+                });
+            }
+            else
+            {
+                keys.Sort((l, r) => string.Compare(l, r, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (prefs.RepositoryGroupSortDescending)
+                keys.Reverse();
 
             if (groups.ContainsKey(string.Empty))
                 keys.Add(string.Empty);
@@ -52,7 +69,11 @@ namespace SourceFork.ViewModels
                 var name = string.IsNullOrEmpty(key)
                     ? App.Text("RepositoryTags.NoPrimary")
                     : $"#{displayNames[key]}";
-                rows.Add(new RepositoryListRow(name));
+                var collapsed = prefs.IsRepositoryGroupCollapsed(key);
+                rows.Add(new RepositoryGroupRow(key, name, collapsed));
+
+                if (collapsed)
+                    continue;
 
                 var group = groups[key];
                 Sort(group);
@@ -65,6 +86,12 @@ namespace SourceFork.ViewModels
 
         public static void NotifyChanged()
         {
+            if (!Dispatcher.UIThread.CheckAccess())
+            {
+                Dispatcher.UIThread.Post(NotifyChanged);
+                return;
+            }
+
             Preferences.Instance.Save();
             App.GetLauncher()?.RefreshRepositoryFilters();
             Welcome.Instance.Refresh();

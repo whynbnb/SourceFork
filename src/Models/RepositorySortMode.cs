@@ -7,4 +7,10 @@ namespace SourceFork.Models
         Name,
         UpdatedTime,
     }
+
+    public enum RepositoryGroupSortMode
+    {
+        Name = 0,
+        Count,
+    }
 }
