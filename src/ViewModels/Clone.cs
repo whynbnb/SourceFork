@@ -47,12 +47,6 @@ namespace SourceFork.ViewModels
             set => SetProperty(ref _local, value);
         }
 
-        public int Bookmark
-        {
-            get => _bookmark;
-            set => SetProperty(ref _bookmark, value);
-        }
-
         public string ExtraArgs
         {
             get => _extraArgs;
@@ -146,7 +140,6 @@ namespace SourceFork.ViewModels
             log.Complete();
 
             var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(path);
-            node.Bookmark = _bookmark;
             await node.UpdateStatusAsync(false, null);
 
             var launcher = App.GetLauncher();
@@ -180,7 +173,6 @@ namespace SourceFork.ViewModels
         private string _parentFolder = string.Empty;
         private string _local = string.Empty;
         private string _extraArgs = string.Empty;
-        private int _bookmark = 0;
         private CancellationTokenSource _cancellation = null;
     }
 }

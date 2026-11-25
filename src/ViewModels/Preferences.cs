@@ -537,6 +537,12 @@ namespace SourceFork.ViewModels
             set;
         } = false;
 
+        public bool ShowRepositoryPathInSidebar
+        {
+            get => _showRepositoryPathInSidebar;
+            set => SetProperty(ref _showRepositoryPathInSidebar, value);
+        }
+
         public Models.RepositoryGroupSortMode RepositoryGroupSort
         {
             get;
@@ -630,8 +636,6 @@ namespace SourceFork.ViewModels
                 node = new RepositoryNode()
                 {
                     Id = normalized,
-                    Name = Path.GetFileName(normalized),
-                    Bookmark = 0,
                     IsRepository = true,
                     CreateTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                 };
@@ -652,12 +656,6 @@ namespace SourceFork.ViewModels
 
             if (save)
                 Save();
-        }
-
-        public void SortByRenamedNode(RepositoryNode node)
-        {
-            SortNodes(RepositoryNodes);
-            Save();
         }
 
         public void AutoRemoveInvalidNode()
@@ -952,7 +950,6 @@ namespace SourceFork.ViewModels
                     RepositoryNodes.Add(new RepositoryNode()
                     {
                         Id = path,
-                        Name = Path.GetFileName(path),
                         IsRepository = true,
                         CreateTime = now - RepositoryNodes.Count,
                     });
@@ -1225,6 +1222,7 @@ namespace SourceFork.ViewModels
         private int _subjectGuideLength = 50;
         private bool _useFixedTabWidth = true;
         private bool _useAutoHideScrollBars = true;
+        private bool _showRepositoryPathInSidebar = false;
         private bool _useGitHubStyleAvatar = true;
         private bool _useCompactBranchNamesInGraph = true;
 

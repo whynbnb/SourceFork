@@ -15,12 +15,6 @@ namespace SourceFork.ViewModels
             set => SetProperty(ref _repoPath, value, true);
         }
 
-        public int Bookmark
-        {
-            get => _bookmark;
-            set => SetProperty(ref _bookmark, value);
-        }
-
         public OpenLocalRepository(string pageId)
         {
             _pageId = pageId;
@@ -54,7 +48,7 @@ namespace SourceFork.ViewModels
                         {
                             if (page.Node.Id.Equals(_pageId, StringComparison.Ordinal))
                             {
-                                page.Popup = new TrustRepository(page.Node.Id, _repoPath, test.StdErr, safeDirectory, true, _bookmark);
+                                page.Popup = new TrustRepository(page.Node.Id, _repoPath, test.StdErr, safeDirectory, true);
                                 break;
                             }
                         }
@@ -65,7 +59,7 @@ namespace SourceFork.ViewModels
                         {
                             if (page.Node.Id.Equals(_pageId, StringComparison.Ordinal))
                             {
-                                page.Popup = new Init(page.Node.Id, _repoPath, _bookmark, test.StdErr);
+                                page.Popup = new Init(page.Node.Id, _repoPath, test.StdErr);
                                 break;
                             }
                         }
@@ -76,7 +70,6 @@ namespace SourceFork.ViewModels
             }
 
             var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(repoRoot);
-            node.Bookmark = _bookmark;
             await node.UpdateStatusAsync(false, null);
             RepositoryListSorter.NotifyChanged();
             node.Open();
@@ -85,6 +78,5 @@ namespace SourceFork.ViewModels
 
         private string _pageId = string.Empty;
         private string _repoPath = string.Empty;
-        private int _bookmark = 0;
     }
 }

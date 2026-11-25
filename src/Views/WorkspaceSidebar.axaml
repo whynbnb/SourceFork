@@ -159,9 +159,11 @@
                   Width="10" Height="10"
                   Margin="0,0,4,0"
                   VerticalAlignment="Center"
-                  Data="{StaticResource Icons.TriangleRight}"
+                  Data="{StaticResource Icons.Down}"
                   Fill="{DynamicResource Brush.FG2}"
-                  IsVisible="{Binding IsCollapsed}"/>
+                  IsVisible="{Binding IsCollapsed}"
+                  RenderTransformOrigin="50%,50%"
+                  RenderTransform="rotate(270deg)"/>
             <TextBlock Grid.Column="1"
                        VerticalAlignment="Center"
                        FontSize="11"
@@ -181,59 +183,99 @@
         <DataTemplate DataType="vm:RepositoryListRow">
           <Grid Background="Transparent">
             <Grid MinHeight="42"
-                  ColumnDefinitions="Auto,*,Auto,Auto"
+                  ColumnDefinitions="*,Auto"
                   PointerPressed="OnRowPointerPressed"
                   PointerMoved="OnRowPointerMoved"
                   PointerReleased="OnRowPointerReleased"
                   PointerCaptureLost="OnRowPointerCaptureLost">
               <ToolTip.Tip>
-                <Grid>
-                  <TextBlock Text="{DynamicResource Text.Welcome}" IsVisible="{Binding !Node.IsRepository}"/>
-                  <StackPanel IsVisible="{Binding Node.IsRepository}">
-                    <TextBlock Text="{Binding Node.Id}"/>
-                    <TextBlock Text="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToDesc}}"
-                               IsVisible="{Binding IsDirty}"
-                               Foreground="{DynamicResource Brush.FG2}"/>
-                  </StackPanel>
-                </Grid>
+                <StackPanel>
+                  <TextBlock Text="{Binding Node.Id}"/>
+                  <TextBlock Text="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToDesc}}"
+                             IsVisible="{Binding IsDirty}"
+                             Foreground="{DynamicResource Brush.FG2}"/>
+                </StackPanel>
               </ToolTip.Tip>
 
-              <v:Bookmark Grid.Column="0"
-                          Width="12" Height="12"
-                          Margin="10,0,8,0"
-                          VerticalAlignment="Center"
-                          Value="{Binding Node.Bookmark, Mode=OneWay}"
-                          IsVisible="{Binding Node.IsRepository}"/>
-              <Path Grid.Column="0"
-                    Width="12" Height="12"
-                    Margin="10,0,8,0"
-                    VerticalAlignment="Center"
-                    Fill="{DynamicResource Brush.FG1}"
-                    Data="{StaticResource Icons.Repositories}"
-                    IsVisible="{Binding !Node.IsRepository}"
-                    IsHitTestVisible="False"/>
-
-              <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto" VerticalAlignment="Center" ClipToBounds="True">
-                <TextBlock Grid.Row="0"
-                           FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
-                           Text="{Binding Node.Name}"
+              <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto" VerticalAlignment="Center" ClipToBounds="True">
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
+                  <Panel Grid.Column="0" Width="14" VerticalAlignment="Center">
+                    <Ellipse Width="8" Height="8"
+                             HorizontalAlignment="Left" VerticalAlignment="Center"
+                             IsVisible="{Binding IsDirty}"
+                             Fill="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToBrush}}"/>
+                  </Panel>
+                  <TextBlock Grid.Column="1"
+                             FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
+                             TextTrimming="CharacterEllipsis">
+                    <Run Text="{Binding Node.Name, Mode=OneWay}"/>
+                    <Run Text="{Binding Node.PrimaryTagDisplay, Mode=OneWay}"
+                         FontSize="10"
+                         FontWeight="Bold"
+                         Foreground="{DynamicResource Brush.Accent}"/>
+                  </TextBlock>
+                </Grid>
+                <TextBlock Grid.Row="1"
+                           Margin="14,0,0,0"
+                           FontSize="10"
+                           Foreground="{DynamicResource Brush.FG2}"
+                           Text="{Binding Node.Id}"
                            TextTrimming="CharacterEllipsis"
-                           IsVisible="{Binding Node.IsRepository}"/>
-                <TextBlock Grid.Row="0"
-                           FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
-                           Text="{DynamicResource Text.PageTabBar.Welcome.Title}"
-                           IsVisible="{Binding !Node.IsRepository}"/>
-                <Grid Grid.Row="1" ColumnDefinitions="*,Auto" IsVisible="{Binding Node.IsRepository}">
-                  <TextBlock Grid.Column="0"
-                             FontSize="10"
-                             Foreground="{DynamicResource Brush.FG2}"
-                             Text="{Binding Node.Id}"
-                             TextTrimming="CharacterEllipsis"/>
-                  <ItemsControl Grid.Column="1"
-                                Margin="8,0,0,0"
+                           IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=ShowRepositoryPathInSidebar}"/>
+                <StackPanel Grid.Row="2"
+                            MinHeight="18"
+                            Margin="14,3,0,0"
+                            Orientation="Horizontal"
+                            ClipToBounds="True">
+                  <ContentControl VerticalAlignment="Center"
+                                  Content="{Binding Node.Status, Mode=OneWay}">
+                    <ContentControl.DataTemplates>
+                      <DataTemplate DataType="m:RepositoryStatus">
+                        <StackPanel Orientation="Horizontal" ClipToBounds="True">
+                          <Border Margin="0,0,4,0"
+                                  Height="16"
+                                  CornerRadius="8"
+                                  Padding="5,0"
+                                  Background="{DynamicResource Brush.FG1}"
+                                  VerticalAlignment="Center"
+                                  IsVisible="{Binding LocalChanges, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
+                            <TextBlock Text="{Binding LocalChanges}"
+                                       FontFamily="{DynamicResource Fonts.Monospace}"
+                                       FontSize="10"
+                                       Foreground="{DynamicResource Brush.Window}"/>
+                          </Border>
+
+                          <TextBlock Margin="0,0,4,0"
+                                     VerticalAlignment="Center"
+                                     Text="{Binding TrackingDescription}"
+                                     FontFamily="{DynamicResource Fonts.Monospace}"
+                                     FontSize="10"
+                                     IsVisible="{Binding IsTrackingStatusVisible}"/>
+
+                          <Border BorderThickness="1"
+                                  BorderBrush="{DynamicResource Brush.FG2}"
+                                  Height="18"
+                                  CornerRadius="4"
+                                  Padding="3,0"
+                                  VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                              <Path Width="10" Height="10" Data="{StaticResource Icons.Branch}"/>
+                              <TextBlock Margin="2,0,0,0"
+                                         MaxWidth="90"
+                                         Text="{Binding CurrentBranch}"
+                                         TextTrimming="CharacterEllipsis"
+                                         FontSize="10"/>
+                            </StackPanel>
+                          </Border>
+                        </StackPanel>
+                      </DataTemplate>
+                    </ContentControl.DataTemplates>
+                  </ContentControl>
+
+                  <ItemsControl Margin="6,0,0,0"
                                 VerticalAlignment="Center"
                                 ItemsSource="{Binding Node.TagItems}"
-                                IsVisible="{Binding Node.HasTags}">
+                                IsVisible="{Binding Node.HasSecondaryTags}">
                     <ItemsControl.ItemsPanel>
                       <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
@@ -243,79 +285,16 @@
                       <DataTemplate DataType="vm:RepositoryTagItem">
                         <TextBlock Margin="4,0,0,0"
                                    FontSize="10"
+                                   Foreground="{DynamicResource Brush.FG2}"
                                    Text="{Binding DisplayName}"
-                                   Classes.primary="{Binding IsPrimary}">
-                          <TextBlock.Styles>
-                            <Style Selector="TextBlock">
-                              <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
-                            </Style>
-                            <Style Selector="TextBlock.primary">
-                              <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
-                              <Setter Property="FontWeight" Value="Bold"/>
-                            </Style>
-                          </TextBlock.Styles>
-                        </TextBlock>
+                                   IsVisible="{Binding !IsPrimary}"/>
                       </DataTemplate>
                     </ItemsControl.ItemTemplate>
                   </ItemsControl>
-                </Grid>
-                <ContentControl Grid.Row="2"
-                                MinHeight="18"
-                                Margin="0,3,0,0"
-                                HorizontalAlignment="Left"
-                                Content="{Binding Node.Status, Mode=OneWay}">
-                  <ContentControl.DataTemplates>
-                    <DataTemplate DataType="m:RepositoryStatus">
-                      <StackPanel Orientation="Horizontal" ClipToBounds="True">
-                        <Border Margin="0,0,4,0"
-                                Height="16"
-                                CornerRadius="8"
-                                Padding="5,0"
-                                Background="{DynamicResource Brush.FG1}"
-                                VerticalAlignment="Center"
-                                IsVisible="{Binding LocalChanges, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
-                          <TextBlock Text="{Binding LocalChanges}"
-                                     FontFamily="{DynamicResource Fonts.Monospace}"
-                                     FontSize="10"
-                                     Foreground="{DynamicResource Brush.Window}"/>
-                        </Border>
-
-                        <TextBlock Margin="0,0,4,0"
-                                   VerticalAlignment="Center"
-                                   Text="{Binding TrackingDescription}"
-                                   FontFamily="{DynamicResource Fonts.Monospace}"
-                                   FontSize="10"
-                                   IsVisible="{Binding IsTrackingStatusVisible}"/>
-
-                        <Border BorderThickness="1"
-                                BorderBrush="{DynamicResource Brush.FG2}"
-                                Height="18"
-                                CornerRadius="4"
-                                Padding="3,0"
-                                VerticalAlignment="Center">
-                          <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Width="10" Height="10" Data="{StaticResource Icons.Branch}"/>
-                            <TextBlock Margin="2,0,0,0"
-                                       MaxWidth="90"
-                                       Text="{Binding CurrentBranch}"
-                                       TextTrimming="CharacterEllipsis"
-                                       FontSize="10"/>
-                          </StackPanel>
-                        </Border>
-                      </StackPanel>
-                    </DataTemplate>
-                  </ContentControl.DataTemplates>
-                </ContentControl>
+                </StackPanel>
               </Grid>
 
-              <Ellipse Grid.Column="2"
-                       Width="8" Height="8"
-                       Margin="6,0"
-                       VerticalAlignment="Center"
-                       IsVisible="{Binding IsDirty}"
-                       Fill="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToBrush}}"/>
-
-              <Button Grid.Column="3"
+              <Button Grid.Column="1"
                       Classes="icon_button page_close"
                       Width="20" Height="20"
                       Margin="0,0,6,0"

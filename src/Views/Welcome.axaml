@@ -153,9 +153,11 @@
                     Width="10" Height="10"
                     Margin="0,0,4,0"
                     VerticalAlignment="Center"
-                    Data="{StaticResource Icons.TriangleRight}"
+                    Data="{StaticResource Icons.Down}"
                     Fill="{DynamicResource Brush.FG2}"
-                    IsVisible="{Binding IsCollapsed}"/>
+                    IsVisible="{Binding IsCollapsed}"
+                    RenderTransformOrigin="50%,50%"
+                    RenderTransform="rotate(270deg)"/>
               <TextBlock Grid.Column="1"
                          VerticalAlignment="Center"
                          FontSize="11"
@@ -175,19 +177,14 @@
           <DataTemplate DataType="vm:RepositoryListRow">
             <Grid Background="Transparent">
               <Grid Height="30"
-                    ColumnDefinitions="18,*,Auto"
+                    ColumnDefinitions="*,Auto"
                     ClipToBounds="True"
                     DoubleTapped="OnDoubleTappedTreeNode"
                     PointerPressed="OnRowPointerPressed"
                     PointerMoved="OnRowPointerMoved"
                     PointerReleased="OnRowPointerReleased"
                     PointerCaptureLost="OnRowPointerCaptureLost">
-                <v:Bookmark Grid.Column="0"
-                            Width="14" Height="14"
-                            HorizontalAlignment="Center"
-                            Value="{Binding Node.Bookmark, Mode=OneWay}"/>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal" ClipToBounds="True">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" ClipToBounds="True">
                   <TextBlock VerticalAlignment="Center" Text="{Binding Node.Name}"/>
                   <TextBlock Margin="4,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource Brush.FG2}" Text="{Binding Node.Id, StringFormat=({0}), Converter={x:Static c:PathConverters.RelativeToHome}}">
                     <TextBlock.IsVisible>
@@ -232,7 +229,7 @@
                         IsVisible="{Binding Node.IsInvalid}"/>
                 </StackPanel>
 
-                <ContentControl Grid.Column="2"
+                <ContentControl Grid.Column="1"
                                 Margin="6,0,0,0"
                                 Content="{Binding Node.Status, Mode=OneWay}"
                                 IsVisible="{Binding Node.Status, Converter={x:Static ObjectConverters.NotEqual}}">

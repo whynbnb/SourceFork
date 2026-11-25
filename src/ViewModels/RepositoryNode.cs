@@ -13,8 +13,6 @@ namespace SourceFork.ViewModels
 {
     public class RepositoryNodeMinimalInfo
     {
-        public string FriendlyName { get; set; } = string.Empty;
-        public int Bookmark { get; set; } = 0;
         public List<string> Tags { get; set; } = [];
         public string PrimaryTag { get; set; } = string.Empty;
         public long CreateTime { get; set; } = 0;
@@ -55,20 +53,19 @@ namespace SourceFork.ViewModels
             set
             {
                 var normalized = value.Replace('\\', '/').TrimEnd('/');
-                SetProperty(ref _id, normalized);
+                if (SetProperty(ref _id, normalized))
+                    OnPropertyChanged(nameof(Name));
             }
         }
 
+        [JsonIgnore]
         public string Name
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
-
-        public int Bookmark
-        {
-            get => _bookmark;
-            set => SetProperty(ref _bookmark, value);
+            get
+            {
+                var name = Path.GetFileName(_id);
+                return string.IsNullOrEmpty(name) ? _id : name;
+            }
         }
 
         public bool IsRepository
@@ -116,6 +113,24 @@ namespace SourceFork.ViewModels
         public bool HasTags
         {
             get => _tags.Count > 0;
+        }
+
+        [JsonIgnore]
+        public bool HasPrimaryTag
+        {
+            get => !string.IsNullOrEmpty(_primaryTag);
+        }
+
+        [JsonIgnore]
+        public string PrimaryTagDisplay
+        {
+            get => string.IsNullOrEmpty(_primaryTag) ? string.Empty : $"  #{_primaryTag}";
+        }
+
+        [JsonIgnore]
+        public bool HasSecondaryTags
+        {
+            get => _tags.Any(x => !x.Equals(_primaryTag, StringComparison.OrdinalIgnoreCase));
         }
 
         [JsonIgnore]
@@ -224,7 +239,7 @@ namespace SourceFork.ViewModels
             if (string.IsNullOrWhiteSpace(filter))
                 return true;
 
-            if ((_name?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true) ||
+            if ((Name?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true) ||
                 (_id?.Contains(filter, StringComparison.OrdinalIgnoreCase) == true))
                 return true;
 
@@ -235,13 +250,6 @@ namespace SourceFork.ViewModels
         {
             if (Directory.Exists(_id))
                 App.GetLauncher().OpenRepositoryInTab(this, null);
-        }
-
-        public void Edit()
-        {
-            var activePage = App.GetLauncher().ActivePage;
-            if (activePage != null && activePage.CanCreatePopup())
-                activePage.Popup = new EditRepositoryNode(this);
         }
 
         public EditRepositoryTags CreateTagEditor()
@@ -300,9 +308,6 @@ namespace SourceFork.ViewModels
             try
             {
                 var minimalInfo = JsonSerializer.Deserialize(File.ReadAllText(savedTo), JsonCodeGen.Default.RepositoryNodeMinimalInfo);
-                if (!string.IsNullOrEmpty(minimalInfo.FriendlyName))
-                    Name = minimalInfo.FriendlyName;
-                Bookmark = minimalInfo.Bookmark;
                 if (minimalInfo.CreateTime > 0)
                     CreateTime = minimalInfo.CreateTime;
                 SetTags(minimalInfo.Tags ?? [], minimalInfo.PrimaryTag);
@@ -321,8 +326,6 @@ namespace SourceFork.ViewModels
             var savedTo = Path.Combine(gitDir, "sourcefork.node");
             var minimalInfo = new RepositoryNodeMinimalInfo
             {
-                FriendlyName = Name,
-                Bookmark = Bookmark,
                 Tags = _tags,
                 PrimaryTag = _primaryTag,
                 CreateTime = CreateTime
@@ -345,6 +348,9 @@ namespace SourceFork.ViewModels
                 TagItems.Add(new RepositoryTagItem(tag, tag.Equals(_primaryTag, StringComparison.OrdinalIgnoreCase)));
 
             OnPropertyChanged(nameof(HasTags));
+            OnPropertyChanged(nameof(HasPrimaryTag));
+            OnPropertyChanged(nameof(PrimaryTagDisplay));
+            OnPropertyChanged(nameof(HasSecondaryTags));
         }
 
         private string NormalizePrimary(string primary)
@@ -390,9 +396,7 @@ namespace SourceFork.ViewModels
         }
 
         private string _id = string.Empty;
-        private string _name = string.Empty;
         private bool _isRepository = false;
-        private int _bookmark = 0;
         private List<string> _tags = [];
         private string _primaryTag = string.Empty;
         private bool _isVisible = true;

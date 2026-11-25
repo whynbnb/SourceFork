@@ -247,10 +247,6 @@
   <x:String x:Key="Text.Discard.IncludeIgnored" xml:space="preserve">Incluir arquivos ignorados</x:String>
   <x:String x:Key="Text.Discard.Total" xml:space="preserve">Um total de {0} alterações será descartado</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Você não pode desfazer esta ação!!!</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Favorito:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Novo Nome:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Alvo:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Editar Repositório Selecionado</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">Buscar</x:String>
   <x:String x:Key="Text.Fetch.AllRemotes" xml:space="preserve">Buscar todos os remotos</x:String>
   <x:String x:Key="Text.Fetch.NoTags" xml:space="preserve">Buscar sem tags</x:String>
@@ -381,7 +377,6 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Fechar Outras Abas</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Fechar Abas à Direita</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Copiar Caminho do Repositório</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Editar</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repositórios</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Colar</x:String>
   <x:String x:Key="Text.Period.DaysAgo" xml:space="preserve">{0} dias atrás</x:String>
@@ -408,6 +403,7 @@
   <x:String x:Key="Text.Preferences.Appearance.Theme" xml:space="preserve">Tema</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">Usar largura fixa de aba na barra de título</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">Usar moldura de janela nativa</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.ShowRepositoryPath" xml:space="preserve">Mostrar o caminho do repositório na barra lateral</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">FERRAMENTA DE DIFF/MERGE</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Path" xml:space="preserve">Caminho de Instalação</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.Path.Placeholder" xml:space="preserve">Insira o caminho para a ferramenta de diff/merge</x:String>
@@ -594,7 +590,6 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Página de Boas-vindas</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clonar Repositório</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Excluir</x:String>
-  <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Editar</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Abrir Repositório</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Abrir Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Reescanear Repositórios no Diretório de Clone Padrão</x:String>

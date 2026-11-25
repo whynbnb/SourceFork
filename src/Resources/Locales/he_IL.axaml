@@ -130,7 +130,6 @@
   <x:String x:Key="Text.Clone" xml:space="preserve">שכפל מאגר מרוחק</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">פרמטרים נוספים:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">ארגומנטים נוספים ל־clone. לא חובה.</x:String>
-  <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">סימנייה:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">שם מקומי:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">שם המאגר. לא חובה.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">תיקיית אב:</x:String>
@@ -389,10 +388,6 @@
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">לא ניתן לבטל פעולה זו!!!</x:String>
   <x:String x:Key="Text.EditBranchDescription" xml:space="preserve">ערוך תיאור ה־Branch</x:String>
   <x:String x:Key="Text.EditBranchDescription.Target" xml:space="preserve">יעד:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">סימנייה:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">שם חדש:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">יעד:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">ערוך המאגר שנבחר</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">יעד:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">מאגר זה</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">Fetch</x:String>
@@ -586,7 +581,6 @@
   <x:String x:Key="Text.OpenFile" xml:space="preserve">פתח קובץ</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">פתח בכלי Merge חיצוני</x:String>
   <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">פתח מאגר מקומי</x:String>
-  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">סימנייה:</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">תיקייה:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">לא חובה.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">צור לשונית חדשה</x:String>
@@ -594,7 +588,6 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">סגור לשוניות אחרות</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">סגור לשוניות מימין</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">העתק נתיב המאגר</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">ערוך</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">רענן</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">מאגרים</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">הדבק</x:String>
@@ -628,6 +621,7 @@
   <x:String x:Key="Text.Preferences.Appearance.UseAutoHideScrollBars" xml:space="preserve">שימוש בפסי גלילה המוסתרים אוטומטית</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">רוחב לשונית קבוע בשורת הכותרת</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">שימוש במסגרת חלון מקומית</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.ShowRepositoryPath" xml:space="preserve">הצג נתיב מאגר בסרגל הצד</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">כלי DIFF/MERGE</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">ארגומנטים ל־Diff</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">משתנים זמינים: $LOCAL, $REMOTE</x:String>
@@ -920,7 +914,6 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">דף פתח</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">שכפל מאגר</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">מחק</x:String>
-  <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">ערוך</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">פתח מאגר</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">פתח טרמינל</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">סרוק מחדש של מאגרים בתיקיית ה־Clone ברירת מחדל</x:String>

@@ -23,13 +23,9 @@
                  HorizontalAlignment="Right" VerticalAlignment="Center"
                  Margin="0,0,8,0"
                  Text="{DynamicResource Text.DeleteRepositoryNode.Target}"/>
-      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-        <v:Bookmark Width="12" Height="12" Margin="0,0,8,0"
-                    Value="{Binding Node.Bookmark, Mode=OneWay}"
-                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
-
-        <TextBlock VerticalAlignment="Center" Text="{Binding Node.Name}"/>
-      </StackPanel>
+      <TextBlock Grid.Row="0" Grid.Column="1"
+                 VerticalAlignment="Center"
+                 Text="{Binding Node.Name}"/>
 
       <TextBlock Grid.Row="1" Grid.Column="0"
                  HorizontalAlignment="Right" VerticalAlignment="Center"

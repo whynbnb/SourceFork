@@ -16,11 +16,10 @@ namespace SourceFork.ViewModels
             private set;
         }
 
-        public Init(string pageId, string path, int bookmark, string reason)
+        public Init(string pageId, string path, string reason)
         {
             _pageId = pageId;
             _targetPath = path;
-            _bookmark = bookmark;
 
             Reason = string.IsNullOrEmpty(reason) ? "unknown error" : reason;
             Reason = Reason.Trim();
@@ -42,7 +41,6 @@ namespace SourceFork.ViewModels
             if (succ)
             {
                 var node = Preferences.Instance.FindOrAddNodeByRepositoryPath(_targetPath);
-                node.Bookmark = _bookmark;
                 await node.UpdateStatusAsync(false, null);
 
                 RepositoryListSorter.NotifyChanged();
@@ -52,6 +50,5 @@ namespace SourceFork.ViewModels
 
         private readonly string _pageId = null;
         private string _targetPath = null;
-        private readonly int _bookmark = 0;
     }
 }

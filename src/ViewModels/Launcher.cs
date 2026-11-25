@@ -160,9 +160,9 @@ namespace SourceFork.ViewModels
 
                     if (Models.SafeDirectories.IsUntrustedRepository(test.StdErr) &&
                         Models.SafeDirectories.TryGetSafeDirectoryValue(repo, test.StdErr, out var safeDirectory))
-                        ActivePage.Popup = new TrustRepository(ActivePage.Node.Id, repo, test.StdErr, safeDirectory, true, 0);
+                        ActivePage.Popup = new TrustRepository(ActivePage.Node.Id, repo, test.StdErr, safeDirectory, true);
                     else
-                        ActivePage.Popup = new Init(ActivePage.Node.Id, repo, 0, test.StdErr ?? "Unknown error occurred while opening the repository.");
+                        ActivePage.Popup = new Init(ActivePage.Node.Id, repo, test.StdErr ?? "Unknown error occurred while opening the repository.");
 
                     return true;
                 }
@@ -449,8 +449,6 @@ namespace SourceFork.ViewModels
             var node = Preferences.Instance.FindNode(normalizedPath) ?? new RepositoryNode
             {
                 Id = normalizedPath,
-                Name = Path.GetFileName(normalizedPath),
-                Bookmark = 0,
                 IsRepository = true,
                 IsUnmanaged = true
             };
@@ -558,17 +556,10 @@ namespace SourceFork.ViewModels
                 return;
             }
 
-            // Get the owner repository's name and extract the pure owner name (without any prefix)
-            var ownerName = ownerPage.Node.Name;
-            var colonIdx = ownerName.LastIndexOf(':');
-            var pureOwnerName = (colonIdx >= 0 && colonIdx < ownerName.Length - 1) ? ownerName.Substring(colonIdx + 1).Trim() : ownerName;
-
             // Find the sub-repository node in the preferences or create a new one if it doesn't exist
             var node = Preferences.Instance.FindNode(normalizedPath) ?? new RepositoryNode
             {
                 Id = normalizedPath,
-                Name = $"{pureOwnerName}: {Path.GetFileName(normalizedPath)}",
-                Bookmark = 0,
                 IsRepository = true,
                 IsUnmanaged = true
             };

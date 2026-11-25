@@ -101,11 +101,11 @@
                           ToolTip.Tip="{DynamicResource Text.RepositoryTags.SetPrimary}">
                     <Panel>
                       <Path Width="13" Height="13"
-                            Data="{StaticResource Icons.Bookmark}"
+                            Data="{StaticResource Icons.Tag}"
                             Fill="{DynamicResource Brush.Accent}"
                             IsVisible="{Binding IsPrimary}"/>
                       <Path Width="13" Height="13"
-                            Data="{StaticResource Icons.Bookmark}"
+                            Data="{StaticResource Icons.Tag}"
                             Fill="{DynamicResource Brush.FG2}"
                             Opacity=".4"
                             IsVisible="{Binding !IsPrimary}"/>

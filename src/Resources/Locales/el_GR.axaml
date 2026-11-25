@@ -138,7 +138,6 @@
   <x:String x:Key="Text.Clone" xml:space="preserve">Κλωνοποίηση απομακρυσμένου αποθετηρίου</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Επιπλέον παράμετροι:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Πρόσθετα ορίσματα για την κλωνοποίηση του αποθετηρίου. Προαιρετικό.</x:String>
-  <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Σελιδοδείκτης:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Τοπικό όνομα:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Όνομα αποθετηρίου. Προαιρετικό.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Γονικός φάκελος:</x:String>
@@ -403,10 +402,6 @@
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Δεν μπορείτε να αναιρέσετε αυτή την ενέργεια!!!</x:String>
   <x:String x:Key="Text.EditBranchDescription" xml:space="preserve">Επεξεργασία περιγραφής κλάδου</x:String>
   <x:String x:Key="Text.EditBranchDescription.Target" xml:space="preserve">Στόχος:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Σελιδοδείκτης:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Νέο όνομα:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Στόχος:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Επεξεργασία επιλεγμένου αποθετηρίου</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">Στόχος:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">Αυτό το αποθετήριο</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">Fetch</x:String>
@@ -617,7 +612,6 @@
   <x:String x:Key="Text.OpenFile" xml:space="preserve">Άνοιγμα αρχείου</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Άνοιγμα σε εξωτερικό εργαλείο συγχώνευσης</x:String>
   <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Άνοιγμα τοπικού αποθετηρίου</x:String>
-  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Σελιδοδείκτης:</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Φάκελος:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Προαιρετικό.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Δημιουργία νέας καρτέλας</x:String>
@@ -625,7 +619,6 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Κλείσιμο άλλων καρτελών</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Κλείσιμο καρτελών στα δεξιά</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Αντιγραφή διαδρομής αποθετηρίου</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Επεξεργασία</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Ανανέωση</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Αποθετήρια</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Επικόλληση</x:String>
@@ -659,6 +652,7 @@
   <x:String x:Key="Text.Preferences.Appearance.UseAutoHideScrollBars" xml:space="preserve">Χρήση μπαρών κύλισης αυτόματης απόκρυψης</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">Χρήση σταθερού πλάτους καρτελών στη γραμμή τίτλου</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">Χρήση εγγενούς πλαισίου παραθύρου</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.ShowRepositoryPath" xml:space="preserve">Εμφάνιση διαδρομής αποθετηρίου στην πλαϊνή γραμμή</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">ΕΡΓΑΛΕΙΟ DIFF/MERGE</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">Ορίσματα Diff</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">Διαθέσιμες μεταβλητές: $LOCAL, $REMOTE</x:String>
@@ -959,7 +953,6 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Σελίδα υποδοχής</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Κλωνοποίηση αποθετηρίου</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Διαγραφή</x:String>
-  <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Επεξεργασία</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Άνοιγμα αποθετηρίου</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Άνοιγμα τερματικού</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Επανασάρωση αποθετηρίων στον προεπιλεγμένο φάκελο κλωνοποίησης</x:String>

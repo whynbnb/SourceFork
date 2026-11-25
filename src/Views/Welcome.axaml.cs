@@ -212,15 +212,6 @@ namespace SourceFork.Views
                 e.Handled = true;
             };
 
-            var edit = new MenuItem();
-            edit.Header = App.Text("Welcome.Edit");
-            edit.Icon = this.CreateMenuIcon("Icons.Edit");
-            edit.Click += (_, e) =>
-            {
-                node.Edit();
-                e.Handled = true;
-            };
-
             var delete = new MenuItem();
             delete.Header = App.Text("Welcome.Delete");
             delete.Icon = this.CreateMenuIcon("Icons.Clear");
@@ -265,7 +256,6 @@ namespace SourceFork.Views
                 menu.Items.Add(terminal);
                 menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(tags);
-                menu.Items.Add(edit);
                 menu.Items.Add(new MenuItem() { Header = "-" });
                 menu.Items.Add(delete);
             }
@@ -443,7 +433,7 @@ namespace SourceFork.Views
                         var pageView = this.FindAncestorOfType<LauncherPage>();
                         if (pageView is { DataContext: ViewModels.LauncherPage page })
                         {
-                            page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, false, 0);
+                            page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, false);
                             break; // Stop processing further because SourceFork only supports one popup at a time.
                         }
                     }

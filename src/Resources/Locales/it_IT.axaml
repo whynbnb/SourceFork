@@ -363,10 +363,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">Questa azione non può essere annullata!!!</x:String>
   <x:String x:Key="Text.EditBranchDescription" xml:space="preserve">Modifica Descrizione del Branch</x:String>
   <x:String x:Key="Text.EditBranchDescription.Target" xml:space="preserve">Destinazione:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Segnalibro:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Nuovo Nome:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Destinazione:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Modifica Repository Selezionato</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">Destinazione:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">Questo repository</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">Recupera</x:String>
@@ -547,7 +543,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Chiudi Altri Tab</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Chiudi i Tab a Destra</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Copia Percorso Repository</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Modifica</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Aggiorna</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repository</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Incolla</x:String>
@@ -578,6 +573,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseAutoHideScrollBars" xml:space="preserve">Usa barre di scorrimento a scomparsa automatica</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">Usa larghezza fissa per i tab nella barra del titolo</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">Usa cornice finestra nativa</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.ShowRepositoryPath" xml:space="preserve">Mostra il percorso del repository nella barra laterale</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">STRUMENTO DI DIFFERENZA/UNIONE</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">Argomenti Diff</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">Variabili disponibili: $LOCAL, $REMOTE</x:String>
@@ -859,7 +855,6 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pagina di Benvenuto</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clona Repository</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Elimina</x:String>
-  <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Modifica</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Apri Repository</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Apri Terminale</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Riscansiona Repository nella Cartella Clone Predefinita</x:String>

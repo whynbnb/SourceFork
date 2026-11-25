@@ -144,7 +144,6 @@
   <x:String x:Key="Text.Clone" xml:space="preserve">Clona un repositori remot</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam" xml:space="preserve">Paràmetres addicionals:</x:String>
   <x:String x:Key="Text.Clone.AdditionalParam.Placeholder" xml:space="preserve">Arguments addicionals per clonar el repositori. Opcional.</x:String>
-  <x:String x:Key="Text.Clone.Bookmark" xml:space="preserve">Marcador:</x:String>
   <x:String x:Key="Text.Clone.LocalName" xml:space="preserve">Nom local:</x:String>
   <x:String x:Key="Text.Clone.LocalName.Placeholder" xml:space="preserve">Nom del repositori. Opcional.</x:String>
   <x:String x:Key="Text.Clone.ParentFolder" xml:space="preserve">Carpeta pare:</x:String>
@@ -411,10 +410,6 @@
   <x:String x:Key="Text.Discard.Warning" xml:space="preserve">No es pot desfer aquesta acció!!!</x:String>
   <x:String x:Key="Text.EditBranchDescription" xml:space="preserve">Edita la descripció de la branca</x:String>
   <x:String x:Key="Text.EditBranchDescription.Target" xml:space="preserve">Objectiu:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Bookmark" xml:space="preserve">Marcador:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Name" xml:space="preserve">Nom nou:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.Target" xml:space="preserve">Objectiu:</x:String>
-  <x:String x:Key="Text.EditRepositoryNode.TitleForRepository" xml:space="preserve">Edita el repositori seleccionat</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Target" xml:space="preserve">Objectiu:</x:String>
   <x:String x:Key="Text.ExecuteCustomAction.Repository" xml:space="preserve">Aquest repositori</x:String>
   <x:String x:Key="Text.Fetch" xml:space="preserve">Obtén</x:String>
@@ -631,7 +626,6 @@
   <x:String x:Key="Text.OpenFile" xml:space="preserve">Obre el fitxer</x:String>
   <x:String x:Key="Text.OpenInExternalMergeTool" xml:space="preserve">Obre a l'eina de fusió externa</x:String>
   <x:String x:Key="Text.OpenLocalRepository" xml:space="preserve">Obre un repositori local</x:String>
-  <x:String x:Key="Text.OpenLocalRepository.Bookmark" xml:space="preserve">Marcador:</x:String>
   <x:String x:Key="Text.OpenLocalRepository.Path" xml:space="preserve">Carpeta:</x:String>
   <x:String x:Key="Text.Optional" xml:space="preserve">Opcional.</x:String>
   <x:String x:Key="Text.PageTabBar.New" xml:space="preserve">Crea una pestanya nova</x:String>
@@ -639,7 +633,6 @@
   <x:String x:Key="Text.PageTabBar.Tab.CloseOther" xml:space="preserve">Tanca les altres pestanyes</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CloseRight" xml:space="preserve">Tanca les pestanyes de la dreta</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.CopyPath" xml:space="preserve">Copia la ruta del repositori</x:String>
-  <x:String x:Key="Text.PageTabBar.Tab.Edit" xml:space="preserve">Edita</x:String>
   <x:String x:Key="Text.PageTabBar.Tab.Refresh" xml:space="preserve">Actualitza</x:String>
   <x:String x:Key="Text.PageTabBar.Welcome.Title" xml:space="preserve">Repositoris</x:String>
   <x:String x:Key="Text.Paste" xml:space="preserve">Enganxa</x:String>
@@ -676,6 +669,7 @@
   <x:String x:Key="Text.Preferences.Appearance.UseAutoHideScrollBars" xml:space="preserve">Utilitza barres de desplaçament d'ocultació automàtica</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseFixedTabWidth" xml:space="preserve">Utilitza una amplada de pestanya fixa a la barra de títol</x:String>
   <x:String x:Key="Text.Preferences.Appearance.UseNativeWindowFrame" xml:space="preserve">Utilitza el marc de finestra natiu</x:String>
+  <x:String x:Key="Text.Preferences.Appearance.ShowRepositoryPath" xml:space="preserve">Mostra el camí del repositori a la barra lateral</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge" xml:space="preserve">EINA DE DIFERÈNCIES/FUSIÓ</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs" xml:space="preserve">Arguments de diferències</x:String>
   <x:String x:Key="Text.Preferences.DiffMerge.DiffArgs.Tip" xml:space="preserve">Variables disponibles: $LOCAL, $REMOTE</x:String>
@@ -1013,7 +1007,6 @@
   <x:String x:Key="Text.Welcome" xml:space="preserve">Pàgina de benvinguda</x:String>
   <x:String x:Key="Text.Welcome.Clone" xml:space="preserve">Clona un repositori</x:String>
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Suprimeix</x:String>
-  <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Edita</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Obre el repositori</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Obre el terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Torna a escanejar els repositoris al directori de clonació per defecte</x:String>

@@ -20,7 +20,7 @@
                  Text="{DynamicResource Text.Clone}"/>
     </StackPanel>
 
-    <Grid Margin="8,16,0,0" RowDefinitions="32,Auto,32,32,32,32,32" ColumnDefinitions="Auto,*">
+    <Grid Margin="8,16,0,0" RowDefinitions="32,Auto,32,32,32,32" ColumnDefinitions="Auto,*">
       <TextBlock Grid.Row="0" Grid.Column="0"
                  HorizontalAlignment="Right"
                  Margin="0,0,8,0"
@@ -103,15 +103,7 @@
                PlaceholderText="{DynamicResource Text.Clone.AdditionalParam.Placeholder}"
                Text="{Binding ExtraArgs, Mode=TwoWay}"/>
 
-      <TextBlock Grid.Row="5" Grid.Column="0"
-                 HorizontalAlignment="Right"
-                 Margin="0,0,8,0"
-                 Text="{DynamicResource Text.Clone.Bookmark}"/>
-      <v:BookmarkSelector Grid.Row="5" Grid.Column="1"
-                          HorizontalAlignment="Left" VerticalAlignment="Center"
-                          Bookmark="{Binding Bookmark, Mode=TwoWay}"/>
-
-      <CheckBox Grid.Row="6" Grid.Column="1"
+      <CheckBox Grid.Row="5" Grid.Column="1"
                 Content="{DynamicResource Text.Clone.RecurseSubmodules}"
                 IsChecked="{Binding InitAndUpdateSubmodules, Mode=TwoWay}"
                 ToolTip.Tip="--recurse-submodules"/>

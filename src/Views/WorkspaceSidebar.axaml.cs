@@ -502,16 +502,6 @@ namespace SourceFork.Views
                 };
                 menu.Items.Add(tags);
 
-                var edit = new MenuItem();
-                edit.Header = App.Text("PageTabBar.Tab.Edit");
-                edit.Icon = this.CreateMenuIcon("Icons.Edit");
-                edit.Click += (_, ev) =>
-                {
-                    node.Edit();
-                    ev.Handled = true;
-                };
-                menu.Items.Add(edit);
-
                 menu.Items.Add(new MenuItem() { Header = "-" });
 
                 var remove = new MenuItem();
