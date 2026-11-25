@@ -45,6 +45,7 @@
 - 移植上游 `Launcher.axaml`、`LauncherPage.axaml`、`RepositoryToolbar.axaml`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏和统一顶栏结构。
 - 发布流程按 `framework` / `aot` / `aot-static` 三种模式构建；`aot-static` 通过 `StaticLink.Avalonia` 和 `StaticLink.libonigwrap` 静态链接 Avalonia/Skia/HarfBuzz/Oniguruma，输出单文件。
 - Release 暂只产出 Linux x64、Windows x64 和 macOS arm64，共 9 种资产；RPM、Flatpak 等暂不构建。
+- 预发布（不打 tag）：`prerelease` workflow 监听 `fork/2026.19` 的推送，只有提交信息里包含 `[pre]`、`[prerelease]`、`[pre-release]` 或 `预发布` 时才构建。它复用 `build-assets.yml` 生成与正式发布相同的 9 种资产，但不创建 tag、也不创建 GitHub Release，资产和 `SHA256SUMS.txt` 只保留在该次 Actions 运行的 Artifacts 中（`prerelease-bundle` 是包含全部资产的单个 zip）。普通提交不会触发构建；也可以在 Actions 页面手动 `Run workflow` 强制构建一次。版本号格式为 `<当前版本>-pre.<运行序号>`（例如 `1.1-pre.42`），仅用于资产命名。
 - UI 框架升级到 Avalonia `12.1.6`（DataGrid `12.1.2`），同步完成 Avalonia 12 适配：
   - 移除已废弃的 `Avalonia.Diagnostics`（12.x 起由 Avalonia Plus 的 DiagnosticsSupport 取代）。
   - `ExtendClientAreaChromeHints` 改为 `Window.WindowDecorations`；`SystemDecorations` 改为 `WindowDecorations`。

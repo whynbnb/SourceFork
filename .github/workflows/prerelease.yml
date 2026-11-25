@@ -1,0 +1,157 @@
+name: prerelease
+
+# Builds the same 9 assets as a tagged release, but creates no git tag and no
+# GitHub Release. Triggered by a keyword in the pushed commit messages, or
+# manually with workflow_dispatch. Assets are attached to the workflow run.
+
+on:
+  push:
+    branches:
+      - "fork/2026.19"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Build even if the checked-out commit has no prerelease keyword"
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    name: Detect prerelease keyword
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      enabled: ${{ steps.detect.outputs.enabled }}
+      version: ${{ steps.detect.outputs.version }}
+      reason: ${{ steps.detect.outputs.reason }}
+      commit: ${{ steps.detect.outputs.commit }}
+      title: ${{ steps.detect.outputs.title }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Check commit messages
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          FORCE: ${{ inputs.force }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+          RUN_NUMBER: ${{ github.run_number }}
+          # Commit messages matching this pattern start a prerelease build.
+          KEYWORDS: '\[pre\]|\[prerelease\]|\[pre-release\]|预发布'
+        run: |
+          set -euo pipefail
+
+          base_version="$(sed -n 's:.*<Version>\([^<]*\)</Version>.*:\1:p' src/SourceFork.csproj | head -n 1)"
+          if [[ -z "$base_version" ]]; then
+            echo "cannot read <Version> from src/SourceFork.csproj" >&2
+            exit 1
+          fi
+
+          enabled=false
+          reason="no prerelease keyword in the pushed commits"
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" && "$FORCE" == "true" ]]; then
+            enabled=true
+            reason="manual dispatch"
+          else
+            if [[ -z "$BEFORE" || "$BEFORE" =~ ^0+$ ]]; then
+              messages="$(git log -1 --format=%B "$AFTER")"
+            elif ! messages="$(git log --format=%B "$BEFORE..$AFTER" 2>/dev/null)"; then
+              # Force-pushed or unreachable "before": fall back to the head commit.
+              messages="$(git log -1 --format=%B "$AFTER")"
+            fi
+
+            if printf '%s\n' "$messages" | grep -Eiq "$KEYWORDS"; then
+              enabled=true
+              reason="prerelease keyword matched"
+            fi
+          fi
+
+          version="${base_version}-pre.${RUN_NUMBER}"
+          commit="$(git rev-parse --short=7 "$AFTER")"
+          title="$(git log -1 --format=%s "$AFTER")"
+
+          {
+            echo "enabled=$enabled"
+            echo "version=$version"
+            echo "reason=$reason"
+            echo "commit=$commit"
+            echo "title=$title"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "enabled:  $enabled"
+          echo "version:  $version"
+          echo "reason:   $reason"
+          echo "commit:   $commit"
+          echo "title:    $title"
+
+      - name: Explain the decision
+        run: |
+          if [[ "${{ steps.detect.outputs.enabled }}" != "true" ]]; then
+            echo "No prerelease build. Add one of [pre], [prerelease], [pre-release] or 预发布 to a commit message to trigger it." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  assets:
+    name: Build prerelease assets
+    needs: detect
+    if: needs.detect.outputs.enabled == 'true'
+    # Only cancel an in-flight prerelease build when another one starts; pushes
+    # without the keyword never reach this job and therefore never cancel it.
+    concurrency:
+      group: prerelease-assets-${{ github.ref }}
+      cancel-in-progress: true
+    uses: ./.github/workflows/build-assets.yml
+    with:
+      version: ${{ needs.detect.outputs.version }}
+
+  summary:
+    name: Collect prerelease assets
+    needs:
+      - detect
+      - assets
+    if: needs.detect.outputs.enabled == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: prerelease-assets
+          merge-multiple: true
+      - name: Write checksums and summary
+        env:
+          VERSION: ${{ needs.detect.outputs.version }}
+          COMMIT: ${{ needs.detect.outputs.commit }}
+          TITLE: ${{ needs.detect.outputs.title }}
+          REASON: ${{ needs.detect.outputs.reason }}
+        run: |
+          cd prerelease-assets
+          sha256sum -- * > SHA256SUMS.txt
+          zip -q -r "../sourcefork-${VERSION}-prerelease.zip" .
+          {
+            echo "## SourceFork pre-release ${VERSION}"
+            echo
+            echo "- commit: \`${COMMIT}\` ${TITLE}"
+            echo "- trigger: ${REASON}"
+            echo "- tag/release: none — download the assets below"
+            echo
+            echo '```text'
+            sha256sum -c SHA256SUMS.txt
+            ls -lh
+            echo '```'
+            echo
+            echo "Download: **Actions → this run → Artifacts → prerelease-bundle** (all 9 assets in one zip),"
+            echo "or grab individual files from the other artifacts."
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: prerelease-bundle
+          path: |
+            sourcefork-${{ needs.detect.outputs.version }}-prerelease.zip
+            prerelease-assets/SHA256SUMS.txt
+          if-no-files-found: error
