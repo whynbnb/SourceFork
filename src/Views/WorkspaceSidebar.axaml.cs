@@ -250,9 +250,9 @@ namespace SourceFork.Views
                 var tags = new MenuItem();
                 tags.Header = App.Text("RepositoryTags.Edit");
                 tags.Icon = this.CreateMenuIcon("Icons.Tags");
-                tags.Click += (_, ev) =>
+                tags.Click += async (_, ev) =>
                 {
-                    node.EditTags();
+                    await this.ShowDialogAsync(node.CreateTagEditor());
                     ev.Handled = true;
                 };
                 menu.Items.Add(tags);

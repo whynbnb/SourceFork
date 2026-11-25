@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SourceFork.ViewModels
 {
-    public class EditRepositoryTags : Popup
+    public class EditRepositoryTags : ObservableObject
     {
         public string Target
         {
@@ -50,6 +49,7 @@ namespace SourceFork.ViewModels
             Tags.Add(new RepositoryTagItem(name, Tags.Count == 0));
             NewTag = string.Empty;
             OnPropertyChanged(nameof(HasTags));
+            ApplyChanges();
         }
 
         public void RemoveTag(RepositoryTagItem tag)
@@ -61,38 +61,45 @@ namespace SourceFork.ViewModels
                 Tags[0].IsPrimary = true;
 
             OnPropertyChanged(nameof(HasTags));
+            ApplyChanges();
         }
 
         public void MoveUp(RepositoryTagItem tag)
         {
             var index = Tags.IndexOf(tag);
             if (index > 0)
+            {
                 Tags.Move(index, index - 1);
+                ApplyChanges();
+            }
         }
 
         public void MoveDown(RepositoryTagItem tag)
         {
             var index = Tags.IndexOf(tag);
             if (index >= 0 && index < Tags.Count - 1)
+            {
                 Tags.Move(index, index + 1);
+                ApplyChanges();
+            }
         }
 
         public void SetPrimary(RepositoryTagItem tag)
         {
-            if (tag == null)
+            if (tag == null || tag.IsPrimary)
                 return;
 
             foreach (var item in Tags)
                 item.IsPrimary = ReferenceEquals(item, tag);
+
+            ApplyChanges();
         }
 
-        public override Task<bool> Sure()
+        public void ApplyChanges()
         {
             var primary = Tags.FirstOrDefault(x => x.IsPrimary)?.Name ?? Tags.FirstOrDefault()?.Name;
             _node.SetTags(Tags.Select(x => x.Name), primary);
-            Preferences.Instance.Save();
             RepositoryListSorter.NotifyChanged();
-            return Task.FromResult(true);
         }
 
         private readonly RepositoryNode _node;

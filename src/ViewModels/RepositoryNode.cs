@@ -244,11 +244,9 @@ namespace SourceFork.ViewModels
                 activePage.Popup = new EditRepositoryNode(this);
         }
 
-        public void EditTags()
+        public EditRepositoryTags CreateTagEditor()
         {
-            var activePage = App.GetLauncher().ActivePage;
-            if (activePage != null && activePage.CanCreatePopup())
-                activePage.Popup = new EditRepositoryTags(this);
+            return new EditRepositoryTags(this);
         }
 
         public void OpenInFileManager()

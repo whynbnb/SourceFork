@@ -1115,6 +1115,7 @@
   <x:String x:Key="Text.RepositoryTags.MoveDown" xml:space="preserve">下移</x:String>
   <x:String x:Key="Text.RepositoryTags.Remove" xml:space="preserve">移除</x:String>
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">主要 Tag 会以强调色显示。使用上下箭头调整顺序。</x:String>
+  <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">完成</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">仓库排序</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">添加时间</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">名称</x:String>

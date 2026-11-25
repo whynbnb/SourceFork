@@ -1,145 +1,191 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:SourceFork.ViewModels"
-             xmlns:v="using:SourceFork.Views"
-             mc:Ignorable="d" d:DesignWidth="560" d:DesignHeight="480"
-             x:Class="SourceFork.Views.EditRepositoryTags"
-             x:DataType="vm:EditRepositoryTags">
-  <StackPanel Orientation="Vertical" Margin="8,0,0,0" Width="520">
-    <StackPanel Orientation="Horizontal">
-      <Path Width="16" Height="16"
-            Margin="0,0,8,0"
-            Data="{StaticResource Icons.Tags}"/>
+<v:ChromelessWindow xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:vm="using:SourceFork.ViewModels"
+                    xmlns:v="using:SourceFork.Views"
+                    mc:Ignorable="d" d:DesignWidth="560" d:DesignHeight="560"
+                    x:Class="SourceFork.Views.EditRepositoryTags"
+                    x:DataType="vm:EditRepositoryTags"
+                    x:Name="ThisControl"
+                    Icon="/App.ico"
+                    Title="{DynamicResource Text.RepositoryTags.Edit}"
+                    Width="560" Height="560"
+                    MinWidth="480" MinHeight="440"
+                    CanResize="True"
+                    WindowStartupLocation="CenterOwner">
+  <Grid RowDefinitions="Auto,*,Auto">
+    <!-- TitleBar -->
+    <Grid Grid.Row="0" Height="28" IsVisible="{Binding !#ThisControl.UseSystemWindowFrame}">
+      <Border Background="{DynamicResource Brush.TitleBar}"
+              BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}"
+              PointerPressed="BeginMoveWindow"/>
 
-      <TextBlock FontSize="18"
-                 Classes="bold"
-                 Text="{DynamicResource Text.RepositoryTags.Edit}"/>
-    </StackPanel>
+      <Path Width="14" Height="14"
+            Margin="10,0,0,0"
+            HorizontalAlignment="Left"
+            Data="{StaticResource Icons.Tags}"
+            IsVisible="{OnPlatform True, macOS=False}"/>
 
-    <TextBlock Margin="0,12,0,0"
-               Text="{Binding Target, Mode=OneWay}"
-               Foreground="{DynamicResource Brush.FG2}"
-               TextTrimming="CharacterEllipsis"/>
+      <TextBlock Classes="bold"
+                 Text="{DynamicResource Text.RepositoryTags.Edit}"
+                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                 IsHitTestVisible="False"/>
 
-    <Grid Margin="0,12,0,0" ColumnDefinitions="*,Auto">
-      <TextBox Grid.Column="0"
-               Height="28"
-               CornerRadius="3"
-               PlaceholderText="{DynamicResource Text.RepositoryTags.Add.Placeholder}"
-               Text="{Binding NewTag, Mode=TwoWay}"
-               KeyDown="OnNewTagKeyDown">
-        <TextBox.InnerLeftContent>
-          <Path Width="12" Height="12"
-                Margin="4,0,2,0"
-                Data="{StaticResource Icons.Tags}"
-                Fill="{DynamicResource Brush.FG1}"/>
-        </TextBox.InnerLeftContent>
-      </TextBox>
+      <v:CaptionButtons HorizontalAlignment="Right"
+                        IsCloseButtonOnly="True"
+                        IsVisible="{OnPlatform True, macOS=False}"/>
+    </Grid>
+
+    <Grid Grid.Row="1" Margin="16,12,16,8" RowDefinitions="Auto,Auto,Auto,*">
+      <StackPanel Grid.Row="0" Orientation="Horizontal">
+        <Path Width="16" Height="16"
+              Margin="0,0,8,0"
+              Data="{StaticResource Icons.Tags}"/>
+
+        <TextBlock FontSize="18"
+                   Classes="bold"
+                   Text="{DynamicResource Text.RepositoryTags.Edit}"/>
+      </StackPanel>
+
+      <TextBlock Grid.Row="1"
+                 Margin="0,12,0,0"
+                 Text="{Binding Target, Mode=OneWay}"
+                 Foreground="{DynamicResource Brush.FG2}"
+                 TextTrimming="CharacterEllipsis"/>
+
+      <Grid Grid.Row="2" Margin="0,12,0,0" ColumnDefinitions="*,Auto">
+        <TextBox x:Name="NewTagBox"
+                 Grid.Column="0"
+                 Height="30"
+                 CornerRadius="3"
+                 PlaceholderText="{DynamicResource Text.RepositoryTags.Add.Placeholder}"
+                 Text="{Binding NewTag, Mode=TwoWay}"
+                 KeyDown="OnNewTagKeyDown">
+          <TextBox.InnerLeftContent>
+            <Path Width="12" Height="12"
+                  Margin="4,0,2,0"
+                  Data="{StaticResource Icons.Tags}"
+                  Fill="{DynamicResource Brush.FG1}"/>
+          </TextBox.InnerLeftContent>
+        </TextBox>
+
+        <Button Grid.Column="1"
+                Classes="flat primary"
+                Height="30"
+                Margin="8,0,0,0"
+                Padding="14,0"
+                Content="{DynamicResource Text.RepositoryTags.Add}"
+                Click="OnAddTag"/>
+      </Grid>
+
+      <Border Grid.Row="3"
+              Margin="0,8,0,0"
+              Background="{DynamicResource Brush.Contents}"
+              BorderThickness="1"
+              BorderBrush="{DynamicResource Brush.Border2}"
+              CornerRadius="4">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+          <ItemsControl ItemsSource="{Binding Tags}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="vm:RepositoryTagItem">
+                <Grid Height="34"
+                      ColumnDefinitions="28,*,Auto,Auto,Auto,Auto"
+                      Margin="4,1">
+                  <Button Grid.Column="0"
+                          Classes="icon_button"
+                          Width="24" Height="24"
+                          Padding="0"
+                          Click="OnSetPrimary"
+                          ToolTip.Tip="{DynamicResource Text.RepositoryTags.SetPrimary}">
+                    <Panel>
+                      <Path Width="13" Height="13"
+                            Data="{StaticResource Icons.Bookmark}"
+                            Fill="{DynamicResource Brush.Accent}"
+                            IsVisible="{Binding IsPrimary}"/>
+                      <Path Width="13" Height="13"
+                            Data="{StaticResource Icons.Bookmark}"
+                            Fill="{DynamicResource Brush.FG2}"
+                            Opacity=".4"
+                            IsVisible="{Binding !IsPrimary}"/>
+                    </Panel>
+                  </Button>
+
+                  <TextBlock Grid.Column="1"
+                             VerticalAlignment="Center"
+                             Text="{Binding DisplayName}"
+                             Classes.primary="{Binding IsPrimary}">
+                    <TextBlock.Styles>
+                      <Style Selector="TextBlock">
+                        <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
+                      </Style>
+                      <Style Selector="TextBlock.primary">
+                        <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                      </Style>
+                    </TextBlock.Styles>
+                  </TextBlock>
+
+                  <TextBlock Grid.Column="2"
+                             Margin="8,0"
+                             VerticalAlignment="Center"
+                             FontSize="11"
+                             Foreground="{DynamicResource Brush.Accent}"
+                             Text="{DynamicResource Text.RepositoryTags.Primary}"
+                             IsVisible="{Binding IsPrimary}"/>
+
+                  <Button Grid.Column="3"
+                          Classes="icon_button"
+                          Width="24" Height="24"
+                          Padding="0"
+                          Click="OnMoveUp"
+                          ToolTip.Tip="{DynamicResource Text.RepositoryTags.MoveUp}">
+                    <Path Width="12" Height="12" Data="{StaticResource Icons.Up}"/>
+                  </Button>
+
+                  <Button Grid.Column="4"
+                          Classes="icon_button"
+                          Width="24" Height="24"
+                          Padding="0"
+                          Click="OnMoveDown"
+                          ToolTip.Tip="{DynamicResource Text.RepositoryTags.MoveDown}">
+                    <Path Width="12" Height="12" Data="{StaticResource Icons.Down}"/>
+                  </Button>
+
+                  <Button Grid.Column="5"
+                          Classes="icon_button"
+                          Width="24" Height="24"
+                          Padding="0"
+                          Click="OnRemoveTag"
+                          ToolTip.Tip="{DynamicResource Text.RepositoryTags.Remove}">
+                    <Path Width="12" Height="12" Data="{StaticResource Icons.Clear}"/>
+                  </Button>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </Border>
+    </Grid>
+
+    <Grid Grid.Row="2" Margin="16,0,16,12" ColumnDefinitions="*,Auto">
+      <TextBlock Grid.Column="0"
+                 VerticalAlignment="Center"
+                 FontSize="11"
+                 Foreground="{DynamicResource Brush.FG2}"
+                 TextWrapping="Wrap"
+                 Text="{DynamicResource Text.RepositoryTags.Tip}"/>
 
       <Button Grid.Column="1"
               Classes="flat primary"
-              Height="28"
-              Margin="8,0,0,0"
-              Padding="14,0"
-              Content="{DynamicResource Text.RepositoryTags.Add}"
-              Click="OnAddTag"/>
+              Width="100" Height="28"
+              Margin="12,0,0,0"
+              Padding="0"
+              HorizontalContentAlignment="Center"
+              VerticalContentAlignment="Center"
+              Content="{DynamicResource Text.RepositoryTags.Done}"
+              Click="OnDone"/>
     </Grid>
-
-    <Border Margin="0,8,0,0"
-            Height="220"
-            Background="{DynamicResource Brush.Contents}"
-            BorderThickness="1"
-            BorderBrush="{DynamicResource Brush.Border2}"
-            CornerRadius="4">
-      <ScrollViewer VerticalScrollBarVisibility="Auto"
-                    HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl ItemsSource="{Binding Tags}">
-          <ItemsControl.ItemTemplate>
-            <DataTemplate DataType="vm:RepositoryTagItem">
-              <Grid Height="34"
-                    ColumnDefinitions="28,*,Auto,Auto,Auto,Auto"
-                    Margin="4,1">
-                <Button Grid.Column="0"
-                        Classes="icon_button"
-                        Width="24" Height="24"
-                        Padding="0"
-                        Click="OnSetPrimary"
-                        ToolTip.Tip="{DynamicResource Text.RepositoryTags.SetPrimary}">
-                  <Panel>
-                    <Path Width="13" Height="13"
-                          Data="{StaticResource Icons.Bookmark}"
-                          Fill="{DynamicResource Brush.Accent}"
-                          IsVisible="{Binding IsPrimary}"/>
-                    <Path Width="13" Height="13"
-                          Data="{StaticResource Icons.Bookmark}"
-                          Fill="{DynamicResource Brush.FG2}"
-                          Opacity=".4"
-                          IsVisible="{Binding !IsPrimary}"/>
-                  </Panel>
-                </Button>
-
-                <TextBlock Grid.Column="1"
-                           VerticalAlignment="Center"
-                           Text="{Binding DisplayName}"
-                           Classes.primary="{Binding IsPrimary}">
-                  <TextBlock.Styles>
-                    <Style Selector="TextBlock">
-                      <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
-                    </Style>
-                    <Style Selector="TextBlock.primary">
-                      <Setter Property="Foreground" Value="{DynamicResource Brush.Accent}"/>
-                      <Setter Property="FontWeight" Value="Bold"/>
-                    </Style>
-                  </TextBlock.Styles>
-                </TextBlock>
-
-                <TextBlock Grid.Column="2"
-                           Margin="8,0"
-                           VerticalAlignment="Center"
-                           FontSize="11"
-                           Foreground="{DynamicResource Brush.Accent}"
-                           Text="{DynamicResource Text.RepositoryTags.Primary}"
-                           IsVisible="{Binding IsPrimary}"/>
-
-                <Button Grid.Column="3"
-                        Classes="icon_button"
-                        Width="24" Height="24"
-                        Padding="0"
-                        Click="OnMoveUp"
-                        ToolTip.Tip="{DynamicResource Text.RepositoryTags.MoveUp}">
-                  <Path Width="12" Height="12" Data="{StaticResource Icons.Up}"/>
-                </Button>
-
-                <Button Grid.Column="4"
-                        Classes="icon_button"
-                        Width="24" Height="24"
-                        Padding="0"
-                        Click="OnMoveDown"
-                        ToolTip.Tip="{DynamicResource Text.RepositoryTags.MoveDown}">
-                  <Path Width="12" Height="12" Data="{StaticResource Icons.Down}"/>
-                </Button>
-
-                <Button Grid.Column="5"
-                        Classes="icon_button"
-                        Width="24" Height="24"
-                        Padding="0"
-                        Click="OnRemoveTag"
-                        ToolTip.Tip="{DynamicResource Text.RepositoryTags.Remove}">
-                  <Path Width="12" Height="12" Data="{StaticResource Icons.Clear}"/>
-                </Button>
-              </Grid>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
-        </ItemsControl>
-      </ScrollViewer>
-    </Border>
-
-    <TextBlock Margin="0,8,0,0"
-               FontSize="11"
-               Foreground="{DynamicResource Brush.FG2}"
-               TextWrapping="Wrap"
-               Text="{DynamicResource Text.RepositoryTags.Tip}"/>
-  </StackPanel>
-</UserControl>
+  </Grid>
+</v:ChromelessWindow>

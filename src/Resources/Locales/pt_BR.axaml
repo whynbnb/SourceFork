@@ -641,6 +641,7 @@
   <x:String x:Key="Text.RepositoryTags.MoveDown" xml:space="preserve">Move down</x:String>
   <x:String x:Key="Text.RepositoryTags.Remove" xml:space="preserve">Remove</x:String>
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
+  <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Concluído</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>

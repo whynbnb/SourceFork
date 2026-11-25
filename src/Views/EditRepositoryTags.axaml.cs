@@ -1,20 +1,35 @@
+using System;
+
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 
 namespace SourceFork.Views
 {
-    public partial class EditRepositoryTags : UserControl
+    public partial class EditRepositoryTags : ChromelessWindow
     {
         public EditRepositoryTags()
         {
+            CloseOnESC = true;
             InitializeComponent();
+        }
+
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+
+            NewTagBox.Focus();
+            NewTagBox.CaretIndex = NewTagBox.Text?.Length ?? 0;
         }
 
         private void OnAddTag(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.EditRepositoryTags vm)
+            {
                 vm.AddTag();
+                NewTagBox.Focus();
+                NewTagBox.CaretIndex = NewTagBox.Text?.Length ?? 0;
+            }
 
             e.Handled = true;
         }
@@ -61,6 +76,15 @@ namespace SourceFork.Views
                 sender is Button { DataContext: ViewModels.RepositoryTagItem tag })
                 vm.RemoveTag(tag);
 
+            e.Handled = true;
+        }
+
+        private void OnDone(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.EditRepositoryTags vm)
+                vm.ApplyChanges();
+
+            Close();
             e.Handled = true;
         }
     }
