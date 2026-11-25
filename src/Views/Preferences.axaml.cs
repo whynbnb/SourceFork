@@ -440,7 +440,9 @@ namespace SourceFork.Views
         {
             if (sender is CheckBox box)
             {
-                ViewModels.Preferences.Instance.UseSystemWindowFrame = box.IsChecked == true;
+                var preferences = ViewModels.Preferences.Instance;
+                preferences.UseSystemWindowFrame = box.IsChecked == true;
+                preferences.Save();
                 await this.ShowDialogAsync(new ConfirmRestart());
             }
 

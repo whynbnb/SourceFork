@@ -21,21 +21,26 @@ namespace SourceFork.Views
             set => SetAndRaise(CaptionHeightProperty, ref _captionHeight, value);
         }
 
+        public bool ShowMacOSTrafficLights
+        {
+            get => OperatingSystem.IsMacOS() && !UseSystemWindowFrame;
+        }
+
         public bool HasRightCaptionButton
         {
             get
             {
-                if (OperatingSystem.IsLinux())
+                if (OperatingSystem.IsLinux() || OperatingSystem.IsWindows())
                     return !Native.OS.UseSystemWindowFrame;
 
-                return OperatingSystem.IsWindows();
+                return false;
             }
         }
 
         public Launcher()
         {
             if (OperatingSystem.IsMacOS())
-                CaptionHeight = new GridLength(34);
+                CaptionHeight = new GridLength(UseSystemWindowFrame ? 30 : 34);
             else if (UseSystemWindowFrame)
                 CaptionHeight = new GridLength(30);
             else
@@ -105,7 +110,7 @@ namespace SourceFork.Views
                     vm.CommandPalette = null;
             }
 
-            if (OperatingSystem.IsMacOS() && WindowState != WindowState.FullScreen)
+            if (OperatingSystem.IsMacOS() && !UseSystemWindowFrame && WindowState != WindowState.FullScreen)
             {
                 if (change.Property == WindowStateProperty ||
                     change.Property == BoundsProperty ||

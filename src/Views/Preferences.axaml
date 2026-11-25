@@ -320,7 +320,6 @@
                       Height="32"
                       Content="{DynamicResource Text.Preferences.Appearance.UseNativeWindowFrame}"
                       IsChecked="{Binding UseSystemWindowFrame, Mode=OneTime}"
-                      IsVisible="{OnPlatform False, Linux=True}"
                       IsCheckedChanged="OnUseNativeWindowFrameChanged"/>
           </Grid>
         </TabItem>

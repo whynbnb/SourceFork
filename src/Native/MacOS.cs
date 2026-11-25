@@ -52,7 +52,7 @@ namespace SourceFork.Native
         public void SetupWindow(Window window)
         {
             window.WindowDecorations = WindowDecorations.Full;
-            window.ExtendClientAreaToDecorationsHint = true;
+            window.ExtendClientAreaToDecorationsHint = !OS.UseSystemWindowFrame;
             window.BorderThickness = new Thickness(0);
         }
 

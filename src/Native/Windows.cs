@@ -48,10 +48,20 @@ namespace SourceFork.Native
 
         public void SetupWindow(Window window)
         {
-            window.WindowDecorations = WindowDecorations.None;
-            window.ExtendClientAreaToDecorationsHint = true;
-            window.BorderThickness = new Thickness(1);
-            window.Padding = new Thickness(0);
+            if (OS.UseSystemWindowFrame)
+            {
+                window.WindowDecorations = WindowDecorations.Full;
+                window.ExtendClientAreaToDecorationsHint = false;
+                window.BorderThickness = new Thickness(0);
+                window.Padding = new Thickness(0);
+            }
+            else
+            {
+                window.WindowDecorations = WindowDecorations.None;
+                window.ExtendClientAreaToDecorationsHint = true;
+                window.BorderThickness = new Thickness(1);
+                window.Padding = new Thickness(0);
+            }
         }
 
         public OS.Directories GetOrCreateDirectories()
@@ -455,6 +465,9 @@ namespace SourceFork.Native
 
         public static void FixWindowFrame(Window w)
         {
+            if (w.WindowDecorations != WindowDecorations.None)
+                return;
+
             if (w.WindowState == WindowState.Maximized)
             {
                 w.BorderThickness = new Thickness(0);
@@ -467,7 +480,11 @@ namespace SourceFork.Native
             }
 
             if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
+            {
+                // Windows 11 does not round custom-drawn window frames by default.
+                Win32Properties.SetWindowCornerPreference(w, Win32Properties.WindowCornerPreference.Round);
                 return;
+            }
 
             Dispatcher.UIThread.Post(() =>
             {

@@ -141,7 +141,7 @@ namespace SourceFork.Native
 
         public static bool UseSystemWindowFrame
         {
-            get => OperatingSystem.IsLinux() && _enableSystemWindowFrame;
+            get => (OperatingSystem.IsLinux() || OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()) && _enableSystemWindowFrame;
             set => _enableSystemWindowFrame = value;
         }
 

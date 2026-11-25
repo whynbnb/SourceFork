@@ -39,6 +39,7 @@
 - 侧边栏宽度保存在 `LayoutInfo.WorkspaceSidebarWidth`；拖动分隔线结束、折叠/展开时会立即保存偏好，避免异常退出丢失宽度。
 - 顶部菜单按钮抽成了 `LauncherMenuButton` 控件，方便侧边栏展开和折叠两种位置复用。
 - 偏好设置窗口可自由调整宽高，初始尺寸 860×520。
+- Windows 主窗口在自绘无边框模式下使用 Windows 11 的 DWM 圆角；偏好设置的外观页在 Windows、Linux 和 macOS 上都提供“使用系统默认窗体样式”选项，切换后按提示重启生效。macOS 开启后会显示标准的系统标题栏，关闭时则保留内容延伸到标题栏的自绘样式。
 - 移植上游 `Launcher.axaml`、`LauncherPage.axaml`、`RepositoryToolbar.axaml`、`Repository.axaml` 等布局相关提交时，不要直接覆盖，保留本 Fork 的侧边栏和统一顶栏结构。
 - 发布流程按 `framework` / `aot` / `aot-static` 三种模式构建；`aot-static` 通过 `StaticLink.Avalonia` 和 `StaticLink.libonigwrap` 静态链接 Avalonia/Skia/HarfBuzz/Oniguruma，输出单文件。
 - Release 暂只产出 Linux x64、Windows x64 和 macOS arm64，共 9 种资产；RPM、Flatpak 等暂不构建。
