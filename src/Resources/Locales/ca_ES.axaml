@@ -1091,6 +1091,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">Descendent</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">Replega el grup</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">Desplega el grup</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Personalitzat</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Gestiona els grups d'etiquetes…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Gestiona els grups d'etiquetes</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Desmarca un grup per amagar-lo. Tria "Personalitzat" a l'ordenació de grups per aplicar aquest ordre.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Encara no hi ha grups d'etiquetes.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} repositoris</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Amaga el grup</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">Visible</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

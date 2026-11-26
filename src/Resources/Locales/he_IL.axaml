@@ -993,6 +993,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">יורד</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">כווץ קבוצה</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">הרחב קבוצה</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">מותאם אישית</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">ניהול קבוצות תגיות…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">ניהול קבוצות תגיות</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">בטלו את הסימון של קבוצה כדי להסתיר אותה. בחרו "מותאם אישית" במיון הקבוצות כדי להחיל את הסדר הזה.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">אין עדיין קבוצות תגיות.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} מאגרים</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">הסתר קבוצה</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">גלוי</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

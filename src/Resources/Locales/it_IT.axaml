@@ -931,6 +931,14 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">Decrescente</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">Comprimi gruppo</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">Espandi gruppo</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Personalizzato</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Gestisci gruppi di tag…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Gestisci gruppi di tag</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Deseleziona un gruppo per nasconderlo. Scegli «Personalizzato» nell'ordinamento dei gruppi per applicare questo ordine.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Nessun gruppo di tag.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} repository</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Nascondi gruppo</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">Visibile</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

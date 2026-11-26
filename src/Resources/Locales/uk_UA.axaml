@@ -675,6 +675,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">За спаданням</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">Згорнути групу</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">Розгорнути групу</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Власна</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Керування групами тегів…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Керування групами тегів</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Зніміть позначку з групи, щоб приховати її. Виберіть «Власна» в сортуванні груп, щоб застосувати цей порядок.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Груп тегів ще немає.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">Репозиторіїв: {0}</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Приховати групу</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">Видима</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

@@ -1038,6 +1038,14 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">Absteigend</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">Gruppe einklappen</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">Gruppe ausklappen</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Benutzerdefiniert</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Tag-Gruppen verwalten…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Tag-Gruppen verwalten</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Deaktivieren Sie ein Gruppenkästchen, um die Gruppe auszublenden. Wählen Sie „Benutzerdefiniert“ als Gruppensortierung, um diese Reihenfolge zu verwenden.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Noch keine Tag-Gruppen.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} Repositories</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Gruppe ausblenden</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">Sichtbar</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

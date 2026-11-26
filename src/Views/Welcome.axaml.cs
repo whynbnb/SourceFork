@@ -184,6 +184,7 @@ namespace SourceFork.Views
 
             if (row is ViewModels.RepositoryGroupRow group)
             {
+                var prefs = ViewModels.Preferences.Instance;
                 var groupMenu = new ContextMenu();
                 var toggle = new MenuItem();
                 toggle.Header = App.Text(group.IsCollapsed ? "RepositorySort.ExpandGroup" : "RepositorySort.CollapseGroup");
@@ -193,6 +194,59 @@ namespace SourceFork.Views
                     e.Handled = true;
                 };
                 groupMenu.Items.Add(toggle);
+
+                if (!string.IsNullOrEmpty(group.GroupKey))
+                {
+                    groupMenu.Items.Add(new MenuItem() { Header = "-" });
+
+                    var moveUp = new MenuItem();
+                    moveUp.Header = App.Text("RepositoryTags.MoveUp");
+                    moveUp.Icon = this.CreateMenuIcon("Icons.Up");
+                    moveUp.Click += (_, e) =>
+                    {
+                        prefs.MoveRepositoryGroupUp(group.GroupKey);
+                        ViewModels.RepositoryListSorter.NotifyChanged();
+                        e.Handled = true;
+                    };
+                    groupMenu.Items.Add(moveUp);
+
+                    var moveDown = new MenuItem();
+                    moveDown.Header = App.Text("RepositoryTags.MoveDown");
+                    moveDown.Icon = this.CreateMenuIcon("Icons.Down");
+                    moveDown.Click += (_, e) =>
+                    {
+                        prefs.MoveRepositoryGroupDown(group.GroupKey);
+                        ViewModels.RepositoryListSorter.NotifyChanged();
+                        e.Handled = true;
+                    };
+                    groupMenu.Items.Add(moveDown);
+
+                    groupMenu.Items.Add(new MenuItem() { Header = "-" });
+
+                    var hide = new MenuItem();
+                    hide.Header = App.Text("RepositoryGroups.Hide");
+                    hide.Icon = this.CreateMenuIcon("Icons.EyeClose");
+                    hide.Click += (_, e) =>
+                    {
+                        prefs.SetRepositoryGroupHidden(group.GroupKey, true);
+                        ViewModels.RepositoryListSorter.NotifyChanged();
+                        e.Handled = true;
+                    };
+                    groupMenu.Items.Add(hide);
+
+                    groupMenu.Items.Add(new MenuItem() { Header = "-" });
+                }
+
+                var manage = new MenuItem();
+                manage.Header = App.Text("RepositorySort.ManageGroups");
+                manage.Icon = this.CreateMenuIcon("Icons.Tags");
+                manage.Click += async (_, e) =>
+                {
+                    await this.ShowDialogAsync(new ViewModels.ManageRepositoryGroups());
+                    e.Handled = true;
+                };
+                groupMenu.Items.Add(manage);
+
                 groupMenu.Open(item);
                 ev.Handled = true;
                 return;

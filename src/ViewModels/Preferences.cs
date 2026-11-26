@@ -561,6 +561,18 @@ namespace SourceFork.ViewModels
             set;
         } = [];
 
+        public List<string> RepositoryGroupOrder
+        {
+            get;
+            set;
+        } = [];
+
+        public List<string> HiddenRepositoryGroups
+        {
+            get;
+            set;
+        } = [];
+
         public AvaloniaList<Models.CustomAction> CustomActions
         {
             get;
@@ -741,6 +753,146 @@ namespace SourceFork.ViewModels
                 CollapsedRepositoryGroups.RemoveAt(index);
             else
                 CollapsedRepositoryGroups.Add(normalized);
+        }
+
+        public bool IsRepositoryGroupHidden(string key)
+        {
+            var normalized = NormalizeRepositoryGroupKey(key);
+            if (string.IsNullOrEmpty(normalized))
+                return false;
+
+            return HiddenRepositoryGroups.Any(x =>
+                string.Equals(NormalizeRepositoryGroupKey(x), normalized, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void SetRepositoryGroupHidden(string key, bool hidden)
+        {
+            var normalized = NormalizeRepositoryGroupKey(key);
+            if (string.IsNullOrEmpty(normalized))
+                return;
+
+            var index = HiddenRepositoryGroups.FindIndex(x =>
+                string.Equals(NormalizeRepositoryGroupKey(x), normalized, StringComparison.OrdinalIgnoreCase));
+            if (hidden)
+            {
+                if (index >= 0)
+                    return;
+
+                HiddenRepositoryGroups.Add(normalized);
+            }
+            else
+            {
+                if (index < 0)
+                    return;
+
+                HiddenRepositoryGroups.RemoveAt(index);
+            }
+
+            Save();
+        }
+
+        public List<string> GetRepositoryGroupKeys()
+        {
+            var keys = new List<string>();
+            void AddKey(string key)
+            {
+                var normalized = NormalizeRepositoryGroupKey(key);
+                if (!string.IsNullOrEmpty(normalized) &&
+                    !keys.Any(x => x.Equals(normalized, StringComparison.OrdinalIgnoreCase)))
+                    keys.Add(normalized);
+            }
+
+            foreach (var node in RepositoryNodes)
+            {
+                if (node.IsRepository)
+                    AddKey(node.PrimaryTag);
+            }
+
+            foreach (var key in RepositoryGroupOrder)
+                AddKey(key);
+
+            foreach (var key in HiddenRepositoryGroups)
+                AddKey(key);
+
+            return GetRepositoryGroupOrder(keys);
+        }
+
+        public List<string> GetRepositoryGroupOrder(IEnumerable<string> keys)
+        {
+            var ordered = new List<string>();
+            foreach (var key in keys)
+            {
+                var normalized = NormalizeRepositoryGroupKey(key);
+                if (!string.IsNullOrEmpty(normalized) &&
+                    !ordered.Any(x => x.Equals(normalized, StringComparison.OrdinalIgnoreCase)))
+                    ordered.Add(normalized);
+            }
+
+            var indexByKey = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            for (var i = 0; i < RepositoryGroupOrder.Count; i++)
+            {
+                var normalized = NormalizeRepositoryGroupKey(RepositoryGroupOrder[i]);
+                if (!string.IsNullOrEmpty(normalized) && !indexByKey.ContainsKey(normalized))
+                    indexByKey[normalized] = i;
+            }
+
+            ordered.Sort((l, r) =>
+            {
+                var li = indexByKey.TryGetValue(l, out var lv) ? lv : int.MaxValue;
+                var ri = indexByKey.TryGetValue(r, out var rv) ? rv : int.MaxValue;
+                return li != ri ? li.CompareTo(ri) : string.Compare(l, r, StringComparison.OrdinalIgnoreCase);
+            });
+
+            return ordered;
+        }
+
+        public void SetRepositoryGroupOrder(IEnumerable<string> keys)
+        {
+            var ordered = new List<string>();
+            foreach (var key in keys)
+            {
+                var normalized = NormalizeRepositoryGroupKey(key);
+                if (!string.IsNullOrEmpty(normalized) &&
+                    !ordered.Any(x => x.Equals(normalized, StringComparison.OrdinalIgnoreCase)))
+                    ordered.Add(normalized);
+            }
+
+            RepositoryGroupOrder = ordered;
+            RepositoryGroupSort = Models.RepositoryGroupSortMode.Custom;
+            Save();
+        }
+
+        public void MoveRepositoryGroupUp(string key)
+        {
+            MoveRepositoryGroup(key, -1);
+        }
+
+        public void MoveRepositoryGroupDown(string key)
+        {
+            MoveRepositoryGroup(key, 1);
+        }
+
+        private void MoveRepositoryGroup(string key, int offset)
+        {
+            var normalized = NormalizeRepositoryGroupKey(key);
+            if (string.IsNullOrEmpty(normalized))
+                return;
+
+            var all = GetRepositoryGroupKeys();
+            var visible = all.Where(x => !IsRepositoryGroupHidden(x)).ToList();
+            var index = visible.FindIndex(x => x.Equals(normalized, StringComparison.OrdinalIgnoreCase));
+            var target = index + offset;
+            if (index < 0 || target < 0 || target >= visible.Count)
+                return;
+
+            (visible[index], visible[target]) = (visible[target], visible[index]);
+            var hidden = all.Where(IsRepositoryGroupHidden);
+            SetRepositoryGroupOrder(visible.Concat(hidden));
+        }
+
+        private static string NormalizeRepositoryGroupKey(string key)
+        {
+            return string.IsNullOrWhiteSpace(key) ? string.Empty : key.Trim().TrimStart('#').Trim();
         }
 
         public void Save()

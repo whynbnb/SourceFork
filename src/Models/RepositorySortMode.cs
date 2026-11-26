@@ -12,5 +12,6 @@ namespace SourceFork.Models
     {
         Name = 0,
         Count,
+        Custom,
     }
 }

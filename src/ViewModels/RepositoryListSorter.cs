@@ -42,24 +42,31 @@ namespace SourceFork.ViewModels
             }
 
             var keys = groups.Keys
-                .Where(x => !string.IsNullOrEmpty(x))
+                .Where(x => !string.IsNullOrEmpty(x) && !prefs.IsRepositoryGroupHidden(x))
                 .ToList();
 
-            if (prefs.RepositoryGroupSort == Models.RepositoryGroupSortMode.Count)
+            if (prefs.RepositoryGroupSort == Models.RepositoryGroupSortMode.Custom)
             {
-                keys.Sort((l, r) =>
-                {
-                    var result = groups[l].Count.CompareTo(groups[r].Count);
-                    return result != 0 ? result : string.Compare(l, r, StringComparison.OrdinalIgnoreCase);
-                });
+                keys = prefs.GetRepositoryGroupOrder(keys);
             }
             else
             {
-                keys.Sort((l, r) => string.Compare(l, r, StringComparison.OrdinalIgnoreCase));
-            }
+                if (prefs.RepositoryGroupSort == Models.RepositoryGroupSortMode.Count)
+                {
+                    keys.Sort((l, r) =>
+                    {
+                        var result = groups[l].Count.CompareTo(groups[r].Count);
+                        return result != 0 ? result : string.Compare(l, r, StringComparison.OrdinalIgnoreCase);
+                    });
+                }
+                else
+                {
+                    keys.Sort((l, r) => string.Compare(l, r, StringComparison.OrdinalIgnoreCase));
+                }
 
-            if (prefs.RepositoryGroupSortDescending)
-                keys.Reverse();
+                if (prefs.RepositoryGroupSortDescending)
+                    keys.Reverse();
+            }
 
             if (groups.ContainsKey(string.Empty))
                 keys.Add(string.Empty);

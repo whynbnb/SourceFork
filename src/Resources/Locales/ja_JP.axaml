@@ -1082,6 +1082,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">降順</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">グループを折りたたむ</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">グループを展開</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">カスタム</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">タググループを管理…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">タググループを管理</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">グループのチェックを外すと非表示になります。この順序を適用するには、グループの並べ替えで「カスタム」を選択してください。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">タググループはまだありません。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} 個のリポジトリ</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">グループを非表示</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">表示</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

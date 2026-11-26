@@ -1001,6 +1001,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">내림차순</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">그룹 접기</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">그룹 펼치기</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">사용자 지정</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">태그 그룹 관리…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">태그 그룹 관리</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">그룹의 선택을 해제하면 숨겨집니다. 이 순서를 적용하려면 그룹 정렬에서 "사용자 지정"을 선택하세요.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">아직 태그 그룹이 없습니다.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">리포지토리 {0}개</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">그룹 숨기기</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">표시</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

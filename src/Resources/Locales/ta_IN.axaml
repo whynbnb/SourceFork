@@ -666,6 +666,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">இறங்கு வரிசை</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">குழுவைச் சுருக்கு</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">குழுவை விரிவாக்கு</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">தனிப்பயன்</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">குறிச்சொல் குழுக்களை நிர்வகி…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">குறிச்சொல் குழுக்களை நிர்வகி</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">குழுவை மறைக்க அதன் தேர்வை நீக்கவும். இந்த வரிசையைப் பயன்படுத்த குழு வரிசைப்படுத்தலில் "தனிப்பயன்" என்பதைத் தேர்ந்தெடுக்கவும்.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">இன்னும் குறிச்சொல் குழுக்கள் இல்லை.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} களஞ்சியங்கள்</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">குழுவை மறை</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">தெரியும்</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

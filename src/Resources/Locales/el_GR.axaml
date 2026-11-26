@@ -1033,6 +1033,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">Φθίνουσα</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">Σύμπτυξη ομάδας</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">Ανάπτυξη ομάδας</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Προσαρμοσμένη</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Διαχείριση ομάδων ετικετών…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Διαχείριση ομάδων ετικετών</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Αποεπιλέξτε μια ομάδα για να την αποκρύψετε. Επιλέξτε «Προσαρμοσμένη» στην ταξινόμηση ομάδων για να εφαρμοστεί αυτή η σειρά.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Δεν υπάρχουν ακόμη ομάδες ετικετών.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} αποθετήρια</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Απόκρυψη ομάδας</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">Ορατό</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">No tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">SCANNING</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">Auto scan folders</x:String>

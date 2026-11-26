@@ -57,11 +57,13 @@ namespace SourceFork.Views
             groupSort.IsEnabled = prefs.RepositoryGroupByPrimaryTag;
             AddGroupMode(owner, groupSort, App.Text("RepositorySort.GroupSort.Name"), Models.RepositoryGroupSortMode.Name);
             AddGroupMode(owner, groupSort, App.Text("RepositorySort.GroupSort.Count"), Models.RepositoryGroupSortMode.Count);
+            AddGroupMode(owner, groupSort, App.Text("RepositorySort.GroupSort.Custom"), Models.RepositoryGroupSortMode.Custom);
             groupSort.Items.Add(new MenuItem() { Header = "-" });
 
             var groupDescending = new MenuItem();
             groupDescending.Header = App.Text("RepositorySort.GroupSort.Descending");
-            groupDescending.IsEnabled = prefs.RepositoryGroupByPrimaryTag;
+            groupDescending.IsEnabled = prefs.RepositoryGroupByPrimaryTag &&
+                                        prefs.RepositoryGroupSort != Models.RepositoryGroupSortMode.Custom;
             if (prefs.RepositoryGroupSortDescending)
                 groupDescending.Icon = owner.CreateMenuIcon("Icons.Check");
             groupDescending.Click += (_, e) =>
@@ -72,6 +74,16 @@ namespace SourceFork.Views
             };
             groupSort.Items.Add(groupDescending);
             menu.Items.Add(groupSort);
+
+            var manageGroups = new MenuItem();
+            manageGroups.Header = App.Text("RepositorySort.ManageGroups");
+            manageGroups.Icon = owner.CreateMenuIcon("Icons.Tags");
+            manageGroups.Click += async (_, e) =>
+            {
+                await owner.ShowDialogAsync(new ViewModels.ManageRepositoryGroups());
+                e.Handled = true;
+            };
+            menu.Items.Add(manageGroups);
 
             menu.Open(anchor);
 

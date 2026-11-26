@@ -1122,6 +1122,14 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Descending" xml:space="preserve">倒序</x:String>
   <x:String x:Key="Text.RepositorySort.CollapseGroup" xml:space="preserve">折叠分组</x:String>
   <x:String x:Key="Text.RepositorySort.ExpandGroup" xml:space="preserve">展开分组</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">自定义</x:String>
+  <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">管理标签分组…</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">管理标签分组</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">取消勾选可隐藏分组。在“分组排序”中选择“自定义”后，此处的顺序会应用到侧边栏和欢迎页。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">暂无标签分组。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} 个仓库</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">隐藏分组</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Visible" xml:space="preserve">显示</x:String>
   <x:String x:Key="Text.RepositoryTags.NoPrimary" xml:space="preserve">无 Tag</x:String>
   <x:String x:Key="Text.Preferences.Scanning" xml:space="preserve">扫描</x:String>
   <x:String x:Key="Text.ScanFolders.Title" xml:space="preserve">自动扫描目录</x:String>
