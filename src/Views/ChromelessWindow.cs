@@ -3,7 +3,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 
 namespace SourceFork.Views
 {
@@ -77,20 +76,9 @@ namespace SourceFork.Views
             }
         }
 
-        protected override void OnLoaded(RoutedEventArgs e)
-        {
-            base.OnLoaded(e);
-
-            if (OperatingSystem.IsWindows())
-                Native.Win64Utilities.FixWindowFrame(this);
-        }
-
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
-
-            if (OperatingSystem.IsWindows() && change.Property == WindowStateProperty)
-                Native.Win64Utilities.FixWindowFrame(this);
 
             if (change.Property == WindowStateProperty)
                 UpdateEdgeSnapInsets();

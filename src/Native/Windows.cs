@@ -9,8 +9,6 @@ using System.Text.Json;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Platform;
-using Avalonia.Threading;
 
 namespace SourceFork.Native
 {
@@ -57,9 +55,12 @@ namespace SourceFork.Native
             }
             else
             {
-                window.WindowDecorations = WindowDecorations.None;
+                // BorderOnly keeps the native resizable frame, drop shadow, Aero
+                // snap and Windows 11 rounded corners, but hides the native
+                // title bar so the app can draw its own.
+                window.WindowDecorations = WindowDecorations.BorderOnly;
                 window.ExtendClientAreaToDecorationsHint = true;
-                window.BorderThickness = new Thickness(1);
+                window.BorderThickness = new Thickness(0);
                 window.Padding = new Thickness(0);
             }
         }
@@ -446,56 +447,6 @@ namespace SourceFork.Native
             return string.Empty;
         }
         #endregion
-    }
-
-    [SupportedOSPlatform("windows")]
-    public static class Win64Utilities
-    {
-        [StructLayout(LayoutKind.Sequential)]
-        internal struct MARGINS
-        {
-            public int cxLeftWidth;
-            public int cxRightWidth;
-            public int cyTopHeight;
-            public int cyBottomHeight;
-        }
-
-        [DllImport("dwmapi.dll")]
-        private static extern int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins);
-
-        public static void FixWindowFrame(Window w)
-        {
-            if (w.WindowDecorations != WindowDecorations.None)
-                return;
-
-            if (w.WindowState == WindowState.Maximized)
-            {
-                w.BorderThickness = new Thickness(0);
-                w.Padding = new Thickness(8, 6, 8, 8);
-            }
-            else
-            {
-                w.BorderThickness = new Thickness(1);
-                w.Padding = new Thickness(0);
-            }
-
-            if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 22000))
-            {
-                // Windows 11 does not round custom-drawn window frames by default.
-                Win32Properties.SetWindowCornerPreference(w, Win32Properties.WindowCornerPreference.Round);
-                return;
-            }
-
-            Dispatcher.UIThread.Post(() =>
-            {
-                var platformHandle = w.TryGetPlatformHandle();
-                if (platformHandle == null)
-                    return;
-
-                var margins = new MARGINS { cxLeftWidth = 1, cxRightWidth = 1, cyTopHeight = 1, cyBottomHeight = 1 };
-                DwmExtendFrameIntoClientArea(platformHandle.Handle, ref margins);
-            }, DispatcherPriority.Render);
-        }
     }
 
     [SupportedOSPlatform("windows")]
