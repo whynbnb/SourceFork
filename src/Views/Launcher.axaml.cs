@@ -375,6 +375,14 @@ namespace SourceFork.Views
             }
         }
 
+        private void OnShowWelcome(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Launcher launcher)
+                launcher.ShowWelcomePage();
+
+            e.Handled = true;
+        }
+
         private void OnToggleWorkspaceSidebar(object sender, RoutedEventArgs e)
         {
             var layout = ViewModels.Preferences.Instance.Layout;

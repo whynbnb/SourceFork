@@ -42,15 +42,52 @@
               PointerPressed="BeginMoveWindow"/>
 
       <!-- Left: window controls, aligned above the sidebar -->
-      <StackPanel Grid.Column="0"
-                  Orientation="Horizontal"
-                  IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}">
+      <Grid Grid.Column="0"
+            IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed, Converter={x:Static BoolConverters.Not}}">
         <v:MacOSTrafficLightsSpacer
+            HorizontalAlignment="Left"
             Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
             IsFullScreen="{Binding #ThisControl.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.FullScreen}}"
             IsVisible="{Binding #ThisControl.ShowMacOSTrafficLights}"/>
-        <v:LauncherMenuButton/>
-      </StackPanel>
+
+        <!-- macOS: welcome button at the right edge of the sidebar title bar -->
+        <Button Classes="icon_button"
+                Width="30" Height="30"
+                Margin="0,0,4,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                IsVisible="{Binding #ThisControl.ShowMacOSTrafficLights}"
+                Click="OnShowWelcome">
+          <Path Width="14" Height="14" Data="{StaticResource Icons.Home}" Fill="{DynamicResource Brush.FG1}"/>
+          <ToolTip.Tip>
+            <TextBlock>
+              <Run Text="{DynamicResource Text.Sidebar.OpenWelcome}"/>
+              <Run Text=" "/>
+              <Run Text="{OnPlatform Ctrl+T, macOS=⌘+T}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+            </TextBlock>
+          </ToolTip.Tip>
+        </Button>
+
+        <!-- Other platforms: welcome button on the left, menu on its right -->
+        <StackPanel Orientation="Horizontal"
+                    IsVisible="{Binding !#ThisControl.ShowMacOSTrafficLights}">
+          <Button Classes="icon_button"
+                  Width="30" Height="30"
+                  Margin="4,0,0,0"
+                  VerticalAlignment="Center"
+                  Click="OnShowWelcome">
+            <Path Width="14" Height="14" Data="{StaticResource Icons.Home}" Fill="{DynamicResource Brush.FG1}"/>
+            <ToolTip.Tip>
+              <TextBlock>
+                <Run Text="{DynamicResource Text.Sidebar.OpenWelcome}"/>
+                <Run Text=" "/>
+                <Run Text="{OnPlatform Ctrl+T, macOS=⌘+T}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+              </TextBlock>
+            </ToolTip.Tip>
+          </Button>
+          <v:LauncherMenuButton/>
+        </StackPanel>
+      </Grid>
 
       <!-- Vertical separator between sidebar and content -->
       <Border Grid.Column="1"
@@ -60,18 +97,38 @@
 
       <!-- Active Page Toolbar -->
       <Grid Grid.Column="2" ColumnDefinitions="Auto,Auto,*">
-        <!-- macOS traffic lights when the sidebar is collapsed -->
-        <Panel Grid.Column="0" IsVisible="{Binding #ThisControl.ShowMacOSTrafficLights}">
-          <v:MacOSTrafficLightsSpacer
-              IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"
-              Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
-              IsFullScreen="{Binding #ThisControl.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.FullScreen}}"/>
-        </Panel>
+        <!-- Window controls and welcome button when the sidebar is collapsed -->
+        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+          <!-- macOS traffic lights -->
+          <Panel IsVisible="{Binding #ThisControl.ShowMacOSTrafficLights}">
+            <v:MacOSTrafficLightsSpacer
+                IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"
+                Zoom="{Binding Source={x:Static vm:Preferences.Instance}, Path=Zoom, Mode=OneWay}"
+                IsFullScreen="{Binding #ThisControl.WindowState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static WindowState.FullScreen}}"/>
+          </Panel>
 
-        <!-- Windows/Linux menu when the sidebar is collapsed -->
-        <Panel Grid.Column="0" IsVisible="{OnPlatform True, macOS=False}">
-          <v:LauncherMenuButton IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"/>
-        </Panel>
+          <Panel IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}">
+            <Button Classes="icon_button"
+                    Width="30" Height="30"
+                    Margin="4,0,0,0"
+                    VerticalAlignment="Center"
+                    Click="OnShowWelcome">
+              <Path Width="14" Height="14" Data="{StaticResource Icons.Home}" Fill="{DynamicResource Brush.FG1}"/>
+              <ToolTip.Tip>
+                <TextBlock>
+                  <Run Text="{DynamicResource Text.Sidebar.OpenWelcome}"/>
+                  <Run Text=" "/>
+                  <Run Text="{OnPlatform Ctrl+T, macOS=⌘+T}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
+                </TextBlock>
+              </ToolTip.Tip>
+            </Button>
+          </Panel>
+
+          <!-- Windows/Linux menu -->
+          <Panel IsVisible="{OnPlatform True, macOS=False}">
+            <v:LauncherMenuButton IsVisible="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkspaceSidebarCollapsed}"/>
+          </Panel>
+        </StackPanel>
 
         <!-- Collapse/expand the workspace sidebar -->
         <Button Grid.Column="1"

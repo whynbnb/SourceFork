@@ -124,14 +124,6 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private void OnAddPage(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ViewModels.Launcher launcher)
-                launcher.ShowWelcomePage();
-
-            e.Handled = true;
-        }
-
         private async Task CloseRowAsync(ViewModels.RepositoryListRow row)
         {
             if (row.Node is not { IsRepository: true } node ||
