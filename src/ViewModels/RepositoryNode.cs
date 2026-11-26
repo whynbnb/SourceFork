@@ -7,6 +7,9 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Avalonia.Threading;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SourceFork.ViewModels
@@ -125,6 +128,14 @@ namespace SourceFork.ViewModels
         public string PrimaryTagDisplay
         {
             get => string.IsNullOrEmpty(_primaryTag) ? string.Empty : $"  #{_primaryTag}";
+        }
+
+        [JsonIgnore]
+        public string SecondaryTagsDisplay
+        {
+            get => string.Concat(_tags
+                .Where(x => !x.Equals(_primaryTag, StringComparison.OrdinalIgnoreCase))
+                .Select(x => $"  #{x}"));
         }
 
         [JsonIgnore]
@@ -296,7 +307,69 @@ namespace SourceFork.ViewModels
             }
 
             _lastUpdateStatus = DateTime.Now;
-            Status = await new Commands.QueryRepositoryStatus(_id).GetResultAsync();
+
+            var cached = Status;
+            var status = await new Commands.QueryRepositoryStatus(_id).GetResultAsync().ConfigureAwait(false);
+            if (status != null)
+            {
+                var cachedTime = cached?.LastCommitTime ?? 0;
+                if (cachedTime > 0 &&
+                    !string.IsNullOrEmpty(status.HeadSha) &&
+                    string.Equals(status.HeadSha, cached?.HeadSha, StringComparison.Ordinal))
+                {
+                    // HEAD did not move, so the cached commit time is still valid.
+                    status.LastCommitTime = cachedTime;
+                }
+                else
+                {
+                    status.LastCommitTime = await new Commands.QueryRepositoryLastCommitTime(_id)
+                        .GetResultAsync()
+                        .ConfigureAwait(false);
+                }
+            }
+
+            if (Dispatcher.UIThread.CheckAccess())
+                Status = status;
+            else
+                await Dispatcher.UIThread.InvokeAsync(() => Status = status);
+        }
+
+        public static async Task UpdateStatusesAsync(IEnumerable<RepositoryNode> nodes, bool force, CancellationToken? token)
+        {
+            var pending = nodes?.Where(x => x != null).ToArray();
+            if (pending == null || pending.Length == 0)
+                return;
+
+            // Keep the git processes off the UI thread; only the final status assignment is
+            // marshaled back, so the bounded concurrency actually overlaps process startup.
+            using var throttle = new SemaphoreSlim(4);
+            var tasks = pending.Select(async node =>
+            {
+                await throttle.WaitAsync(token ?? CancellationToken.None).ConfigureAwait(false);
+                try
+                {
+                    await node.UpdateStatusAsync(force, token).ConfigureAwait(false);
+                }
+                finally
+                {
+                    throttle.Release();
+                }
+            });
+
+            try
+            {
+                await Task.WhenAll(tasks).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Cancellation is expected when the view is unloaded or a scan is stopped.
+            }
+
+            // Persist the last commit time and HEAD SHA so the next launch can skip `git log`.
+            if (Dispatcher.UIThread.CheckAccess())
+                Preferences.Instance.Save();
+            else
+                Dispatcher.UIThread.Post(() => Preferences.Instance.Save());
         }
 
         public void LoadMinimalInfo(string gitDir)
@@ -350,6 +423,7 @@ namespace SourceFork.ViewModels
             OnPropertyChanged(nameof(HasTags));
             OnPropertyChanged(nameof(HasPrimaryTag));
             OnPropertyChanged(nameof(PrimaryTagDisplay));
+            OnPropertyChanged(nameof(SecondaryTagsDisplay));
             OnPropertyChanged(nameof(HasSecondaryTags));
         }
 

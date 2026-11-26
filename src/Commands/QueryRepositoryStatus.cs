@@ -30,6 +30,7 @@ namespace SourceFork.Commands
 
             var sha1 = lines[0].Substring(13).Trim(); // Remove "# branch.oid " prefix
             var head = lines[1].Substring(14).Trim(); // Remove "# branch.head " prefix
+            status.HeadSha = sha1;
 
             if (head.Equals("(detached)", StringComparison.Ordinal))
                 status.CurrentBranch = sha1.Length > 10 ? $"({sha1.Substring(0, 10)})" : "-";

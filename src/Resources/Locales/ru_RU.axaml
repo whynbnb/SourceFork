@@ -1188,4 +1188,8 @@
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">Cleaned {0} unknown-origin entries. Skipped {1} tagged repositories.</x:String>
   <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">Nothing to clean. Skipped {0} tagged repositories.</x:String>
   <x:String x:Key="Text.Sidebar.OpenWelcome" xml:space="preserve">Welcome</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinDay" xml:space="preserve">Сегодня</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">На этой неделе</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">В этом месяце</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Давно</x:String>
 </ResourceDictionary>

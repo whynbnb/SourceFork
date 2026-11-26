@@ -145,6 +145,8 @@ namespace SourceFork.ViewModels
 
                 if (existing is RepositoryGroupRow oldGroup && desired[i] is RepositoryGroupRow newGroup)
                     oldGroup.SetExpanded(newGroup.IsExpanded);
+                else
+                    existing.RefreshDerived();
 
                 // The freshly built duplicate row attached to its page in the constructor.
                 desired[i].Detach();

@@ -210,10 +210,13 @@
                              FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
                              TextTrimming="CharacterEllipsis">
                     <Run Text="{Binding Node.Name, Mode=OneWay}"/>
-                    <Run Text="{Binding Node.PrimaryTagDisplay, Mode=OneWay}"
+                    <Run Text="{Binding PrimaryTagText, Mode=OneWay}"
                          FontSize="10"
                          FontWeight="Bold"
                          Foreground="{DynamicResource Brush.Accent}"/>
+                    <Run Text="{Binding Node.SecondaryTagsDisplay, Mode=OneWay}"
+                         FontSize="10"
+                         Foreground="{DynamicResource Brush.FG2}"/>
                   </TextBlock>
                 </Grid>
                 <TextBlock Grid.Row="1"
@@ -273,25 +276,12 @@
                     </ContentControl.DataTemplates>
                   </ContentControl>
 
-                  <ItemsControl Margin="6,0,0,0"
-                                VerticalAlignment="Center"
-                                ItemsSource="{Binding Node.TagItems}"
-                                IsVisible="{Binding Node.HasSecondaryTags}">
-                    <ItemsControl.ItemsPanel>
-                      <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                      </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                      <DataTemplate DataType="vm:RepositoryTagItem">
-                        <TextBlock Margin="4,0,0,0"
-                                   FontSize="10"
-                                   Foreground="{DynamicResource Brush.FG2}"
-                                   Text="{Binding DisplayName}"
-                                   IsVisible="{Binding !IsPrimary}"/>
-                      </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                  </ItemsControl>
+                  <TextBlock Margin="6,0,0,0"
+                             VerticalAlignment="Center"
+                             FontSize="10"
+                             Foreground="{DynamicResource Brush.FG2}"
+                             Text="{Binding UpdatedText}"
+                             IsVisible="{Binding HasUpdatedText}"/>
                 </StackPanel>
               </Grid>
 

@@ -125,12 +125,10 @@ namespace SourceFork.ViewModels
 
             Dispatcher.UIThread.Post(async () =>
             {
-                var nodes = Preferences.Instance.RepositoryNodes.ToArray();
-                foreach (var node in nodes)
-                {
-                    if (node.IsRepository)
-                        await node.UpdateStatusAsync(false, null);
-                }
+                var nodes = Preferences.Instance.RepositoryNodes
+                    .Where(x => x.IsRepository)
+                    .ToArray();
+                await RepositoryNode.UpdateStatusesAsync(nodes, false, null);
             }, DispatcherPriority.Background);
         }
 

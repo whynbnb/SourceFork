@@ -734,4 +734,8 @@
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">Cleaned {0} unknown-origin entries. Skipped {1} tagged repositories.</x:String>
   <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">Nothing to clean. Skipped {0} tagged repositories.</x:String>
   <x:String x:Key="Text.Sidebar.OpenWelcome" xml:space="preserve">Welcome</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinDay" xml:space="preserve">இன்று</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">இந்த வாரம்</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">இந்த மாதம்</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">நெடுங்காலத்திற்கு முன்</x:String>
 </ResourceDictionary>

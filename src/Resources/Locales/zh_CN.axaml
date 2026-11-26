@@ -1190,4 +1190,8 @@
   <x:String x:Key="Text.RepositoryHistory.RemovedUnknownSkipped" xml:space="preserve">已清理 {0} 个未知来源条目，跳过 {1} 个带 Tag 的重要仓库。</x:String>
   <x:String x:Key="Text.RepositoryHistory.NothingToCleanTagged" xml:space="preserve">没有可清理的条目，跳过了 {0} 个带 Tag 的重要仓库。</x:String>
   <x:String x:Key="Text.Sidebar.OpenWelcome" xml:space="preserve">欢迎页</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinDay" xml:space="preserve">1天内</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">7天内</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">30天内</x:String>
+  <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">很久</x:String>
 </ResourceDictionary>

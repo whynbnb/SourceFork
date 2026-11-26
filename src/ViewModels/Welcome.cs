@@ -67,14 +67,11 @@ namespace SourceFork.ViewModels
             try
             {
                 // Rows can be rebuilt by tag changes, sorting or scanning while statuses update.
-                foreach (var row in Rows.ToArray())
-                {
-                    if (token?.IsCancellationRequested == true)
-                        break;
-
-                    if (row.Node != null)
-                        await row.Node.UpdateStatusAsync(force, token);
-                }
+                var nodes = Rows
+                    .Select(x => x.Node)
+                    .Where(x => x != null)
+                    .ToArray();
+                await RepositoryNode.UpdateStatusesAsync(nodes, force, token);
             }
             finally
             {
