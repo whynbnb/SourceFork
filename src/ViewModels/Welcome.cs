@@ -51,12 +51,10 @@ namespace SourceFork.ViewModels
 
         public void Refresh()
         {
-            Rows.Clear();
-
             var nodes = Preferences.Instance.RepositoryNodes
                 .Where(x => x.IsRepository && x.MatchesSearch(_searchFilter) && x.HasAllTags(_tagFilters));
-            foreach (var row in RepositoryListSorter.Build(nodes))
-                Rows.Add(row);
+            var desired = RepositoryListSorter.Build(nodes).ToList();
+            RepositoryListSorter.Sync(Rows, desired);
         }
 
         public async Task UpdateStatusAsync(bool force, CancellationToken? token)

@@ -84,6 +84,8 @@ namespace SourceFork.ViewModels
             }
         }
 
+        public event Action<RepositoryListRow> ActiveRowChanged;
+
         public ICommandPalette CommandPalette
         {
             get => _commandPalette;
@@ -590,14 +592,9 @@ namespace SourceFork.ViewModels
         {
             var filter = _repositoryFilter?.Trim();
 
-            foreach (var row in VisiblePages)
-                row.Detach();
-
             _isRefreshingVisiblePages = true;
             try
             {
-                VisiblePages.Clear();
-
                 var pagesByNode = new Dictionary<string, LauncherPage>(StringComparer.Ordinal);
 
                 foreach (var page in Pages)
@@ -610,9 +607,9 @@ namespace SourceFork.ViewModels
                     .Where(x => x.MatchesSearch(filter) && x.HasAllTags(_tagFilters))
                     .ToList();
 
-                foreach (var row in RepositoryListSorter.Build(repositories,
-                    node => pagesByNode.TryGetValue(node.Id, out var page) ? page : null))
-                    VisiblePages.Add(row);
+                var desired = RepositoryListSorter.Build(repositories,
+                    node => pagesByNode.TryGetValue(node.Id, out var page) ? page : null).ToList();
+                RepositoryListSorter.Sync(VisiblePages, desired);
             }
             finally
             {
@@ -736,6 +733,7 @@ namespace SourceFork.ViewModels
 
             SyncSelectedRow();
             CommandPalette = null;
+            ActiveRowChanged?.Invoke(_selectedRow);
         }
 
         public int TagFilterCount

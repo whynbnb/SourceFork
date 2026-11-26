@@ -96,19 +96,31 @@ namespace SourceFork.ViewModels
 
         public bool IsExpanded
         {
-            get;
+            get => _isExpanded;
+            private set
+            {
+                if (SetProperty(ref _isExpanded, value))
+                    OnPropertyChanged(nameof(IsCollapsed));
+            }
         }
 
         public bool IsCollapsed
         {
-            get => !IsExpanded;
+            get => !_isExpanded;
         }
 
         public RepositoryGroupRow(string groupKey, string groupName, bool isCollapsed)
             : base(groupName)
         {
             GroupKey = groupKey;
-            IsExpanded = !isCollapsed;
+            _isExpanded = !isCollapsed;
         }
+
+        public void SetExpanded(bool expanded)
+        {
+            IsExpanded = expanded;
+        }
+
+        private bool _isExpanded;
     }
 }

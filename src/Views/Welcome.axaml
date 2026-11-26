@@ -104,6 +104,7 @@
                ScrollViewer.VerticalScrollBarVisibility="Auto"
                ItemsSource="{Binding Rows}"
                SelectionMode="Single"
+               AutoScrollToSelectedItem="False"
                ContextRequested="OnTreeContextRequested"
                LostFocus="OnTreeViewLostFocus"
                DragDrop.AllowDrop="True"

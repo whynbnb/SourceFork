@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Avalonia.Collections;
 using Avalonia.Threading;
 
 namespace SourceFork.ViewModels
@@ -91,6 +92,65 @@ namespace SourceFork.ViewModels
             return rows;
         }
 
+        public static void Sync(AvaloniaList<RepositoryListRow> target, IReadOnlyList<RepositoryListRow> desired)
+        {
+            var oldByKey = new Dictionary<string, RepositoryListRow>(StringComparer.Ordinal);
+            foreach (var row in target)
+            {
+                var key = GetRowKey(row);
+                if (key != null)
+                    oldByKey.TryAdd(key, row);
+            }
+
+            var reused = new List<RepositoryListRow>(desired.Count);
+            var used = new HashSet<RepositoryListRow>();
+            foreach (var want in desired)
+            {
+                var key = GetRowKey(want);
+                if (key != null &&
+                    oldByKey.TryGetValue(key, out var existing) &&
+                    !used.Contains(existing) &&
+                    CanReuse(existing, want))
+                {
+                    used.Add(existing);
+                    reused.Add(existing);
+                }
+                else
+                {
+                    reused.Add(null);
+                }
+            }
+
+            for (var i = target.Count - 1; i >= 0; i--)
+            {
+                if (used.Contains(target[i]))
+                    continue;
+
+                target[i].Detach();
+                target.RemoveAt(i);
+            }
+
+            for (var i = 0; i < desired.Count; i++)
+            {
+                var existing = reused[i];
+                if (existing == null)
+                {
+                    target.Insert(i, desired[i]);
+                    continue;
+                }
+
+                var current = target.IndexOf(existing);
+                if (current != i)
+                    target.Move(current, i);
+
+                if (existing is RepositoryGroupRow oldGroup && desired[i] is RepositoryGroupRow newGroup)
+                    oldGroup.SetExpanded(newGroup.IsExpanded);
+
+                // The freshly built duplicate row attached to its page in the constructor.
+                desired[i].Detach();
+            }
+        }
+
         public static void NotifyChanged()
         {
             if (!Dispatcher.UIThread.CheckAccess())
@@ -158,6 +218,25 @@ namespace SourceFork.ViewModels
         {
             var result = Models.NumericSort.Compare(left.Name, right.Name);
             return descending ? -result : result;
+        }
+
+        private static string GetRowKey(RepositoryListRow row)
+        {
+            if (row is RepositoryGroupRow group)
+                return "G:" + group.GroupKey;
+
+            return row.Node is { } node ? "R:" + node.Id : null;
+        }
+
+        private static bool CanReuse(RepositoryListRow existing, RepositoryListRow desired)
+        {
+            if (existing is RepositoryGroupRow left && desired is RepositoryGroupRow right)
+                return string.Equals(left.GroupName, right.GroupName, StringComparison.Ordinal);
+
+            if (existing is RepositoryGroupRow || desired is RepositoryGroupRow)
+                return false;
+
+            return ReferenceEquals(existing.Node, desired.Node) && ReferenceEquals(existing.Page, desired.Page);
         }
     }
 }

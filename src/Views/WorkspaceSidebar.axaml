@@ -96,6 +96,7 @@
                ItemsSource="{Binding VisiblePages}"
                SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
                SelectionMode="Single"
+               AutoScrollToSelectedItem="False"
                ContextRequested="OnPagesContextRequested"
                DragDrop.AllowDrop="True"
                DragDrop.DragOver="OnPagesDragOver"

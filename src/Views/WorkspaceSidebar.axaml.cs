@@ -22,11 +22,35 @@ namespace SourceFork.Views
         private bool _dropAfterTarget;
         private bool _canDrop;
         private readonly DataFormat<string> _dragData = DataFormat.CreateStringApplicationFormat("sourcefork-sidebar-repo");
+        private ViewModels.Launcher _launcher;
 
         public WorkspaceSidebar()
         {
             InitializeComponent();
             PagesList.AddHandler(PointerPressedEvent, OnPagesPointerPressed, RoutingStrategies.Tunnel, true);
+            DataContextChanged += OnDataContextChanged;
+        }
+
+        private void OnDataContextChanged(object sender, EventArgs e)
+        {
+            if (_launcher != null)
+                _launcher.ActiveRowChanged -= OnActiveRowChanged;
+
+            _launcher = DataContext as ViewModels.Launcher;
+            if (_launcher != null)
+                _launcher.ActiveRowChanged += OnActiveRowChanged;
+        }
+
+        private void OnActiveRowChanged(ViewModels.RepositoryListRow row)
+        {
+            if (row == null || _launcher == null || !_launcher.VisiblePages.Contains(row))
+                return;
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (_launcher != null && _launcher.VisiblePages.Contains(row))
+                    PagesList.ScrollIntoView(row);
+            }, DispatcherPriority.Background);
         }
 
         private void OnSortMenu(object sender, RoutedEventArgs e)
@@ -405,8 +429,11 @@ namespace SourceFork.Views
 
         private void ToggleGroup(ViewModels.RepositoryGroupRow group)
         {
-            ViewModels.Preferences.Instance.ToggleRepositoryGroupCollapsed(group.GroupKey);
-            ViewModels.RepositoryListSorter.NotifyChanged();
+            PagesList.ToggleGroupPreservingScroll(group.GroupKey, () =>
+            {
+                ViewModels.Preferences.Instance.ToggleRepositoryGroupCollapsed(group.GroupKey);
+                ViewModels.RepositoryListSorter.NotifyChanged();
+            });
         }
 
         private static Button FindCloseButton(object source)

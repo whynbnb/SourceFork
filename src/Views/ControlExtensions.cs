@@ -6,6 +6,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input.Platform;
 using Avalonia.Media;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
 
 namespace SourceFork.Views
 {
@@ -40,6 +42,61 @@ namespace SourceFork.Views
             {
                 await new Alert().ShowAsync(topLevel, "Failed to copy text to clipboard: " + e.Message, true);
             }
+        }
+
+        public static void ToggleGroupPreservingScroll(this ListBox list, string groupKey, Action toggle)
+        {
+            var scroll = list.FindDescendantOfType<ScrollViewer>();
+            if (scroll == null)
+            {
+                toggle();
+                return;
+            }
+
+            var offset = scroll.Offset;
+            var beforeY = FindGroupHeader(list, groupKey)?.TranslatePoint(new Point(0, 0), scroll)?.Y;
+
+            toggle();
+
+            // Rebuilding the row list can change the layout of the virtualizing panel. Keep
+            // the clicked group header at the same viewport position, falling back to the
+            // previous scroll offset when its container is no longer realized.
+            var corrected = false;
+            void RestoreScrollOffset()
+            {
+                if (corrected)
+                    return;
+
+                var afterY = FindGroupHeader(list, groupKey)?.TranslatePoint(new Point(0, 0), scroll)?.Y;
+                if (beforeY is { } y0 && afterY is { } y1)
+                {
+                    var delta = y1 - y0;
+                    if (Math.Abs(delta) > 0.01)
+                    {
+                        corrected = true;
+                        scroll.Offset = new Vector(scroll.Offset.X, Math.Max(0, scroll.Offset.Y + delta));
+                    }
+                }
+                else if (scroll.Offset != offset)
+                {
+                    scroll.Offset = offset;
+                }
+            }
+
+            Dispatcher.UIThread.Post(RestoreScrollOffset, DispatcherPriority.Default);
+            Dispatcher.UIThread.Post(RestoreScrollOffset, DispatcherPriority.Background);
+        }
+
+        private static Control FindGroupHeader(ListBox list, string groupKey)
+        {
+            for (var i = 0; i < list.ItemCount; i++)
+            {
+                if (list.Items[i] is ViewModels.RepositoryGroupRow group &&
+                    string.Equals(group.GroupKey, groupKey, StringComparison.OrdinalIgnoreCase))
+                    return list.ContainerFromIndex(i);
+            }
+
+            return null;
         }
 
         public static Path CreateMenuIcon(this Control control, string iconKey)

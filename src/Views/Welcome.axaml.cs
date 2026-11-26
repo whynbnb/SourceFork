@@ -514,8 +514,11 @@ namespace SourceFork.Views
 
         private void ToggleGroup(ViewModels.RepositoryGroupRow group)
         {
-            ViewModels.Preferences.Instance.ToggleRepositoryGroupCollapsed(group.GroupKey);
-            ViewModels.RepositoryListSorter.NotifyChanged();
+            TreeContainer.ToggleGroupPreservingScroll(group.GroupKey, () =>
+            {
+                ViewModels.Preferences.Instance.ToggleRepositoryGroupCollapsed(group.GroupKey);
+                ViewModels.RepositoryListSorter.NotifyChanged();
+            });
         }
 
         private static ListBoxItem FindListBoxItem(object source)
