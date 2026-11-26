@@ -37,6 +37,7 @@
       <Border Grid.Column="0" Grid.ColumnSpan="5"
               BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}"
               Background="{DynamicResource Brush.TitleBar}"
+              Win32Properties.NonClientHitTestResult="Caption"
               DoubleTapped="MaximizeOrRestoreWindow"
               PointerPressed="BeginMoveWindow"/>
 
