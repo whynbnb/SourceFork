@@ -1018,6 +1018,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.RepositoryTags.Edit" xml:space="preserve">Edit Tags</x:String>
   <x:String x:Key="Text.RepositoryTags.Add" xml:space="preserve">Add</x:String>
   <x:String x:Key="Text.RepositoryTags.Add.Placeholder" xml:space="preserve">Enter a tag name</x:String>
+  <x:String x:Key="Text.RepositoryTags.Suggestions" xml:space="preserve">Vorhandene Tags</x:String>
   <x:String x:Key="Text.RepositoryTags.SetPrimary" xml:space="preserve">Set as primary tag</x:String>
   <x:String x:Key="Text.RepositoryTags.Primary" xml:space="preserve">PRIMARY</x:String>
   <x:String x:Key="Text.RepositoryTags.MoveUp" xml:space="preserve">Move up</x:String>

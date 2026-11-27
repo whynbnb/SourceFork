@@ -14,6 +14,27 @@
                     MinWidth="480" MinHeight="440"
                     CanResize="True"
                     WindowStartupLocation="CenterOwner">
+  <v:ChromelessWindow.Styles>
+    <Style Selector="Button.tag_chip">
+      <Setter Property="Height" Value="24"/>
+      <Setter Property="Padding" Value="8,0"/>
+      <Setter Property="Margin" Value="0,0,6,6"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="FontSize" Value="12"/>
+      <Setter Property="FontWeight" Value="Normal"/>
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border2}"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
+    </Style>
+    <Style Selector="Button.tag_chip:pointerover /template/ Border#PART_Border">
+      <Setter Property="Background" Value="{DynamicResource Brush.FlatButton.BackgroundHovered}"/>
+    </Style>
+    <Style Selector="Button.tag_chip:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
+    </Style>
+  </v:ChromelessWindow.Styles>
+
   <Grid RowDefinitions="Auto,*,Auto">
     <!-- TitleBar -->
     <Grid Grid.Row="0" Height="28" IsVisible="{Binding !#ThisControl.UseSystemWindowFrame}">
@@ -37,7 +58,7 @@
                         IsVisible="{OnPlatform True, macOS=False}"/>
     </Grid>
 
-    <Grid Grid.Row="1" Margin="16,12,16,8" RowDefinitions="Auto,Auto,Auto,*">
+    <Grid Grid.Row="1" Margin="16,12,16,8" RowDefinitions="Auto,Auto,Auto,Auto,*">
       <StackPanel Grid.Row="0" Orientation="Horizontal">
         <Path Width="16" Height="16"
               Margin="0,0,8,0"
@@ -80,6 +101,43 @@
       </Grid>
 
       <Border Grid.Row="3"
+              Margin="0,8,0,0"
+              Padding="8,6,2,0"
+              IsVisible="{Binding HasSuggestions}"
+              Background="{DynamicResource Brush.Contents}"
+              BorderThickness="1"
+              BorderBrush="{DynamicResource Brush.Border2}"
+              CornerRadius="4">
+        <ScrollViewer MaxHeight="110"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+          <StackPanel>
+            <TextBlock Margin="0,0,0,4"
+                       FontSize="11"
+                       Foreground="{DynamicResource Brush.FG2}"
+                       Text="{DynamicResource Text.RepositoryTags.Suggestions}"/>
+
+            <ItemsControl ItemsSource="{Binding Suggestions}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="x:String">
+                  <Button Classes="flat tag_chip"
+                          Tag="{Binding}"
+                          Click="OnSuggestionClick">
+                    <TextBlock Text="{Binding StringFormat='#{0}'}"/>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+
+      <Border Grid.Row="4"
               Margin="0,8,0,0"
               Background="{DynamicResource Brush.Contents}"
               BorderThickness="1"

@@ -1102,6 +1102,7 @@
   <x:String x:Key="Text.RepositoryTags.Edit" xml:space="preserve">编辑 Tag</x:String>
   <x:String x:Key="Text.RepositoryTags.Add" xml:space="preserve">添加</x:String>
   <x:String x:Key="Text.RepositoryTags.Add.Placeholder" xml:space="preserve">输入 Tag 名称</x:String>
+  <x:String x:Key="Text.RepositoryTags.Suggestions" xml:space="preserve">选择已有 Tag</x:String>
   <x:String x:Key="Text.RepositoryTags.SetPrimary" xml:space="preserve">设为主要 Tag</x:String>
   <x:String x:Key="Text.RepositoryTags.Primary" xml:space="preserve">主要</x:String>
   <x:String x:Key="Text.RepositoryTags.MoveUp" xml:space="preserve">上移</x:String>

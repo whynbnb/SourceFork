@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -20,12 +22,26 @@ namespace SourceFork.ViewModels
         public string NewTag
         {
             get => _newTag;
-            set => SetProperty(ref _newTag, value);
+            set
+            {
+                if (SetProperty(ref _newTag, value))
+                    RefreshSuggestions();
+            }
         }
 
         public bool HasTags
         {
             get => Tags.Count > 0;
+        }
+
+        public ObservableCollection<string> Suggestions
+        {
+            get;
+        } = [];
+
+        public bool HasSuggestions
+        {
+            get => Suggestions.Count > 0;
         }
 
         public EditRepositoryTags(RepositoryNode node)
@@ -35,6 +51,47 @@ namespace SourceFork.ViewModels
 
             foreach (var tag in node.Tags)
                 Tags.Add(new RepositoryTagItem(tag, tag.Equals(node.PrimaryTag, System.StringComparison.OrdinalIgnoreCase)));
+
+            RefreshSuggestions();
+        }
+
+        public void RefreshSuggestions()
+        {
+            var keyword = NewTag?.Trim().TrimStart('#').Trim() ?? string.Empty;
+            var assigned = new HashSet<string>(Tags.Select(x => x.Name), StringComparer.OrdinalIgnoreCase);
+
+            var launcher = App.GetLauncher();
+            var existing = launcher != null
+                ? launcher.GetAvailableTags()
+                : Preferences.Instance.RepositoryNodes
+                    .Where(x => x.IsRepository)
+                    .SelectMany(x => x.Tags)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .OrderBy(x => x, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+            Suggestions.Clear();
+            foreach (var tag in existing)
+            {
+                if (assigned.Contains(tag))
+                    continue;
+
+                if (keyword.Length > 0 && !tag.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                Suggestions.Add(tag);
+            }
+
+            OnPropertyChanged(nameof(HasSuggestions));
+        }
+
+        public void AcceptSuggestion(string tag)
+        {
+            if (string.IsNullOrWhiteSpace(tag))
+                return;
+
+            NewTag = tag;
+            AddTag();
         }
 
         public void AddTag()
@@ -61,6 +118,7 @@ namespace SourceFork.ViewModels
                 Tags[0].IsPrimary = true;
 
             OnPropertyChanged(nameof(HasTags));
+            RefreshSuggestions();
             ApplyChanges();
         }
 

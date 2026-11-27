@@ -34,6 +34,19 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
+        private void OnSuggestionClick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.EditRepositoryTags vm &&
+                sender is Button { Tag: string tag })
+            {
+                vm.AcceptSuggestion(tag);
+                NewTagBox.Focus();
+                NewTagBox.CaretIndex = NewTagBox.Text?.Length ?? 0;
+            }
+
+            e.Handled = true;
+        }
+
         private void OnNewTagKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter && DataContext is ViewModels.EditRepositoryTags vm)
