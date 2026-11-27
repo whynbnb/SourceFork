@@ -12,18 +12,9 @@ namespace SourceFork.ViewModels
         public static List<RepositoryListRow> Build(IEnumerable<RepositoryNode> nodes, Func<RepositoryNode, LauncherPage> pageSelector = null)
         {
             var list = nodes.Where(x => x != null).ToList();
-            Sort(list);
 
             var rows = new List<RepositoryListRow>();
             var prefs = Preferences.Instance;
-            if (!prefs.RepositoryGroupByPrimaryTag)
-            {
-                foreach (var node in list)
-                    rows.Add(new RepositoryListRow(node, pageSelector?.Invoke(node)));
-
-                return rows;
-            }
-
             var groups = new Dictionary<string, List<RepositoryNode>>(StringComparer.OrdinalIgnoreCase);
             var displayNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             foreach (var node in list)
@@ -84,7 +75,11 @@ namespace SourceFork.ViewModels
                     continue;
 
                 var group = groups[key];
-                Sort(group);
+                var itemSort = prefs.GetRepositoryGroupItemSort(key);
+                Sort(group,
+                    itemSort?.Mode ?? Models.RepositorySortMode.Custom,
+                    itemSort?.Descending ?? false);
+
                 foreach (var node in group)
                     rows.Add(new RepositoryListRow(node, pageSelector?.Invoke(node)));
             }
@@ -166,12 +161,9 @@ namespace SourceFork.ViewModels
             Welcome.Instance.Refresh();
         }
 
-        private static void Sort(List<RepositoryNode> nodes)
+        private static void Sort(List<RepositoryNode> nodes, Models.RepositorySortMode mode, bool descending)
         {
-            var prefs = Preferences.Instance;
-            var descending = prefs.RepositorySortDescending;
-
-            switch (prefs.RepositorySort)
+            switch (mode)
             {
                 case Models.RepositorySortMode.AddedTime:
                     nodes.Sort((l, r) => Compare(l.CreateTime, r.CreateTime, l, r, descending));
@@ -180,11 +172,11 @@ namespace SourceFork.ViewModels
                     nodes.Sort((l, r) => CompareName(l, r, descending));
                     break;
                 case Models.RepositorySortMode.UpdatedTime:
-                    nodes.Sort((l, r) => Compare(l.GetLastUpdatedTime(), r.GetLastUpdatedTime(), l, r, descending));
+                    nodes.Sort((l, r) => Compare(GetUpdatedTime(l), GetUpdatedTime(r), l, r, descending));
                     break;
                 default:
                     var order = new Dictionary<string, int>(StringComparer.Ordinal);
-                    var all = prefs.RepositoryNodes;
+                    var all = Preferences.Instance.RepositoryNodes;
                     for (var i = 0; i < all.Count; i++)
                         order[all[i].Id] = i;
 
@@ -196,6 +188,15 @@ namespace SourceFork.ViewModels
                     });
                     break;
             }
+        }
+
+        private static DateTime GetUpdatedTime(RepositoryNode node)
+        {
+            var timestamp = node.Status?.LastCommitTime ?? 0;
+            if (timestamp > 0)
+                return DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+
+            return node.GetLastUpdatedTime();
         }
 
         private static int Compare(long left, long right, RepositoryNode l, RepositoryNode r, bool descending)

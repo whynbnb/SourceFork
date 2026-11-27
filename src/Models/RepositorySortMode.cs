@@ -14,4 +14,10 @@ namespace SourceFork.Models
         Count,
         Custom,
     }
+
+    public class RepositoryGroupItemSort
+    {
+        public RepositorySortMode Mode { get; set; } = RepositorySortMode.Custom;
+        public bool Descending { get; set; } = false;
+    }
 }

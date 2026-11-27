@@ -57,17 +57,6 @@ namespace SourceFork.ViewModels
             get => DirtyState != Models.DirtyState.None;
         }
 
-        public string PrimaryTagText
-        {
-            get
-            {
-                if (Preferences.Instance.RepositoryGroupByPrimaryTag)
-                    return string.Empty;
-
-                return Node is { HasPrimaryTag: true } node ? $"#{node.PrimaryTag}" : string.Empty;
-            }
-        }
-
         public bool HasUpdatedText
         {
             get => UpdatedText.Length > 0;
@@ -99,7 +88,6 @@ namespace SourceFork.ViewModels
 
         public void RefreshDerived()
         {
-            OnPropertyChanged(nameof(PrimaryTagText));
             RefreshUpdated();
         }
 

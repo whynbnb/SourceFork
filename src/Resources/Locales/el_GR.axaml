@@ -1021,6 +1021,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Τέλος</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Ταξινόμηση εντός ομάδας</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1036,7 +1037,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Προσαρμοσμένη</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Διαχείριση ομάδων ετικετών…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Διαχείριση ομάδων ετικετών</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Αποεπιλέξτε μια ομάδα για να την αποκρύψετε. Επιλέξτε «Προσαρμοσμένη» στην ταξινόμηση ομάδων για να εφαρμοστεί αυτή η σειρά.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Επιλέξτε ή αποεπιλέξτε ομάδες για εμφάνιση ή απόκρυψη. Εδώ ορίζετε τη σειρά κάθε ομάδας και με τα βέλη τη σειρά των ομάδων. Με «Προσαρμοσμένη» σειρά, αυτή εφαρμόζεται στην πλαϊνή γραμμή και στη σελίδα υποδοχής.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Σειρά ομάδων</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Δεν υπάρχουν ακόμη ομάδες ετικετών.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} αποθετήρια</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Απόκρυψη ομάδας</x:String>

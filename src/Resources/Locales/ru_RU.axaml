@@ -1108,6 +1108,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Готово</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Сортировка внутри группы</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1123,7 +1124,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Пользовательская</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Управление группами тегов…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Управление группами тегов</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Снимите флажок с группы, чтобы скрыть её. Выберите «Пользовательская» в сортировке групп, чтобы применить этот порядок.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Установите или снимите флажок группы, чтобы показать или скрыть её. Здесь задаётся сортировка внутри каждой группы, а стрелками меняется порядок групп. При порядке «Пользовательский» он применяется в боковой панели и на странице приветствия.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Порядок групп</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Групп тегов пока нет.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">Репозиториев: {0}</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Скрыть группу</x:String>

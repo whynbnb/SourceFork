@@ -19,7 +19,7 @@
     <!-- Managed Repositories -->
     <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto,*">
       <!-- Search and Tag Filter -->
-      <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto">
+      <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
         <TextBox Grid.Column="0"
                  x:Name="SearchBox"
                  Height="32"
@@ -80,17 +80,6 @@
                      Fill="{DynamicResource Brush.Accent}"
                      IsVisible="{Binding HasTagFilters, Mode=OneWay}"/>
           </Panel>
-        </Button>
-
-        <Button Grid.Column="2"
-                Classes="icon_button"
-                Width="32" Height="32"
-                Margin="4,0,0,0"
-                Click="OnSortMenu">
-          <ToolTip.Tip>
-            <TextBlock Text="{DynamicResource Text.RepositorySort.Title}" FontWeight="Bold"/>
-          </ToolTip.Tip>
-          <Path Width="16" Height="16" Data="{StaticResource Icons.OrderByName}" Fill="{DynamicResource Brush.FG1}"/>
         </Button>
       </Grid>
 
@@ -198,7 +187,7 @@
                   <ItemsControl Margin="12,0,0,0"
                                 VerticalAlignment="Center"
                                 ItemsSource="{Binding Node.TagItems}"
-                                IsVisible="{Binding Node.HasTags}">
+                                IsVisible="{Binding Node.HasSecondaryTags}">
                     <ItemsControl.ItemsPanel>
                       <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal"/>
@@ -209,7 +198,8 @@
                         <TextBlock Margin="6,0,0,0"
                                    FontSize="11"
                                    Text="{Binding DisplayName}"
-                                   Classes.primary="{Binding IsPrimary}">
+                                   Classes.primary="{Binding IsPrimary}"
+                                   IsVisible="{Binding !IsPrimary}">
                           <TextBlock.Styles>
                             <Style Selector="TextBlock">
                               <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>

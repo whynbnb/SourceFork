@@ -981,6 +981,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">סיום</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">מיון בתוך הקבוצה</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -996,7 +997,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">מותאם אישית</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">ניהול קבוצות תגיות…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">ניהול קבוצות תגיות</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">בטלו את הסימון של קבוצה כדי להסתיר אותה. בחרו "מותאם אישית" במיון הקבוצות כדי להחיל את הסדר הזה.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">סמנו או בטלו סימון של קבוצה כדי להציג או להסתיר אותה. כאן מגדירים את המיון הפנימי של כל קבוצה, ובאמצעות החצים משנים את סדר הקבוצות. כשסדר הקבוצות „מותאם אישית”, הסדר הזה חל בסרגל הצד ובעמוד הברוכים הבאים.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">סדר הקבוצות</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">אין עדיין קבוצות תגיות.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} מאגרים</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">הסתר קבוצה</x:String>

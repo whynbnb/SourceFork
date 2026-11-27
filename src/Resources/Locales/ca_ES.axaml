@@ -1079,6 +1079,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Fet</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Ordena dins del grup</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1094,7 +1095,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Personalitzat</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Gestiona els grups d'etiquetes…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Gestiona els grups d'etiquetes</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Desmarca un grup per amagar-lo. Tria "Personalitzat" a l'ordenació de grups per aplicar aquest ordre.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Marqueu o desmarqueu els grups per mostrar-los o amagar-los. Aquí podeu definir l'ordre intern de cada grup i, amb les fletxes, l'ordre dels grups. Amb l'ordre de grups «Personalitzat», aquest ordre s'aplica a la barra lateral i a la pàgina de benvinguda.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Ordre dels grups</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Encara no hi ha grups d'etiquetes.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} repositoris</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Amaga el grup</x:String>

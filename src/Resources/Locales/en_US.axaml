@@ -1098,6 +1098,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Done</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Sort within group</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1113,7 +1114,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Custom</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Manage tag groups…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Manage tag groups</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Uncheck a group to hide it. Choose "Custom" in group sorting to apply this order.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Check a group to show it and uncheck it to hide it. Set each group's internal sort order here, and use the arrows to change the group order. With the “Custom” group order, that order is used in the sidebar and Welcome page.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Group order</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">No tag groups yet.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} repositories</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Hide group</x:String>

@@ -105,14 +105,6 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private void OnSortMenu(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button)
-                RepositorySortMenu.Show(this, button);
-
-            e.Handled = true;
-        }
-
         private void OnTagFilterMenu(object sender, RoutedEventArgs e)
         {
             if (sender is not Button button)
@@ -184,69 +176,10 @@ namespace SourceFork.Views
 
             if (row is ViewModels.RepositoryGroupRow group)
             {
-                var prefs = ViewModels.Preferences.Instance;
-                var groupMenu = new ContextMenu();
-                var toggle = new MenuItem();
-                toggle.Header = App.Text(group.IsCollapsed ? "RepositorySort.ExpandGroup" : "RepositorySort.CollapseGroup");
-                toggle.Click += (_, e) =>
-                {
-                    ToggleGroup(group);
-                    e.Handled = true;
-                };
-                groupMenu.Items.Add(toggle);
-
-                if (!string.IsNullOrEmpty(group.GroupKey))
-                {
-                    groupMenu.Items.Add(new MenuItem() { Header = "-" });
-
-                    var moveUp = new MenuItem();
-                    moveUp.Header = App.Text("RepositoryTags.MoveUp");
-                    moveUp.Icon = this.CreateMenuIcon("Icons.Up");
-                    moveUp.Click += (_, e) =>
-                    {
-                        prefs.MoveRepositoryGroupUp(group.GroupKey);
-                        ViewModels.RepositoryListSorter.NotifyChanged();
-                        e.Handled = true;
-                    };
-                    groupMenu.Items.Add(moveUp);
-
-                    var moveDown = new MenuItem();
-                    moveDown.Header = App.Text("RepositoryTags.MoveDown");
-                    moveDown.Icon = this.CreateMenuIcon("Icons.Down");
-                    moveDown.Click += (_, e) =>
-                    {
-                        prefs.MoveRepositoryGroupDown(group.GroupKey);
-                        ViewModels.RepositoryListSorter.NotifyChanged();
-                        e.Handled = true;
-                    };
-                    groupMenu.Items.Add(moveDown);
-
-                    groupMenu.Items.Add(new MenuItem() { Header = "-" });
-
-                    var hide = new MenuItem();
-                    hide.Header = App.Text("RepositoryGroups.Hide");
-                    hide.Icon = this.CreateMenuIcon("Icons.EyeClose");
-                    hide.Click += (_, e) =>
-                    {
-                        prefs.SetRepositoryGroupHidden(group.GroupKey, true);
-                        ViewModels.RepositoryListSorter.NotifyChanged();
-                        e.Handled = true;
-                    };
-                    groupMenu.Items.Add(hide);
-
-                    groupMenu.Items.Add(new MenuItem() { Header = "-" });
-                }
-
-                var manage = new MenuItem();
-                manage.Header = App.Text("RepositorySort.ManageGroups");
-                manage.Icon = this.CreateMenuIcon("Icons.Tags");
-                manage.Click += async (_, e) =>
-                {
-                    await this.ShowDialogAsync(new ViewModels.ManageRepositoryGroups());
-                    e.Handled = true;
-                };
-                groupMenu.Items.Add(manage);
-
+                var groupMenu = RepositoryGroupContextMenu.Build(
+                    this,
+                    group,
+                    () => ToggleGroup(group));
                 groupMenu.Open(item);
                 ev.Handled = true;
                 return;
@@ -438,19 +371,32 @@ namespace SourceFork.Views
                     after = e.GetPosition(TreeContainer).Y > top.Y + item.Bounds.Height / 2;
                 }
 
+                var prefs = ViewModels.Preferences.Instance;
+                var source = prefs.FindNode(sourceId);
                 if (!string.IsNullOrEmpty(target))
                 {
+                    var targetNode = prefs.FindNode(target);
+                    var sourceGroup = source?.PrimaryTag ?? string.Empty;
+                    var targetGroup = targetNode?.PrimaryTag ?? string.Empty;
+                    if (!string.Equals(sourceGroup, targetGroup, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _dragStart = null;
+                        _dragStarted = false;
+                        e.Handled = true;
+                        return;
+                    }
+
                     if (after)
-                        ViewModels.Preferences.Instance.MoveRepositoryNodeAfter(sourceId, target);
+                        prefs.MoveRepositoryNodeAfter(sourceId, target);
                     else
-                        ViewModels.Preferences.Instance.MoveRepositoryNodeBefore(sourceId, target);
+                        prefs.MoveRepositoryNodeBefore(sourceId, target);
                 }
                 else
                 {
-                    ViewModels.Preferences.Instance.MoveRepositoryNodeToEnd(sourceId);
+                    prefs.MoveRepositoryNodeToEnd(sourceId);
                 }
 
-                ViewModels.Preferences.Instance.RepositorySort = Models.RepositorySortMode.Custom;
+                prefs.SetRepositoryGroupItemSort(source?.PrimaryTag, Models.RepositorySortMode.Custom);
                 ViewModels.RepositoryListSorter.NotifyChanged();
 
                 _dragStart = null;

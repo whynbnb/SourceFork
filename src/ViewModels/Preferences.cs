@@ -519,24 +519,6 @@ namespace SourceFork.ViewModels
             set;
         } = string.Empty;
 
-        public Models.RepositorySortMode RepositorySort
-        {
-            get;
-            set;
-        } = Models.RepositorySortMode.Custom;
-
-        public bool RepositorySortDescending
-        {
-            get;
-            set;
-        } = false;
-
-        public bool RepositoryGroupByPrimaryTag
-        {
-            get;
-            set;
-        } = false;
-
         public bool ShowRepositoryPathInSidebar
         {
             get => _showRepositoryPathInSidebar;
@@ -554,6 +536,12 @@ namespace SourceFork.ViewModels
             get;
             set;
         } = false;
+
+        public Dictionary<string, Models.RepositoryGroupItemSort> RepositoryGroupItemSorts
+        {
+            get;
+            set;
+        } = [];
 
         public List<string> CollapsedRepositoryGroups
         {
@@ -815,6 +803,45 @@ namespace SourceFork.ViewModels
                 AddKey(key);
 
             return GetRepositoryGroupOrder(keys);
+        }
+
+        public Models.RepositoryGroupItemSort GetRepositoryGroupItemSort(string key)
+        {
+            var target = key ?? string.Empty;
+            foreach (var pair in RepositoryGroupItemSorts)
+            {
+                if (string.Equals(pair.Key, target, StringComparison.OrdinalIgnoreCase))
+                    return pair.Value;
+            }
+
+            return null;
+        }
+
+        public Models.RepositoryGroupItemSort SetRepositoryGroupItemSort(
+            string key,
+            Models.RepositorySortMode mode,
+            bool? descending = null)
+        {
+            var target = key ?? string.Empty;
+            var storedKey = target;
+            foreach (var pair in RepositoryGroupItemSorts)
+            {
+                if (string.Equals(pair.Key, target, StringComparison.OrdinalIgnoreCase))
+                {
+                    storedKey = pair.Key;
+                    break;
+                }
+            }
+
+            if (!RepositoryGroupItemSorts.ContainsKey(storedKey))
+                RepositoryGroupItemSorts[storedKey] = new Models.RepositoryGroupItemSort();
+
+            var sort = RepositoryGroupItemSorts[storedKey] ??= new Models.RepositoryGroupItemSort();
+            sort.Mode = mode;
+            if (descending is { } value)
+                sort.Descending = value;
+
+            return sort;
         }
 
         public List<string> GetRepositoryGroupOrder(IEnumerable<string> keys)

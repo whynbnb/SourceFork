@@ -1026,6 +1026,7 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Fertig</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Innerhalb der Gruppe sortieren</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1041,7 +1042,8 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Benutzerdefiniert</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Tag-Gruppen verwalten…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Tag-Gruppen verwalten</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Deaktivieren Sie ein Gruppenkästchen, um die Gruppe auszublenden. Wählen Sie „Benutzerdefiniert“ als Gruppensortierung, um diese Reihenfolge zu verwenden.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Aktivieren oder deaktivieren Sie Gruppen, um sie ein- oder auszublenden. Legen Sie hier die Sortierung jeder Gruppe fest und ändern Sie mit den Pfeilen die Gruppenreihenfolge. Bei „Benutzerdefiniert“ gilt diese Reihenfolge in der Seitenleiste und auf der Willkommensseite.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Gruppenreihenfolge</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Noch keine Tag-Gruppen.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} Repositories</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Gruppe ausblenden</x:String>

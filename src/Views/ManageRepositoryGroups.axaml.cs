@@ -11,6 +11,14 @@ namespace SourceFork.Views
             InitializeComponent();
         }
 
+        protected override void OnLoaded(RoutedEventArgs e)
+        {
+            base.OnLoaded(e);
+
+            if (DataContext is ViewModels.ManageRepositoryGroups vm)
+                vm.Reload();
+        }
+
         private void OnMoveUp(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.ManageRepositoryGroups vm &&

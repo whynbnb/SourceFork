@@ -654,6 +654,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">முடிந்தது</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">குழுவுக்குள் வரிசைப்படுத்து</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -669,7 +670,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">தனிப்பயன்</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">குறிச்சொல் குழுக்களை நிர்வகி…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">குறிச்சொல் குழுக்களை நிர்வகி</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">குழுவை மறைக்க அதன் தேர்வை நீக்கவும். இந்த வரிசையைப் பயன்படுத்த குழு வரிசைப்படுத்தலில் "தனிப்பயன்" என்பதைத் தேர்ந்தெடுக்கவும்.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">குழுக்களைக் காட்ட அல்லது மறைக்க தேர்வுப்பெட்டியைப் பயன்படுத்தவும். ஒவ்வொரு குழுவின் உள் வரிசையை இங்கே அமைக்கவும், அம்புகளால் குழு வரிசையை மாற்றவும். குழு வரிசை “தனிப்பயன்” ஆக இருக்கும்போது இந்த வரிசை பக்கப்பட்டி மற்றும் வரவேற்பு பக்கத்தில் பயன்படுத்தப்படும்.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">குழு வரிசை</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">இன்னும் குறிச்சொல் குழுக்கள் இல்லை.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} களஞ்சியங்கள்</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">குழுவை மறை</x:String>

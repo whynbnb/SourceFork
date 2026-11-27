@@ -663,6 +663,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Готово</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Сортувати в групі</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -678,7 +679,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Власна</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Керування групами тегів…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Керування групами тегів</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Зніміть позначку з групи, щоб приховати її. Виберіть «Власна» в сортуванні груп, щоб застосувати цей порядок.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Установіть або зніміть прапорець групи, щоб показати чи приховати її. Тут задається сортування всередині кожної групи, а стрілками змінюється порядок груп. За порядку «Користувацький» він застосовується в бічній панелі та на сторінці вітання.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Порядок груп</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Груп тегів ще немає.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">Репозиторіїв: {0}</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Приховати групу</x:String>

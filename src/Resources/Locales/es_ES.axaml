@@ -1095,6 +1095,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Hecho</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Ordenar dentro del grupo</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1110,7 +1111,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Personalizado</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Gestionar grupos de etiquetas…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Gestionar grupos de etiquetas</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Desmarca un grupo para ocultarlo. Elige «Personalizado» en la ordenación de grupos para aplicar este orden.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Marca o desmarca grupos para mostrarlos u ocultarlos. Define aquí el orden interno de cada grupo y usa las flechas para cambiar el orden de los grupos. Con el orden «Personalizado», este orden se aplica a la barra lateral y a la página de bienvenida.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Orden de los grupos</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Aún no hay grupos de etiquetas.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} repositorios</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Ocultar grupo</x:String>

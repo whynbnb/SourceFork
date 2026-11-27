@@ -919,6 +919,7 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Fatto</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Ordina nel gruppo</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -934,7 +935,8 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Personalizzato</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Gestisci gruppi di tag…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Gestisci gruppi di tag</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Deseleziona un gruppo per nasconderlo. Scegli «Personalizzato» nell'ordinamento dei gruppi per applicare questo ordine.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Seleziona o deseleziona un gruppo per mostrarlo o nasconderlo. Imposta qui l'ordinamento interno di ogni gruppo e usa le frecce per cambiare l'ordine dei gruppi. Con l'ordine «Personalizzato», questo ordine viene usato nella barra laterale e nella pagina di benvenuto.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Ordine dei gruppi</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Nessun gruppo di tag.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} repository</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Nascondi gruppo</x:String>

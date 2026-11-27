@@ -1025,6 +1025,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Selesai</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Urutkan dalam grup</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1040,7 +1041,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Kustom</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Kelola grup tag…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Kelola grup tag</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Hapus centang grup untuk menyembunyikannya. Pilih "Kustom" di pengurutan grup untuk menerapkan urutan ini.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Centang atau hapus centang grup untuk menampilkan atau menyembunyikannya. Atur urutan internal setiap grup di sini, dan gunakan panah untuk mengubah urutan grup. Dengan urutan grup “Kustom”, urutan ini dipakai di bilah sisi dan halaman selamat datang.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Urutan grup</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Belum ada grup tag.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} repositori</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Sembunyikan grup</x:String>

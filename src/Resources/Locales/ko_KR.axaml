@@ -989,6 +989,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">완료</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">그룹 내 정렬</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1004,7 +1005,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">사용자 지정</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">태그 그룹 관리…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">태그 그룹 관리</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">그룹의 선택을 해제하면 숨겨집니다. 이 순서를 적용하려면 그룹 정렬에서 "사용자 지정"을 선택하세요.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">확인란으로 그룹을 표시하거나 숨깁니다. 여기에서 각 그룹의 내부 정렬을 설정하고 화살표로 그룹 순서를 변경할 수 있습니다. 그룹 순서가 “사용자 지정”이면 이 순서가 사이드바와 시작 페이지에 적용됩니다.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">그룹 순서</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">아직 태그 그룹이 없습니다.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">리포지토리 {0}개</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">그룹 숨기기</x:String>

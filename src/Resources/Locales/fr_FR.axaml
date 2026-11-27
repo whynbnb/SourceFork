@@ -981,6 +981,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">Terminé</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">Trier dans le groupe</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -996,7 +997,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">Personnalisé</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">Gérer les groupes d'étiquettes…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">Gérer les groupes d'étiquettes</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Décochez un groupe pour le masquer. Choisissez « Personnalisé » dans le tri des groupes pour appliquer cet ordre.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">Cochez ou décochez un groupe pour l’afficher ou le masquer. Définissez ici le tri interne de chaque groupe et utilisez les flèches pour changer l’ordre des groupes. Avec l’ordre « Personnalisé », cet ordre s’applique à la barre latérale et à la page d’accueil.</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">Ordre des groupes</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">Aucun groupe d'étiquettes pour le moment.</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} dépôts</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">Masquer le groupe</x:String>

@@ -1130,6 +1130,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">主要 Tag 會以強調色顯示。使用上下箭頭調整順序。</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">完成</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">倉庫排序</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">組內排序</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">新增時間</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">名稱</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">更新時間</x:String>
@@ -1145,7 +1146,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">自訂</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">管理標籤分組…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">管理標籤分組</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">取消勾選可隱藏分組。在「分組排序」中選擇「自訂」後，此處的順序會套用到側邊欄和歡迎頁。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">勾選控制分組是否顯示；在這裡設定每個分組的組內排序，並用上移/下移調整分組順序。選擇「自訂」分組排序後，目前順序會套用到側邊欄和歡迎頁。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">分組排序</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">尚無標籤分組。</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} 個倉庫</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">隱藏分組</x:String>

@@ -1070,6 +1070,7 @@
   <x:String x:Key="Text.RepositoryTags.Tip" xml:space="preserve">The primary tag is shown in accent color. Use the arrows to change the order.</x:String>
   <x:String x:Key="Text.RepositoryTags.Done" xml:space="preserve">完了</x:String>
   <x:String x:Key="Text.RepositorySort.Title" xml:space="preserve">Sort repositories</x:String>
+  <x:String x:Key="Text.RepositorySort.GroupItems" xml:space="preserve">グループ内を並べ替え</x:String>
   <x:String x:Key="Text.RepositorySort.AddedTime" xml:space="preserve">Added time</x:String>
   <x:String x:Key="Text.RepositorySort.Name" xml:space="preserve">Name</x:String>
   <x:String x:Key="Text.RepositorySort.UpdatedTime" xml:space="preserve">Updated time</x:String>
@@ -1085,7 +1086,8 @@
   <x:String x:Key="Text.RepositorySort.GroupSort.Custom" xml:space="preserve">カスタム</x:String>
   <x:String x:Key="Text.RepositorySort.ManageGroups" xml:space="preserve">タググループを管理…</x:String>
   <x:String x:Key="Text.RepositoryGroups.Title" xml:space="preserve">タググループを管理</x:String>
-  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">グループのチェックを外すと非表示になります。この順序を適用するには、グループの並べ替えで「カスタム」を選択してください。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.Hint" xml:space="preserve">チェックでグループの表示/非表示を切り替えます。ここで各グループ内の並び順を設定し、矢印でグループの順序を変更できます。「カスタム」のグループ順序では、この順序がサイドバーとウェルカムページに適用されます。</x:String>
+  <x:String x:Key="Text.RepositoryGroups.GroupOrder" xml:space="preserve">グループの並び順</x:String>
   <x:String x:Key="Text.RepositoryGroups.Empty" xml:space="preserve">タググループはまだありません。</x:String>
   <x:String x:Key="Text.RepositoryGroups.RepositoryCount" xml:space="preserve">{0} 個のリポジトリ</x:String>
   <x:String x:Key="Text.RepositoryGroups.Hide" xml:space="preserve">グループを非表示</x:String>

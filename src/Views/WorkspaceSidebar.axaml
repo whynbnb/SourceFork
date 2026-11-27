@@ -27,7 +27,7 @@
 
   <Grid RowDefinitions="Auto,*">
     <!-- Repository Search and Tag Filter -->
-    <Grid Grid.Row="0" Height="34" Margin="8,10,8,6" ColumnDefinitions="*,Auto,Auto">
+    <Grid Grid.Row="0" Height="34" Margin="8,10,8,6" ColumnDefinitions="*,Auto">
       <Border Grid.Column="0"
               Classes="search_box"
               Height="30"
@@ -74,18 +74,6 @@
                    Fill="{DynamicResource Brush.Accent}"
                    IsVisible="{Binding HasTagFilters, Mode=OneWay}"/>
         </Panel>
-      </Button>
-
-      <Button Grid.Column="2"
-              Classes="icon_button"
-              Width="30" Height="30"
-              Margin="4,0,0,0"
-              VerticalAlignment="Center"
-              Click="OnSortMenu">
-        <ToolTip.Tip>
-          <TextBlock Text="{DynamicResource Text.RepositorySort.Title}" FontWeight="Bold"/>
-        </ToolTip.Tip>
-        <Path Width="14" Height="14" Data="{StaticResource Icons.OrderByName}" Fill="{DynamicResource Brush.FG1}"/>
       </Button>
     </Grid>
 
@@ -210,10 +198,6 @@
                              FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
                              TextTrimming="CharacterEllipsis">
                     <Run Text="{Binding Node.Name, Mode=OneWay}"/>
-                    <Run Text="{Binding PrimaryTagText, Mode=OneWay}"
-                         FontSize="10"
-                         FontWeight="Bold"
-                         Foreground="{DynamicResource Brush.Accent}"/>
                     <Run Text="{Binding Node.SecondaryTagsDisplay, Mode=OneWay}"
                          FontSize="10"
                          Foreground="{DynamicResource Brush.FG2}"/>
