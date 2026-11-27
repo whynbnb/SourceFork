@@ -37,16 +37,6 @@ namespace SourceFork.ViewModels
             get => Node is { IsRepository: true };
         }
 
-        public bool IsOpen
-        {
-            get => Page != null;
-        }
-
-        public bool CanClose
-        {
-            get => IsRepository && Page != null;
-        }
-
         public Models.DirtyState DirtyState
         {
             get => Page?.DirtyState ?? Models.DirtyState.None;

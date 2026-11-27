@@ -23,6 +23,11 @@
     <Style Selector="Button.sidebar_action:pointerover /template/ Border#PART_Border">
       <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
     </Style>
+    <Style Selector="ListBox#PagesList /template/ ScrollViewer /template/ ScrollContentPresenter#PART_ContentPresenter">
+      <Setter Property="Grid.RowSpan" Value="1"/>
+      <Setter Property="Grid.ColumnSpan" Value="1"/>
+      <Setter Property="Margin" Value="0,0,12,0"/>
+    </Style>
   </UserControl.Styles>
 
   <Grid RowDefinitions="Auto,*">
@@ -78,7 +83,7 @@
     </Grid>
 
     <!-- Repositories -->
-    <Grid Grid.Row="1" Margin="6,0" ClipToBounds="True">
+    <Grid Grid.Row="1" Margin="6,0,2,0" ClipToBounds="True">
       <ListBox x:Name="PagesList"
                Background="Transparent"
                ItemsSource="{Binding VisiblePages}"
@@ -120,14 +125,6 @@
         <Style Selector="ListBoxItem:selected /template/ Border#PART_Background">
           <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
           <Setter Property="Opacity" Value=".18"/>
-        </Style>
-        <Style Selector="ListBoxItem Button.page_close">
-          <Setter Property="Opacity" Value="0"/>
-          <Setter Property="IsHitTestVisible" Value="False"/>
-        </Style>
-        <Style Selector="ListBoxItem:pointerover Button.page_close, ListBoxItem:selected Button.page_close">
-          <Setter Property="Opacity" Value="1"/>
-          <Setter Property="IsHitTestVisible" Value="True"/>
         </Style>
       </ListBox.Styles>
 
@@ -172,7 +169,7 @@
         <DataTemplate DataType="vm:RepositoryListRow">
           <Grid Background="Transparent">
             <Grid MinHeight="42"
-                  ColumnDefinitions="*,Auto"
+                  ColumnDefinitions="*"
                   PointerPressed="OnRowPointerPressed"
                   PointerMoved="OnRowPointerMoved"
                   PointerReleased="OnRowPointerReleased"
@@ -186,7 +183,11 @@
                 </StackPanel>
               </ToolTip.Tip>
 
-              <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto" VerticalAlignment="Center" ClipToBounds="True">
+              <Grid Grid.Column="0"
+                    Margin="8,0,0,0"
+                    RowDefinitions="Auto,Auto,Auto"
+                    VerticalAlignment="Center"
+                    ClipToBounds="True">
                 <Grid Grid.Row="0" ColumnDefinitions="Auto,*">
                   <Panel Grid.Column="0" Width="14" VerticalAlignment="Center">
                     <Ellipse Width="8" Height="8"
@@ -268,16 +269,6 @@
                              IsVisible="{Binding HasUpdatedText}"/>
                 </StackPanel>
               </Grid>
-
-              <Button Grid.Column="1"
-                      Classes="icon_button page_close"
-                      Width="20" Height="20"
-                      Margin="0,0,6,0"
-                      VerticalAlignment="Center"
-                      IsVisible="{Binding CanClose}"
-                      ToolTip.Tip="{DynamicResource Text.Repository.RemoveFromList}">
-                <Path Width="8" Height="8" Data="{StaticResource Icons.Close}"/>
-              </Button>
             </Grid>
           </Grid>
         </DataTemplate>

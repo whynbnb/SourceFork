@@ -518,37 +518,6 @@ namespace SourceFork.Views
                 menu.Items.Add(remove);
             }
 
-            if (page != null && (node.IsRepository || launcher.Pages.Count > 1))
-            {
-                if (menu.Items.Count > 0)
-                    menu.Items.Add(new MenuItem() { Header = "-" });
-
-                var close = new MenuItem();
-                close.Header = App.Text("PageTabBar.Tab.Close");
-                close.Tag = OperatingSystem.IsMacOS() ? "⌘+W" : "Ctrl+W";
-                close.Click += (_, ev) =>
-                {
-                    launcher.CloseTab(page);
-                    ev.Handled = true;
-                };
-                menu.Items.Add(close);
-            }
-
-            if (page != null && launcher.Pages.Count > 1)
-            {
-                var closeOthers = new MenuItem();
-                closeOthers.Header = App.Text("PageTabBar.Tab.CloseOther");
-                closeOthers.Click += (_, ev) =>
-                {
-                    if (launcher.ActivePage != page)
-                        launcher.ActivePage = page;
-
-                    launcher.CloseOtherTabs();
-                    ev.Handled = true;
-                };
-                menu.Items.Add(closeOthers);
-            }
-
             menu.Open(item);
             e.Handled = true;
         }

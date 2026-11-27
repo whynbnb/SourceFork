@@ -402,47 +402,6 @@ namespace SourceFork.ViewModels
                 SelectedRow = target;
         }
 
-        public void CloseOtherTabs()
-        {
-            if (Pages.Count == 1)
-                return;
-
-            _ignoreIndexChange = true;
-
-            var id = ActivePage.Node.Id;
-            foreach (var one in Pages)
-            {
-                if (one.Node.Id != id)
-                    CloseRepositoryInTab(one);
-            }
-
-            Pages = new AvaloniaList<LauncherPage> { ActivePage };
-            OnPropertyChanged(nameof(Pages));
-            AttachPagesEvents();
-            RefreshVisiblePages();
-
-            PersistOpenRepositories();
-            Preferences.Instance.Save();
-            _ignoreIndexChange = false;
-            GC.Collect();
-        }
-
-        public void CloseRightTabs()
-        {
-            _ignoreIndexChange = true;
-
-            var endIdx = Pages.IndexOf(ActivePage);
-            for (var i = Pages.Count - 1; i > endIdx; i--)
-            {
-                CloseRepositoryInTab(Pages[i]);
-                Pages.Remove(Pages[i]);
-            }
-
-            Preferences.Instance.Save();
-            _ignoreIndexChange = false;
-            GC.Collect();
-        }
-
         public void OpenRepositoryInTab(string repo, LauncherPage page)
         {
             var normalizedPath = repo.Replace('\\', '/').TrimEnd('/');

@@ -206,13 +206,6 @@ namespace SourceFork.Views
 
             if (e.KeyModifiers.HasFlag(cmdKey))
             {
-                if (e.Key == Key.W)
-                {
-                    vm.CloseTab(null);
-                    e.Handled = true;
-                    return;
-                }
-
                 if (e.Key == Key.R)
                 {
                     if (vm.ActivePage.Data is not ViewModels.Welcome)
