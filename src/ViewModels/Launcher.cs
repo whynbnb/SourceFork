@@ -602,7 +602,7 @@ namespace SourceFork.ViewModels
                 }
 
                 var repositories = EnumerateRepositoryNodes()
-                    .Where(x => x.MatchesSearch(filter) && x.HasAllTags(_tagFilters))
+                    .Where(x => x.MatchesSearch(filter) && x.HasAnyTag(_tagFilters))
                     .ToList();
 
                 var desired = RepositoryListSorter.Build(repositories,

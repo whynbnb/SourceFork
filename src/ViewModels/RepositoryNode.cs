@@ -217,18 +217,12 @@ namespace SourceFork.ViewModels
             RebuildTagItems();
         }
 
-        public bool HasAllTags(IReadOnlyCollection<string> filters)
+        public bool HasAnyTag(IReadOnlyCollection<string> filters)
         {
             if (filters == null || filters.Count == 0)
                 return true;
 
-            foreach (var filter in filters)
-            {
-                if (!_tags.Any(t => t.Equals(filter, StringComparison.OrdinalIgnoreCase)))
-                    return false;
-            }
-
-            return true;
+            return filters.Any(filter => _tags.Any(t => t.Equals(filter, StringComparison.OrdinalIgnoreCase)));
         }
 
         public DateTime GetLastUpdatedTime()

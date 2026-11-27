@@ -52,7 +52,7 @@ namespace SourceFork.ViewModels
         public void Refresh()
         {
             var nodes = Preferences.Instance.RepositoryNodes
-                .Where(x => x.IsRepository && x.MatchesSearch(_searchFilter) && x.HasAllTags(_tagFilters));
+                .Where(x => x.IsRepository && x.MatchesSearch(_searchFilter) && x.HasAnyTag(_tagFilters));
             var desired = RepositoryListSorter.Build(nodes).ToList();
             RepositoryListSorter.Sync(Rows, desired);
         }
