@@ -9,6 +9,14 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SourceFork.Views.Welcome"
              x:DataType="vm:Welcome">
+  <UserControl.Styles>
+    <Style Selector="ListBox#TreeContainer /template/ ScrollViewer /template/ ScrollContentPresenter#PART_ContentPresenter">
+      <Setter Property="Grid.RowSpan" Value="1"/>
+      <Setter Property="Grid.ColumnSpan" Value="1"/>
+      <Setter Property="Margin" Value="0,0,16,0"/>
+    </Style>
+  </UserControl.Styles>
+
   <Grid RowDefinitions="*" Margin="8">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*"/>
