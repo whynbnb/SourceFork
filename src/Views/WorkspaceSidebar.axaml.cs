@@ -410,7 +410,7 @@ namespace SourceFork.Views
 
         private void ToggleGroup(ViewModels.RepositoryGroupRow group)
         {
-            PagesList.ToggleGroupPreservingScroll(group.GroupKey, () =>
+            PagesList.ToggleGroupPreservingScroll(() =>
             {
                 ViewModels.Preferences.Instance.ToggleRepositoryGroupCollapsed(group.GroupKey);
                 ViewModels.RepositoryListSorter.NotifyChanged();

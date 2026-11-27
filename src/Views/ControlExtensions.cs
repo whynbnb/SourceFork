@@ -44,7 +44,7 @@ namespace SourceFork.Views
             }
         }
 
-        public static void ToggleGroupPreservingScroll(this ListBox list, string groupKey, Action toggle)
+        public static void ToggleGroupPreservingScroll(this ListBox list, Action toggle)
         {
             var scroll = list.FindDescendantOfType<ScrollViewer>();
             if (scroll == null)
@@ -54,49 +54,29 @@ namespace SourceFork.Views
             }
 
             var offset = scroll.Offset;
-            var beforeY = FindGroupHeader(list, groupKey)?.TranslatePoint(new Point(0, 0), scroll)?.Y;
-
             toggle();
 
-            // Rebuilding the row list can change the layout of the virtualizing panel. Keep
-            // the clicked group header at the same viewport position, falling back to the
-            // previous scroll offset when its container is no longer realized.
-            var corrected = false;
-            void RestoreScrollOffset()
+            // Inserting or removing rows makes the virtualizing panel re-anchor the scroll
+            // offset, and the new extent can lag a frame behind. Restore the previous offset
+            // until it sticks, otherwise expanding the bottom groups drifts the viewport and
+            // shows up as a flicker.
+            var attempts = 0;
+            void Restore()
             {
-                if (corrected)
+                if (scroll.Offset == offset || attempts >= 4)
                     return;
 
-                var afterY = FindGroupHeader(list, groupKey)?.TranslatePoint(new Point(0, 0), scroll)?.Y;
-                if (beforeY is { } y0 && afterY is { } y1)
-                {
-                    var delta = y1 - y0;
-                    if (Math.Abs(delta) > 0.01)
-                    {
-                        corrected = true;
-                        scroll.Offset = new Vector(scroll.Offset.X, Math.Max(0, scroll.Offset.Y + delta));
-                    }
-                }
-                else if (scroll.Offset != offset)
-                {
-                    scroll.Offset = offset;
-                }
+                attempts++;
+                scroll.Offset = offset;
+
+                if (attempts < 4)
+                    Dispatcher.UIThread.Post(Restore, DispatcherPriority.Background);
             }
 
-            Dispatcher.UIThread.Post(RestoreScrollOffset, DispatcherPriority.Default);
-            Dispatcher.UIThread.Post(RestoreScrollOffset, DispatcherPriority.Background);
-        }
-
-        private static Control FindGroupHeader(ListBox list, string groupKey)
-        {
-            for (var i = 0; i < list.ItemCount; i++)
-            {
-                if (list.Items[i] is ViewModels.RepositoryGroupRow group &&
-                    string.Equals(group.GroupKey, groupKey, StringComparison.OrdinalIgnoreCase))
-                    return list.ContainerFromIndex(i);
-            }
-
-            return null;
+            list.UpdateLayout();
+            Restore();
+            Dispatcher.UIThread.Post(Restore, DispatcherPriority.Render);
+            Dispatcher.UIThread.Post(Restore, DispatcherPriority.Background);
         }
 
         public static Path CreateMenuIcon(this Control control, string iconKey)
