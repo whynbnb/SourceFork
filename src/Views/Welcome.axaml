@@ -15,85 +15,145 @@
       <Setter Property="Grid.ColumnSpan" Value="1"/>
       <Setter Property="Margin" Value="0,0,16,0"/>
     </Style>
+    <Style Selector="ListBox#TagList /template/ ScrollViewer /template/ ScrollContentPresenter#PART_ContentPresenter">
+      <Setter Property="Grid.RowSpan" Value="1"/>
+      <Setter Property="Grid.ColumnSpan" Value="1"/>
+      <Setter Property="Margin" Value="0,0,6,0"/>
+    </Style>
   </UserControl.Styles>
 
-  <Grid RowDefinitions="*" Margin="8">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="2*" MinWidth="600"/>
-      <ColumnDefinition Width="1*"/>
-    </Grid.ColumnDefinitions>
+  <Grid RowDefinitions="Auto,*" Margin="12,8,16,8" ColumnDefinitions="196,1,*">
+    <!-- Search -->
+    <TextBox Grid.Row="0"
+             Grid.Column="0"
+             Grid.ColumnSpan="3"
+             x:Name="SearchBox"
+             Height="32"
+             Margin="0,0,8,10"
+             Padding="0"
+             CornerRadius="16"
+             BorderBrush="{DynamicResource Brush.Border0}"
+             BorderThickness="1"
+             Background="{DynamicResource Brush.Contents}"
+             PlaceholderText="{DynamicResource Text.Welcome.Search}"
+             VerticalContentAlignment="Center"
+             Text="{Binding SearchFilter, Mode=TwoWay}">
+      <TextBox.Styles>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+          <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+          <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
+        </Style>
+      </TextBox.Styles>
 
-    <!-- Managed Repositories -->
-    <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto,*">
-      <!-- Search and Tag Filter -->
-      <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-        <TextBox Grid.Column="0"
-                 x:Name="SearchBox"
-                 Height="32"
-                 Padding="0"
-                 CornerRadius="16"
-                 BorderBrush="{DynamicResource Brush.Border0}"
-                 BorderThickness="1"
-                 Background="{DynamicResource Brush.Contents}"
-                 PlaceholderText="{DynamicResource Text.Welcome.Search}"
-                 VerticalContentAlignment="Center"
-                 Text="{Binding SearchFilter, Mode=TwoWay}">
-          <TextBox.Styles>
-            <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
-              <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
+      <TextBox.InnerLeftContent>
+        <Path Width="16" Height="16" Margin="6,0,3,0" Data="{StaticResource Icons.Search}" Fill="{DynamicResource Brush.FG2}"/>
+      </TextBox.InnerLeftContent>
+
+      <TextBox.InnerRightContent>
+        <StackPanel Orientation="Horizontal">
+          <!-- Invisible Button to handle search hotkey pressed-->
+          <Button Width="0" Height="0"
+                  Margin="0" Padding="0"
+                  Click="OnSearchHotKey"
+                  HotKey="{OnPlatform Ctrl+F, macOS=⌘+F}"/>
+
+          <Button Classes="icon_button" IsVisible="{Binding SearchFilter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Click="OnClearSearchFilter">
+            <Path Width="16" Height="16" Margin="0,0,0,0" Data="{StaticResource Icons.Clear}" Fill="{DynamicResource Brush.FG1}"/>
+          </Button>
+        </StackPanel>
+      </TextBox.InnerRightContent>
+    </TextBox>
+
+    <!-- Tags -->
+    <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="Auto,*" Margin="0,0,16,0">
+      <TextBlock Margin="4,0,0,8"
+                 FontSize="11"
+                 FontWeight="Bold"
+                 Foreground="{DynamicResource Brush.FG2}"
+                 Text="{DynamicResource Text.Welcome.Tags}"/>
+
+      <Border Grid.Row="1"
+              Background="{DynamicResource Brush.Contents}"
+              BorderThickness="1"
+              BorderBrush="{DynamicResource Brush.Border0}"
+              CornerRadius="6">
+        <ListBox x:Name="TagList"
+                 Background="Transparent"
+                 ItemsSource="{Binding TagItems}"
+                 SelectedItem="{Binding SelectedTagItem, Mode=TwoWay}"
+                 SelectionMode="Single"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+          <ListBox.Styles>
+            <Style Selector="ListBox">
+              <Setter Property="FocusAdorner">
+                <FocusAdornerTemplate>
+                  <Border Background="Transparent" BorderThickness="0"/>
+                </FocusAdornerTemplate>
+              </Setter>
             </Style>
-            <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-              <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
+
+            <Style Selector="ListBoxItem">
+              <Setter Property="Margin" Value="0,1"/>
+              <Setter Property="Padding" Value="0"/>
+              <Setter Property="CornerRadius" Value="4"/>
+              <Setter Property="FocusAdorner">
+                <FocusAdornerTemplate>
+                  <Border Background="Transparent" BorderThickness="0"/>
+                </FocusAdornerTemplate>
+              </Setter>
+              <Setter Property="Template">
+                <ControlTemplate>
+                  <Grid>
+                    <Border Name="PART_Background"
+                            Background="Transparent"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Opacity="0"/>
+                    <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Content="{TemplateBinding Content}"
+                                      Padding="{TemplateBinding Padding}"
+                                      VerticalContentAlignment="Center"
+                                      HorizontalContentAlignment="Stretch"/>
+                  </Grid>
+                </ControlTemplate>
+              </Setter>
             </Style>
-          </TextBox.Styles>
+            <Style Selector="ListBoxItem:pointerover /template/ Border#PART_Background">
+              <Setter Property="Background" Value="{DynamicResource Brush.FG1}"/>
+              <Setter Property="Opacity" Value=".03"/>
+            </Style>
+            <Style Selector="ListBoxItem:selected /template/ Border#PART_Background">
+              <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
+              <Setter Property="Opacity" Value=".18"/>
+            </Style>
+          </ListBox.Styles>
 
-          <TextBox.InnerLeftContent>
-            <Path Width="16" Height="16" Margin="6,0,3,0" Data="{StaticResource Icons.Search}" Fill="{DynamicResource Brush.FG2}"/>
-          </TextBox.InnerLeftContent>
+          <ListBox.ItemTemplate>
+            <DataTemplate DataType="vm:WelcomeTagItem">
+              <Grid Height="30" Margin="10,0" ColumnDefinitions="*,Auto">
+                <TextBlock VerticalAlignment="Center"
+                           Text="{Binding DisplayName}"
+                           TextTrimming="CharacterEllipsis"/>
+                <TextBlock Grid.Column="1"
+                           Margin="8,0,0,0"
+                           VerticalAlignment="Center"
+                           FontSize="11"
+                           Foreground="{DynamicResource Brush.FG2}"
+                           Text="{Binding Count}"/>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Border>
+    </Grid>
 
-          <TextBox.InnerRightContent>
-            <StackPanel Orientation="Horizontal">
-              <!-- Invisible Button to handle search hotkey pressed-->
-              <Button Width="0" Height="0"
-                      Margin="0" Padding="0"
-                      Click="OnSearchHotKey"
-                      HotKey="{OnPlatform Ctrl+F, macOS=⌘+F}"/>
+    <Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource Brush.Border0}"/>
 
-              <Button Classes="icon_button" IsVisible="{Binding SearchFilter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Click="OnClearSearchFilter">
-                <Path Width="16" Height="16" Margin="0,0,0,0" Data="{StaticResource Icons.Clear}" Fill="{DynamicResource Brush.FG1}"/>
-              </Button>
-            </StackPanel>
-          </TextBox.InnerRightContent>
-        </TextBox>
-
-        <Button Grid.Column="1"
-                Classes="icon_button"
-                Width="32" Height="32"
-                Margin="8,0,0,0"
-                Click="OnTagFilterMenu">
-          <ToolTip.Tip>
-            <StackPanel Orientation="Horizontal">
-              <TextBlock Text="{DynamicResource Text.Sidebar.FilterByTags}"/>
-              <TextBlock Margin="6,0,0,0"
-                         Text="{Binding TagFilterCount, Mode=OneWay}"
-                         IsVisible="{Binding HasTagFilters, Mode=OneWay}"
-                         Foreground="{DynamicResource Brush.Accent}"/>
-            </StackPanel>
-          </ToolTip.Tip>
-          <Panel>
-            <Path Width="16" Height="16" Data="{StaticResource Icons.Tags}" Fill="{DynamicResource Brush.FG1}"/>
-            <Ellipse Width="7" Height="7"
-                     HorizontalAlignment="Right" VerticalAlignment="Top"
-                     Fill="{DynamicResource Brush.Accent}"
-                     IsVisible="{Binding HasTagFilters, Mode=OneWay}"/>
-          </Panel>
-        </Button>
-      </Grid>
-
-      <!-- Repository List -->
-      <ListBox Grid.Row="1"
-               x:Name="TreeContainer"
+    <!-- Repositories -->
+    <Grid Grid.Row="1" Grid.Column="2" RowDefinitions="*" Margin="16,0,0,0">
+      <ListBox x:Name="TreeContainer"
                Margin="0,8,8,0"
                Focusable="True"
                Background="Transparent"
@@ -119,7 +179,7 @@
           <Style Selector="ListBoxItem" x:DataType="vm:RepositoryListRow">
             <Setter Property="Margin" Value="0"/>
             <Setter Property="Padding" Value="0"/>
-                <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="CornerRadius" Value="4"/>
             <Setter Property="FocusAdorner">
               <FocusAdornerTemplate>
                 <Border Background="Transparent" BorderThickness="0"/>
@@ -135,43 +195,6 @@
         </ListBox.ItemsPanel>
 
         <ListBox.DataTemplates>
-          <DataTemplate DataType="vm:RepositoryGroupRow">
-            <Grid Height="26"
-                  Margin="4,8,8,2"
-                  ColumnDefinitions="Auto,*"
-                  Background="Transparent">
-              <Path Grid.Column="0"
-                    Width="10" Height="10"
-                    Margin="0,0,4,0"
-                    VerticalAlignment="Center"
-                    Data="{StaticResource Icons.Down}"
-                    Fill="{DynamicResource Brush.FG2}"
-                    IsVisible="{Binding IsExpanded}"/>
-              <Path Grid.Column="0"
-                    Width="10" Height="10"
-                    Margin="0,0,4,0"
-                    VerticalAlignment="Center"
-                    Data="{StaticResource Icons.Down}"
-                    Fill="{DynamicResource Brush.FG2}"
-                    IsVisible="{Binding IsCollapsed}"
-                    RenderTransformOrigin="50%,50%"
-                    RenderTransform="rotate(270deg)"/>
-              <TextBlock Grid.Column="1"
-                         VerticalAlignment="Center"
-                         FontSize="11"
-                         FontWeight="Bold"
-                         Foreground="{DynamicResource Brush.FG2}"
-                         Text="{Binding GroupName}"
-                         TextTrimming="CharacterEllipsis"/>
-              <ToolTip.Tip>
-                <Panel>
-                  <TextBlock Text="{DynamicResource Text.RepositorySort.CollapseGroup}" IsVisible="{Binding IsExpanded}"/>
-                  <TextBlock Text="{DynamicResource Text.RepositorySort.ExpandGroup}" IsVisible="{Binding IsCollapsed}"/>
-                </Panel>
-              </ToolTip.Tip>
-            </Grid>
-          </DataTemplate>
-
           <DataTemplate DataType="vm:RepositoryListRow">
             <Grid Background="Transparent">
               <Grid Height="30"
@@ -275,6 +298,5 @@
         </ListBox.DataTemplates>
       </ListBox>
     </Grid>
-
   </Grid>
 </UserControl>

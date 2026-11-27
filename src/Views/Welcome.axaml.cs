@@ -35,16 +35,13 @@ namespace SourceFork.Views
                 return;
             }
 
-            if (properties.IsLeftButtonPressed && row is ViewModels.RepositoryGroupRow group)
-            {
-                e.Handled = true;
-                Dispatcher.UIThread.Post(() => ToggleGroup(group), DispatcherPriority.Background);
-            }
+
         }
 
         protected override async void OnLoaded(RoutedEventArgs e)
         {
             base.OnLoaded(e);
+
             SearchBox.Focus(NavigationMethod.Directional);
             await ViewModels.Welcome.Instance.UpdateStatusAsync(false, _cancellation.Token);
         }
@@ -105,85 +102,11 @@ namespace SourceFork.Views
             e.Handled = true;
         }
 
-        private void OnTagFilterMenu(object sender, RoutedEventArgs e)
-        {
-            if (sender is not Button button)
-                return;
-
-            var welcome = ViewModels.Welcome.Instance;
-            var menu = new ContextMenu()
-            {
-                Placement = PlacementMode.BottomEdgeAlignedLeft,
-                VerticalOffset = -6,
-            };
-
-            menu.Items.Add(new MenuItem()
-            {
-                Header = App.Text("Sidebar.FilterByTags"),
-                IsEnabled = false,
-            });
-
-            var tags = welcome.GetAvailableTags();
-            if (tags.Count == 0)
-            {
-                menu.Items.Add(new MenuItem()
-                {
-                    Header = App.Text("Sidebar.NoTags"),
-                    IsEnabled = false,
-                });
-            }
-            else
-            {
-                foreach (var tag in tags)
-                {
-                    var item = new MenuItem();
-                    item.Header = $"#{tag}";
-                    if (welcome.IsTagFiltered(tag))
-                        item.Icon = this.CreateMenuIcon("Icons.Check");
-                    item.Click += (_, ev) =>
-                    {
-                        welcome.ToggleTagFilter(tag);
-                        ev.Handled = true;
-                    };
-                    menu.Items.Add(item);
-                }
-            }
-
-            if (welcome.HasTagFilters)
-            {
-                menu.Items.Add(new MenuItem() { Header = "-" });
-
-                var clear = new MenuItem();
-                clear.Header = App.Text("Tags.ClearFilter");
-                clear.Icon = this.CreateMenuIcon("Icons.Clear");
-                clear.Click += (_, ev) =>
-                {
-                    welcome.ClearTagFilters();
-                    ev.Handled = true;
-                };
-                menu.Items.Add(clear);
-            }
-
-            menu.Open(button);
-            e.Handled = true;
-        }
-
         private void OnTreeContextRequested(object sender, ContextRequestedEventArgs ev)
         {
             var item = FindListBoxItem(ev.Source);
             if (item?.DataContext is not ViewModels.RepositoryListRow row)
                 return;
-
-            if (row is ViewModels.RepositoryGroupRow group)
-            {
-                var groupMenu = RepositoryGroupContextMenu.Build(
-                    this,
-                    group,
-                    () => ToggleGroup(group));
-                groupMenu.Open(item);
-                ev.Handled = true;
-                return;
-            }
 
             if (row.Node is not { } node)
                 return;
@@ -456,15 +379,6 @@ namespace SourceFork.Views
                 node.Open();
                 e.Handled = true;
             }
-        }
-
-        private void ToggleGroup(ViewModels.RepositoryGroupRow group)
-        {
-            TreeContainer.ToggleGroupPreservingScroll(() =>
-            {
-                ViewModels.Preferences.Instance.ToggleRepositoryGroupCollapsed(group.GroupKey);
-                ViewModels.RepositoryListSorter.NotifyChanged();
-            });
         }
 
         private static ListBoxItem FindListBoxItem(object source)

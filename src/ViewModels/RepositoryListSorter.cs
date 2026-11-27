@@ -9,7 +9,7 @@ namespace SourceFork.ViewModels
 {
     public static class RepositoryListSorter
     {
-        public static List<RepositoryListRow> Build(IEnumerable<RepositoryNode> nodes, Func<RepositoryNode, LauncherPage> pageSelector = null)
+        public static List<RepositoryListRow> Build(IEnumerable<RepositoryNode> nodes, Func<RepositoryNode, LauncherPage> pageSelector = null, bool ignoreCollapsedGroups = false)
         {
             var list = nodes.Where(x => x != null).ToList();
 
@@ -68,7 +68,7 @@ namespace SourceFork.ViewModels
                 var name = string.IsNullOrEmpty(key)
                     ? App.Text("RepositoryTags.NoPrimary")
                     : $"#{displayNames[key]}";
-                var collapsed = prefs.IsRepositoryGroupCollapsed(key);
+                var collapsed = !ignoreCollapsedGroups && prefs.IsRepositoryGroupCollapsed(key);
                 rows.Add(new RepositoryGroupRow(key, name, collapsed));
 
                 if (collapsed)

@@ -613,6 +613,8 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Відкрити термінал</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Пересканувати сховища у теці клонування за замовчуванням</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Пошук сховищ...</x:String>
+  <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Теги</x:String>
+  <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Усі репозиторії</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">ЛОКАЛЬНІ ЗМІНИ</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Ігнорувати всі файли *{0}</x:String>

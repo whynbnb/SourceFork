@@ -9,6 +9,36 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SourceFork.ViewModels
 {
+    public class WelcomeTagItem
+    {
+        public string Key
+        {
+            get;
+        }
+
+        public string DisplayName
+        {
+            get;
+        }
+
+        public int Count
+        {
+            get;
+        }
+
+        public bool IsAll
+        {
+            get => Key == null;
+        }
+
+        public WelcomeTagItem(string key, string displayName, int count)
+        {
+            Key = key;
+            DisplayName = displayName;
+            Count = count;
+        }
+    }
+
     public class Welcome : ObservableObject
     {
         public static Welcome Instance { get; } = new();
@@ -29,19 +59,22 @@ namespace SourceFork.ViewModels
             }
         }
 
-        public int TagFilterCount
+        public AvaloniaList<WelcomeTagItem> TagItems
         {
-            get => _tagFilters.Count;
-        }
+            get;
+        } = [];
 
-        public bool HasTagFilters
+        public WelcomeTagItem SelectedTagItem
         {
-            get => _tagFilters.Count > 0;
-        }
+            get => _selectedTagItem;
+            set
+            {
+                if (_isRefreshing)
+                    return;
 
-        public IReadOnlyList<string> ActiveTagFilters
-        {
-            get => _tagFilters;
+                if (SetProperty(ref _selectedTagItem, value))
+                    Refresh();
+            }
         }
 
         public Welcome()
@@ -51,10 +84,76 @@ namespace SourceFork.ViewModels
 
         public void Refresh()
         {
+            if (_isRefreshing)
+                return;
+
+            _isRefreshing = true;
+            try
+            {
+                RebuildTagItems();
+
+                IEnumerable<RepositoryNode> nodes = Preferences.Instance.RepositoryNodes
+                    .Where(x => x.IsRepository && x.MatchesSearch(_searchFilter));
+
+                var key = _selectedTagItem?.Key;
+                if (key != null)
+                {
+                    nodes = nodes.Where(x => string.Equals(x.PrimaryTag ?? string.Empty,
+                        key, StringComparison.OrdinalIgnoreCase));
+                }
+
+                var desired = RepositoryListSorter.Build(nodes.ToList(), null, true)
+                    .Where(x => !x.IsGroupHeader)
+                    .ToList();
+                RepositoryListSorter.Sync(Rows, desired);
+            }
+            finally
+            {
+                _isRefreshing = false;
+            }
+        }
+
+        private void RebuildTagItems()
+        {
+            var selectedKey = _selectedTagItem?.Key;
             var nodes = Preferences.Instance.RepositoryNodes
-                .Where(x => x.IsRepository && x.MatchesSearch(_searchFilter) && x.HasAnyTag(_tagFilters));
-            var desired = RepositoryListSorter.Build(nodes).ToList();
-            RepositoryListSorter.Sync(Rows, desired);
+                .Where(x => x.IsRepository)
+                .ToList();
+
+            var groups = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            foreach (var node in nodes)
+            {
+                var key = node.PrimaryTag ?? string.Empty;
+                groups[key] = groups.TryGetValue(key, out var count) ? count + 1 : 1;
+            }
+
+            var items = new List<WelcomeTagItem>
+            {
+                new(null, App.Text("Welcome.AllRepositories"), nodes.Count)
+            };
+
+            foreach (var key in groups.Keys
+                .Where(x => !string.IsNullOrEmpty(x))
+                .OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+            {
+                items.Add(new WelcomeTagItem(key, $"#{key}", groups[key]));
+            }
+
+            if (groups.TryGetValue(string.Empty, out var noTagCount))
+                items.Add(new WelcomeTagItem(string.Empty, App.Text("RepositoryTags.NoPrimary"), noTagCount));
+
+            var target = items.FirstOrDefault(x => string.Equals(x.Key, selectedKey, StringComparison.Ordinal))
+                ?? items[0];
+
+            TagItems.Clear();
+            foreach (var item in items)
+                TagItems.Add(item);
+
+            if (!ReferenceEquals(target, _selectedTagItem))
+            {
+                _selectedTagItem = target;
+                OnPropertyChanged(nameof(SelectedTagItem));
+            }
         }
 
         public async Task UpdateStatusAsync(bool force, CancellationToken? token)
@@ -77,51 +176,6 @@ namespace SourceFork.ViewModels
             {
                 _isUpdatingStatus = false;
             }
-        }
-
-        public List<string> GetAvailableTags()
-        {
-            var tags = new List<string>();
-            foreach (var node in Preferences.Instance.RepositoryNodes)
-            {
-                foreach (var tag in node.Tags)
-                {
-                    if (!tags.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase)))
-                        tags.Add(tag);
-                }
-            }
-
-            tags.Sort((l, r) => string.Compare(l, r, StringComparison.OrdinalIgnoreCase));
-            return tags;
-        }
-
-        public bool IsTagFiltered(string tag)
-        {
-            return _tagFilters.Any(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
-        }
-
-        public void ToggleTagFilter(string tag)
-        {
-            var exists = _tagFilters.FindIndex(x => x.Equals(tag, StringComparison.OrdinalIgnoreCase));
-            if (exists >= 0)
-                _tagFilters.RemoveAt(exists);
-            else
-                _tagFilters.Add(tag);
-
-            OnPropertyChanged(nameof(TagFilterCount));
-            OnPropertyChanged(nameof(HasTagFilters));
-            Refresh();
-        }
-
-        public void ClearTagFilters()
-        {
-            if (_tagFilters.Count == 0)
-                return;
-
-            _tagFilters.Clear();
-            OnPropertyChanged(nameof(TagFilterCount));
-            OnPropertyChanged(nameof(HasTagFilters));
-            Refresh();
         }
 
         public async Task<Commands.Command.Result> GetRepositoryRootAsync(string path)
@@ -197,6 +251,7 @@ namespace SourceFork.ViewModels
 
         private string _searchFilter = string.Empty;
         private bool _isUpdatingStatus = false;
-        private readonly List<string> _tagFilters = [];
+        private bool _isRefreshing = false;
+        private WelcomeTagItem _selectedTagItem;
     }
 }

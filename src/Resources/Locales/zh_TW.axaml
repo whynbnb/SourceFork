@@ -1062,6 +1062,8 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">開啟終端機</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">重新掃描預設複製 (clone) 目錄下的存放庫</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">篩選存放庫...</x:String>
+  <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Tag</x:String>
+  <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">全部倉庫</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">本機變更</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">加入至 .gitignore 忽略清單</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">忽略所有 *{0} 檔案</x:String>

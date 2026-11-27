@@ -961,6 +961,8 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Buka Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Pindai Ulang Repositori di Direktori Clone Default</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Cari Repositori...</x:String>
+  <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Tag</x:String>
+  <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Semua repositori</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">PERUBAHAN LOKAL</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore" xml:space="preserve">Git Ignore</x:String>
   <x:String x:Key="Text.WorkingCopy.AddToGitIgnore.Extension" xml:space="preserve">Abaikan semua berkas *{0}</x:String>
