@@ -1062,6 +1062,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">開啟終端機</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">重新掃描預設複製 (clone) 目錄下的存放庫</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">篩選存放庫...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">匯入倉庫</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">放開滑鼠即可匯入資料夾</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">按 Esc 取消</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">拖到這裡：暫時固定面板並逐個選擇</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">可匯入 {0} 個 · 已管理 {1} 個</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">全選</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">匯入所選</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">關閉</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">檢查中…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">將匯入</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">已在倉庫清單中</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">不是 Git 倉庫</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">路徑不存在</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Tag</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">全部倉庫</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">本機變更</x:String>

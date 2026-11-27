@@ -24,6 +24,11 @@ namespace SourceFork.ViewModels
             get;
         } = new();
 
+        public ImportDropSession ImportDrop
+        {
+            get;
+        } = new();
+
         public RepositoryListRow SelectedRow
         {
             get => _selectedRow;

@@ -1043,6 +1043,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">打开终端</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">重新扫描默认克隆路径下的仓库</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">快速查找仓库...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">导入仓库</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">松开鼠标即可导入文件夹</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">按 Esc 取消</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">拖到这里：临时固定面板并逐个选择</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">可导入 {0} 个 · 已管理 {1} 个</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">全选</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">导入所选</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">关闭</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">检查中…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">将导入</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">已在仓库列表中</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">不是 Git 仓库</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">路径不存在</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Tag</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">全部仓库</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">本地更改</x:String>

@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Threading;
 
 namespace SourceFork.Views
 {
@@ -48,6 +50,31 @@ namespace SourceFork.Views
 
             InitializeComponent();
             PositionChanged += OnPositionChanged;
+
+            // Drag events are bubbling routed events in Avalonia, so the window only sees them
+            // when it listens to handled events as well: children such as the repository list
+            // mark DragOver/Drop as handled to accept the drop.
+            AddHandler(DragDrop.DragEnterEvent, OnWindowDragOver, RoutingStrategies.Bubble, true);
+            AddHandler(DragDrop.DragOverEvent, OnWindowDragOver, RoutingStrategies.Bubble, true);
+            AddHandler(DragDrop.DragLeaveEvent, OnWindowDragLeave, RoutingStrategies.Bubble, true);
+            AddHandler(DragDrop.DropEvent, OnWindowDrop, RoutingStrategies.Bubble, true);
+
+            // DragLeave also fires when the pointer moves between child controls, so wait a
+            // moment and only hide the panel if no DragOver follows.
+            _importLeaveTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+            _importLeaveTimer.Tick += (_, _) =>
+            {
+                _importLeaveTimer.Stop();
+                if (DataContext is ViewModels.Launcher launcher && !launcher.ImportDrop.IsPinned)
+                    launcher.ImportDrop.End();
+            };
+
+            // The import preview must never outlive the interaction that opened it.
+            Deactivated += (_, _) =>
+            {
+                if (DataContext is ViewModels.Launcher launcher && !launcher.ImportDrop.IsPinned)
+                    launcher.ImportDrop.End();
+            };
 
             var layout = ViewModels.Preferences.Instance.Layout;
             Width = layout.LauncherWidth;
@@ -135,6 +162,13 @@ namespace SourceFork.Views
         {
             if (DataContext is not ViewModels.Launcher vm)
                 return;
+
+            if (e is { Key: Key.Escape, KeyModifiers: KeyModifiers.None } && vm.ImportDrop.IsActive)
+            {
+                vm.ImportDrop.End();
+                e.Handled = true;
+                return;
+            }
 
             // Check for AltGr (which is detected as Ctrl+Alt)
             bool isAltGr = e.KeyModifiers.HasFlag(KeyModifiers.Control) &&
@@ -356,6 +390,114 @@ namespace SourceFork.Views
                 ViewModels.Preferences.Instance.Save();
 
             App.Quit(0);
+        }
+
+        private DispatcherTimer _importLeaveTimer;
+
+        private void OnWindowDragOver(object sender, DragEventArgs e)
+        {
+            if (DataContext is not ViewModels.Launcher launcher ||
+                !e.DataTransfer.Contains(DataFormat.File))
+            {
+                return;
+            }
+
+            _importLeaveTimer?.Stop();
+            e.DragEffects = DragDropEffects.Move;
+            e.Handled = true;
+            _importLeaveTimer?.Stop();
+
+            var paths = e.DataTransfer.TryGetFiles()?
+                .Select(x => x.Path.LocalPath)
+                .ToList() ?? [];
+            launcher.ImportDrop.Show(paths);
+        }
+
+        private void OnWindowDragLeave(object sender, DragEventArgs e)
+        {
+            if (DataContext is not ViewModels.Launcher launcher || !launcher.ImportDrop.IsActive)
+                return;
+
+            _importLeaveTimer?.Stop();
+            _importLeaveTimer?.Start();
+        }
+
+        private async void OnWindowDrop(object sender, DragEventArgs e)
+        {
+            if (DataContext is not ViewModels.Launcher launcher ||
+                !e.DataTransfer.Contains(DataFormat.File))
+            {
+                return;
+            }
+
+            e.Handled = true;
+
+            var paths = e.DataTransfer.TryGetFiles()?
+                .Select(x => x.Path.LocalPath)
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToList() ?? [];
+
+            if (paths.Count == 0)
+            {
+                launcher.ImportDrop.End();
+                return;
+            }
+
+            // Dropping on the small pin area keeps the panel open for picking repositories.
+            if (ImportPinArea.IsVisible)
+            {
+                var position = e.GetPosition(ImportPinArea);
+                if (position.X >= 0 &&
+                    position.Y >= 0 &&
+                    position.X <= ImportPinArea.Bounds.Width &&
+                    position.Y <= ImportPinArea.Bounds.Height)
+                {
+                    launcher.ImportDrop.Pin();
+                    return;
+                }
+            }
+
+            // Hide the panel right away; inspecting a workspace runs git commands and can take
+            // a moment, so the overlay should not linger after the mouse is released.
+            var session = launcher.ImportDrop;
+            session.Hide();
+            await session.EnsureInspectedAsync();
+
+            var selected = session.SelectedPaths;
+            session.End();
+
+            if (selected.Count > 0)
+                await ViewModels.Welcome.Instance.ImportDroppedPathsAsync(selected, launcher.ActivePage);
+        }
+
+        private void OnCloseImportOverlay(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Launcher launcher)
+                launcher.ImportDrop.End();
+
+            e.Handled = true;
+        }
+
+        private void OnSelectAllImport(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Launcher launcher)
+                launcher.ImportDrop.SetAllSelected(true);
+
+            e.Handled = true;
+        }
+
+        private async void OnImportSelected(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not ViewModels.Launcher launcher)
+                return;
+
+            e.Handled = true;
+
+            var paths = launcher.ImportDrop.SelectedPaths;
+            launcher.ImportDrop.End();
+
+            if (paths.Count > 0)
+                await ViewModels.Welcome.Instance.ImportDroppedPathsAsync(paths, launcher.ActivePage);
         }
 
         private void OnPositionChanged(object sender, PixelPointEventArgs e)

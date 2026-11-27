@@ -961,6 +961,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Buka Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Pindai Ulang Repositori di Direktori Clone Default</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Cari Repositori...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">Impor repositori</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">Jatuhkan folder untuk mengimpor</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Tekan Esc untuk membatalkan</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">Jatuhkan di sini untuk menyematkan panel dan memilih repositori</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} akan diimpor · {1} sudah dikelola</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">Pilih semua</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">Impor yang dipilih</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">Tutup</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">Memeriksa…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">Akan diimpor</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">Sudah ada di daftar repositori</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">Bukan repositori Git</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">Jalur tidak ditemukan</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Tag</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Semua repositori</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">PERUBAHAN LOKAL</x:String>

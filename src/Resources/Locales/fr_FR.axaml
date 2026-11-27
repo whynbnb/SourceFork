@@ -918,6 +918,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Ouvrir le terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Réanalyser les repositories dans le dossier de clonage par défaut</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Chercher des dépôts...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">Importer un dépôt</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">Déposez des dossiers pour les importer</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Appuyez sur Échap pour annuler</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">Déposez ici pour épingler le panneau et choisir les dépôts</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} à importer · {1} déjà gérés</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">Tout sélectionner</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">Importer la sélection</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">Fermer</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">Vérification…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">Sera importé</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">Déjà dans la liste des dépôts</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">Pas un dépôt Git</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">Chemin introuvable</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Tags</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Tous les dépôts</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">Changements</x:String>

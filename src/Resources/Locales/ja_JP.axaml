@@ -1004,6 +1004,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">端末を開く</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">既定のクローンディレクトリ内のリポジトリを再スキャン</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">リポジトリを検索...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">リポジトリをインポート</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">フォルダをドロップしてインポート</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Esc でキャンセル</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">ここにドロップするとパネルを固定してリポジトリを選択できます</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">インポート {0} 件 · 管理済み {1} 件</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">すべて選択</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">選択項目をインポート</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">閉じる</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">確認中…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">インポートします</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">リポジトリ一覧にあります</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">Git リポジトリではありません</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">パスが見つかりません</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">タグ</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">すべてのリポジトリ</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">ローカルの変更</x:String>

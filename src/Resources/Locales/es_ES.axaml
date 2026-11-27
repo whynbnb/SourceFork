@@ -1027,6 +1027,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Abrir Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Reescanear Repositorios en el Directorio de Clonado por Defecto</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Buscar Repositorios...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">Importar repositorio</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">Suelta carpetas para importarlas</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Pulsa Esc para cancelar</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">Suelta aquí para fijar el panel y elegir repositorios</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} por importar · {1} ya gestionados</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">Seleccionar todo</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">Importar seleccionados</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">Cerrar</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">Comprobando…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">Se importará</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">Ya está en la lista de repositorios</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">No es un repositorio Git</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">Ruta no encontrada</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Etiquetas</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Todos los repositorios</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">Cambios</x:String>

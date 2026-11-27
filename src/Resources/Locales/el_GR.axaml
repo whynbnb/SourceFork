@@ -957,6 +957,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Άνοιγμα τερματικού</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Επανασάρωση αποθετηρίων στον προεπιλεγμένο φάκελο κλωνοποίησης</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Αναζήτηση αποθετηρίων...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">Εισαγωγή αποθετηρίου</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">Αφήστε φακέλους για εισαγωγή</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Πατήστε Esc για ακύρωση</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">Αφήστε εδώ για καρφίτσωμα του πίνακα και επιλογή αποθετηρίων</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} προς εισαγωγή · {1} ήδη διαχειριζόμενα</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">Επιλογή όλων</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">Εισαγωγή επιλεγμένων</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">Κλείσιμο</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">Έλεγχος…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">Θα εισαχθεί</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">Υπάρχει ήδη στη λίστα αποθετηρίων</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">Δεν είναι αποθετήριο Git</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">Η διαδρομή δεν βρέθηκε</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Ετικέτες</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Όλα τα αποθετήρια</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">ΤΟΠΙΚΕΣ ΑΛΛΑΓΕΣ</x:String>

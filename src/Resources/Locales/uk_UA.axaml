@@ -613,6 +613,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Відкрити термінал</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Пересканувати сховища у теці клонування за замовчуванням</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Пошук сховищ...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">Імпорт репозиторію</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">Відпустіть папки для імпорту</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Натисніть Esc, щоб скасувати</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">Відпустіть тут, щоб закріпити панель і вибрати репозиторії</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} до імпорту · {1} уже додано</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">Вибрати все</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">Імпортувати вибрані</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">Закрити</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">Перевірка…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">Буде імпортовано</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">Уже в списку репозиторіїв</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">Не репозиторій Git</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">Шлях не знайдено</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Теги</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Усі репозиторії</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">ЛОКАЛЬНІ ЗМІНИ</x:String>

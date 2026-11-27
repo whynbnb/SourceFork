@@ -1011,6 +1011,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Obre el terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Torna a escanejar els repositoris al directori de clonació per defecte</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Cerca repositoris...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">Importa un repositori</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">Deixa anar les carpetes per importar-les</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Prem Esc per cancel·lar</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">Deixa anar aquí per fixar el panell i triar repositoris</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} per importar · {1} ja gestionats</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">Selecciona-ho tot</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">Importa la selecció</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">Tanca</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">Comprovant…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">S'importarà</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">Ja és a la llista de repositoris</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">No és un repositori Git</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">No s'ha trobat el camí</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Etiquetes</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Tots els repositoris</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">Canvis locals</x:String>

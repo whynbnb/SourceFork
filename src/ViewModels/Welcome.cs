@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -197,6 +198,46 @@ namespace SourceFork.ViewModels
 
             if (open)
                 node.Open();
+        }
+
+        public async Task ImportDroppedPathsAsync(IReadOnlyList<string> paths, LauncherPage page)
+        {
+            var refresh = false;
+            foreach (var path in paths)
+            {
+                var root = path;
+                if (!Directory.Exists(root))
+                {
+                    if (File.Exists(root))
+                        root = Path.GetDirectoryName(root);
+                    else
+                        continue;
+                }
+
+                if (string.IsNullOrEmpty(root) || !Directory.Exists(root))
+                    continue;
+
+                var result = await GetRepositoryRootAsync(root);
+                if (!result.IsSuccess)
+                {
+                    if (page != null &&
+                        page.CanCreatePopup() &&
+                        Models.SafeDirectories.IsUntrustedRepository(result.StdErr) &&
+                        Models.SafeDirectories.TryGetSafeDirectoryValue(root, result.StdErr, out var safeDirectory))
+                    {
+                        page.Popup = new TrustRepository(page.Node.Id, root, result.StdErr, safeDirectory, false);
+                        break;
+                    }
+
+                    continue;
+                }
+
+                await AddRepositoryAsync(result.StdOut.Trim(), false);
+                refresh = true;
+            }
+
+            if (refresh)
+                RepositoryListSorter.NotifyChanged();
         }
 
         public void Clone()

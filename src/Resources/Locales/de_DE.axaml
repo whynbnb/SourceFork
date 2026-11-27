@@ -961,6 +961,19 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">Öffne Terminal</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">Standard Klon-Ordner erneut nach Repositorys durchsuchen</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">Suche Repositorys…</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">Repository importieren</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">Ordner zum Importieren ablegen</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">Esc zum Abbrechen</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">Hier ablegen, um das Panel zu fixieren und Repositories auszuwählen</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} zu importieren · {1} bereits verwaltet</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">Alle auswählen</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">Ausgewählte importieren</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">Schließen</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">Wird geprüft…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">Wird importiert</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">Bereits in der Repository-Liste</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">Kein Git-Repository</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">Pfad nicht gefunden</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">Tags</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">Alle Repositorys</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">ÄNDERUNGEN</x:String>

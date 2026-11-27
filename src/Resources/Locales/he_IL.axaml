@@ -918,6 +918,19 @@
   <x:String x:Key="Text.Welcome.OpenTerminal" xml:space="preserve">פתח טרמינל</x:String>
   <x:String x:Key="Text.Welcome.ScanDefaultCloneDir" xml:space="preserve">סרוק מחדש של מאגרים בתיקיית ה־Clone ברירת מחדל</x:String>
   <x:String x:Key="Text.Welcome.Search" xml:space="preserve">חיפוש מאגרים...</x:String>
+  <x:String x:Key="Text.Import.Title" xml:space="preserve">ייבוא מאגר</x:String>
+  <x:String x:Key="Text.Import.Hint" xml:space="preserve">שחררו תיקיות כדי לייבא</x:String>
+  <x:String x:Key="Text.Import.EscHint" xml:space="preserve">לחצו Esc לביטול</x:String>
+  <x:String x:Key="Text.Import.PinHint" xml:space="preserve">שחררו כאן כדי להצמיד את הפאנל ולבחור מאגרים</x:String>
+  <x:String x:Key="Text.Import.Summary" xml:space="preserve">{0} לייבוא · {1} כבר מנוהלים</x:String>
+  <x:String x:Key="Text.Import.SelectAll" xml:space="preserve">בחר הכל</x:String>
+  <x:String x:Key="Text.Import.ImportSelected" xml:space="preserve">ייבא נבחרים</x:String>
+  <x:String x:Key="Text.Import.Close" xml:space="preserve">סגור</x:String>
+  <x:String x:Key="Text.Import.Checking" xml:space="preserve">בודק…</x:String>
+  <x:String x:Key="Text.Import.Ready" xml:space="preserve">ייובא</x:String>
+  <x:String x:Key="Text.Import.Managed" xml:space="preserve">כבר ברשימת המאגרים</x:String>
+  <x:String x:Key="Text.Import.NotGit" xml:space="preserve">לא מאגר Git</x:String>
+  <x:String x:Key="Text.Import.Missing" xml:space="preserve">הנתיב לא נמצא</x:String>
   <x:String x:Key="Text.Welcome.Tags" xml:space="preserve">תגיות</x:String>
   <x:String x:Key="Text.Welcome.AllRepositories" xml:space="preserve">כל המאגרים</x:String>
   <x:String x:Key="Text.WorkingCopy" xml:space="preserve">שינויים מקומיים</x:String>

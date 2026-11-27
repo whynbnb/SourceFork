@@ -267,7 +267,7 @@ namespace SourceFork.Views
             }
             else if (e.DataTransfer.Contains(DataFormat.File))
             {
-                e.DragEffects = DragDropEffects.Copy;
+                e.DragEffects = DragDropEffects.Move;
                 e.Handled = true;
             }
             else
@@ -277,7 +277,7 @@ namespace SourceFork.Views
             }
         }
 
-        private async void DropOnTreeView(object sender, DragEventArgs e)
+        private void DropOnTreeView(object sender, DragEventArgs e)
         {
             if (e.DataTransfer.TryGetValue(_dragData) is { Length: > 0 } sourceId)
             {
@@ -328,48 +328,7 @@ namespace SourceFork.Views
                 return;
             }
 
-            if (!e.DataTransfer.Contains(DataFormat.File))
-                return;
-
-            e.Handled = true;
-
-            var items = e.DataTransfer.TryGetFiles() ?? [];
-            var refresh = false;
-
-            foreach (var item in items)
-            {
-                var root = item.Path.LocalPath;
-                if (!Directory.Exists(root))
-                {
-                    if (File.Exists(root))
-                        root = Path.GetDirectoryName(root);
-                    else
-                        continue;
-                }
-
-                var rs = await ViewModels.Welcome.Instance.GetRepositoryRootAsync(root);
-                if (!rs.IsSuccess)
-                {
-                    if (Models.SafeDirectories.IsUntrustedRepository(rs.StdErr) &&
-                        Models.SafeDirectories.TryGetSafeDirectoryValue(root, rs.StdErr, out var safeDirectory))
-                    {
-                        var pageView = this.FindAncestorOfType<LauncherPage>();
-                        if (pageView is { DataContext: ViewModels.LauncherPage page })
-                        {
-                            page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, false);
-                            break; // Stop processing further because SourceFork only supports one popup at a time.
-                        }
-                    }
-                }
-                else
-                {
-                    await ViewModels.Welcome.Instance.AddRepositoryAsync(rs.StdOut.Trim(), false);
-                    refresh = true;
-                }
-            }
-
-            if (refresh)
-                ViewModels.RepositoryListSorter.NotifyChanged();
+            e.Handled = false;
         }
 
         private void OnDoubleTappedTreeNode(object sender, TappedEventArgs e)
