@@ -1232,4 +1232,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">7天內</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">30天內</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">很久</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">倉庫工具列</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">選擇每個操作顯示的位置。首頁（Welcome）工具列不受影響。</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">隱藏</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">更多選單</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">左側更多選單</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">中間更多選單</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">右側更多選單</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">左側</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">中間</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">右側</x:String>
 </ResourceDictionary>

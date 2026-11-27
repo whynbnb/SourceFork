@@ -1172,4 +1172,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">今週</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">今月</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">ずっと前</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">リポジトリツールバー</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">各操作を表示する位置を選択します。ホームのツールバーには影響しません。</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">非表示</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">その他のメニュー</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">左のその他メニュー</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">中央のその他メニュー</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">右のその他メニュー</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">左</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">中央</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">右</x:String>
 </ResourceDictionary>

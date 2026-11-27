@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -13,9 +16,258 @@ namespace SourceFork.Views
 {
     public partial class RepositoryToolbar : UserControl
     {
+        private readonly List<ViewModels.RepositoryToolbarAction> _allActions = [];
+        private readonly List<ViewModels.RepositoryToolbarAction> _leftMoreActions = [];
+        private readonly List<ViewModels.RepositoryToolbarAction> _middleMoreActions = [];
+        private readonly List<ViewModels.RepositoryToolbarAction> _rightMoreActions = [];
+        private ViewModels.Repository _repo;
+
         public RepositoryToolbar()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAttachedToVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+            ViewModels.Preferences.Instance.RepositoryToolbarChanged += OnToolbarSettingsChanged;
+            BuildActions();
+        }
+
+        protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
+        {
+            ViewModels.Preferences.Instance.RepositoryToolbarChanged -= OnToolbarSettingsChanged;
+
+            if (_repo != null)
+            {
+                _repo.PropertyChanged -= OnRepositoryPropertyChanged;
+                _repo = null;
+            }
+
+            base.OnDetachedFromVisualTree(e);
+        }
+
+        protected override void OnDataContextChanged(EventArgs e)
+        {
+            base.OnDataContextChanged(e);
+
+            if (_repo != null)
+                _repo.PropertyChanged -= OnRepositoryPropertyChanged;
+
+            _repo = DataContext as ViewModels.Repository;
+            if (_repo != null)
+                _repo.PropertyChanged += OnRepositoryPropertyChanged;
+
+            BuildActions();
+        }
+
+        private void OnToolbarSettingsChanged(object sender, EventArgs e)
+        {
+            BuildActions();
+        }
+
+        private void OnRepositoryPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName is nameof(ViewModels.Repository.CurrentBranch) or
+                nameof(ViewModels.Repository.FocusOnCurrentBranch) or
+                nameof(ViewModels.Repository.IsBare))
+            {
+                UpdateActionStates();
+            }
+        }
+
+        private void BuildActions()
+        {
+            var left = new List<ViewModels.RepositoryToolbarAction>();
+            var middle = new List<ViewModels.RepositoryToolbarAction>();
+            var right = new List<ViewModels.RepositoryToolbarAction>();
+            _allActions.Clear();
+            _leftMoreActions.Clear();
+            _middleMoreActions.Clear();
+            _rightMoreActions.Clear();
+
+            if (DataContext is ViewModels.Repository)
+            {
+                foreach (var info in Models.RepositoryToolbarCatalog.Actions)
+                {
+                    var zone = ViewModels.Preferences.Instance.GetRepositoryToolbarZone(info.Id);
+                    if (zone == Models.RepositoryToolbarZones.Hidden)
+                        continue;
+
+                    var action = new ViewModels.RepositoryToolbarAction(info);
+                    _allActions.Add(action);
+
+                    switch (zone)
+                    {
+                        case Models.RepositoryToolbarZones.Left:
+                            left.Add(action);
+                            break;
+                        case Models.RepositoryToolbarZones.Middle:
+                            middle.Add(action);
+                            break;
+                        case Models.RepositoryToolbarZones.Right:
+                            right.Add(action);
+                            break;
+                        case Models.RepositoryToolbarZones.LeftMore:
+                            _leftMoreActions.Add(action);
+                            break;
+                        case Models.RepositoryToolbarZones.RightMore:
+                            _rightMoreActions.Add(action);
+                            break;
+                        default:
+                            _middleMoreActions.Add(action);
+                            break;
+                    }
+                }
+            }
+
+            LeftActions.ItemsSource = left;
+            MiddleActions.ItemsSource = middle;
+            RightActions.ItemsSource = right;
+            LeftMoreButton.IsVisible = _leftMoreActions.Count > 0;
+            MoreButton.IsVisible = _middleMoreActions.Count > 0;
+            RightMoreButton.IsVisible = _rightMoreActions.Count > 0;
+
+            UpdateActionStates();
+        }
+
+        private void UpdateActionStates()
+        {
+            var repo = DataContext as ViewModels.Repository;
+            foreach (var action in _allActions)
+            {
+                action.IsVisible = repo is { IsBare: true } &&
+                    action.Id is "pull" or "stash" or "applyPatch" or "gitflow" or "lfs" or "bisect"
+                        ? false
+                        : true;
+
+                action.ShowBadge = action.Id switch
+                {
+                    "pull" => repo?.CurrentBranch?.Behind.Count > 0,
+                    "push" => repo?.CurrentBranch?.Ahead.Count > 0,
+                    _ => false,
+                };
+
+                action.IsToggled = repo?.FocusOnCurrentBranch == true;
+            }
+        }
+
+        private async void OnToolbarActionTapped(object sender, TappedEventArgs e)
+        {
+            if (sender is not Button { DataContext: ViewModels.RepositoryToolbarAction action } button)
+                return;
+
+            e.Handled = true;
+            await ExecuteActionAsync(action, button, e.KeyModifiers);
+        }
+
+        private void OnToggleToolbarAction(object sender, RoutedEventArgs e)
+        {
+            if (sender is ToggleButton { DataContext: ViewModels.RepositoryToolbarAction action } toggle &&
+                DataContext is ViewModels.Repository repo)
+            {
+                repo.FocusOnCurrentBranch = toggle.IsChecked == true;
+                action.IsToggled = repo.FocusOnCurrentBranch;
+            }
+
+            e.Handled = true;
+        }
+
+        private void OnOpenMoreActions(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button)
+                return;
+
+            var actions = (button.Tag as string) switch
+            {
+                "LeftMore" => _leftMoreActions,
+                "RightMore" => _rightMoreActions,
+                _ => _middleMoreActions,
+            };
+
+            var menu = new ContextMenu();
+            menu.Placement = PlacementMode.BottomEdgeAlignedLeft;
+
+            foreach (var action in actions)
+            {
+                var item = new MenuItem();
+                item.Header = action.Tooltip;
+                item.Icon = this.CreateMenuIcon(action.IconKey);
+                item.Click += async (_, ev) =>
+                {
+                    await ExecuteActionAsync(action, button, KeyModifiers.None);
+                    ev.Handled = true;
+                };
+                menu.Items.Add(item);
+            }
+
+            if (menu.Items.Count > 0)
+                menu.Open(button);
+
+            e.Handled = true;
+        }
+
+        private async Task ExecuteActionAsync(ViewModels.RepositoryToolbarAction action,
+            Control anchor, KeyModifiers modifiers)
+        {
+            if (DataContext is not ViewModels.Repository repo)
+                return;
+
+            var showOptions = modifiers.HasFlag(KeyModifiers.Control);
+            switch (action.Id)
+            {
+                case "explore":
+                    Native.OS.OpenInFileManager(repo.FullPath);
+                    break;
+                case "terminal":
+                    Native.OS.OpenTerminal(repo.FullPath);
+                    break;
+                case "fetch":
+                    await FetchCoreAsync(showOptions);
+                    break;
+                case "pull":
+                    await PullCoreAsync(showOptions);
+                    break;
+                case "push":
+                    await PushCoreAsync(showOptions);
+                    break;
+                case "stash":
+                    await StashCoreAsync(showOptions);
+                    break;
+                case "applyPatch":
+                    repo.ApplyPatch();
+                    break;
+                case "gitflow":
+                    OpenGitFlowMenu(anchor, new RoutedEventArgs());
+                    break;
+                case "lfs":
+                    OpenGitLFSMenu(anchor, new RoutedEventArgs());
+                    break;
+                case "bisect":
+                    StartBisect(anchor, new RoutedEventArgs());
+                    break;
+                case "customAction":
+                    OpenCustomActionMenu(anchor, new RoutedEventArgs());
+                    break;
+                case "clean":
+                    Cleanup(anchor, new RoutedEventArgs());
+                    break;
+                case "openWith":
+                    OpenWithExternalTools(anchor, new RoutedEventArgs());
+                    break;
+                case "logs":
+                    OpenGitLogs(anchor, new RoutedEventArgs());
+                    break;
+                case "statistics":
+                    OpenStatistics(anchor, new RoutedEventArgs());
+                    break;
+                case "settings":
+                    OpenConfigure(anchor, new RoutedEventArgs());
+                    break;
+                case "magic":
+                    repo.FocusOnCurrentBranch = !repo.FocusOnCurrentBranch;
+                    break;
+            }
         }
 
         private void OpenWithExternalTools(object sender, RoutedEventArgs ev)
@@ -173,11 +425,14 @@ namespace SourceFork.Views
 
         private async void Fetch(object sender, TappedEventArgs e)
         {
+            await FetchCoreAsync(e.KeyModifiers is KeyModifiers.Control);
+            e.Handled = true;
+        }
+
+        private async Task FetchCoreAsync(bool showOptions)
+        {
             if (DataContext is ViewModels.Repository repo)
-            {
-                await repo.FetchAsync(e.KeyModifiers is KeyModifiers.Control);
-                e.Handled = true;
-            }
+                await repo.FetchAsync(showOptions);
         }
 
         private async void FetchDirectlyByHotKey(object sender, RoutedEventArgs e)
@@ -194,11 +449,14 @@ namespace SourceFork.Views
 
         private async void Pull(object sender, TappedEventArgs e)
         {
+            await PullCoreAsync(e.KeyModifiers is KeyModifiers.Control);
+            e.Handled = true;
+        }
+
+        private async Task PullCoreAsync(bool showOptions)
+        {
             if (DataContext is ViewModels.Repository repo)
-            {
-                await repo.PullAsync(e.KeyModifiers is KeyModifiers.Control);
-                e.Handled = true;
-            }
+                await repo.PullAsync(showOptions);
         }
 
         private async void PullDirectlyByHotKey(object sender, RoutedEventArgs e)
@@ -215,11 +473,14 @@ namespace SourceFork.Views
 
         private async void Push(object sender, TappedEventArgs e)
         {
+            await PushCoreAsync(e.KeyModifiers is KeyModifiers.Control);
+            e.Handled = true;
+        }
+
+        private async Task PushCoreAsync(bool showOptions)
+        {
             if (DataContext is ViewModels.Repository repo)
-            {
-                await repo.PushAsync(e.KeyModifiers is KeyModifiers.Control);
-                e.Handled = true;
-            }
+                await repo.PushAsync(showOptions);
         }
 
         private async void PushDirectlyByHotKey(object sender, RoutedEventArgs e)
@@ -236,11 +497,14 @@ namespace SourceFork.Views
 
         private async void StashAll(object _, TappedEventArgs e)
         {
+            await StashCoreAsync(e.KeyModifiers is KeyModifiers.Control);
+            e.Handled = true;
+        }
+
+        private async Task StashCoreAsync(bool showOptions)
+        {
             if (DataContext is ViewModels.Repository repo)
-            {
-                await repo.StashAllAsync(e.KeyModifiers is KeyModifiers.Control);
-                e.Handled = true;
-            }
+                await repo.StashAllAsync(showOptions);
         }
 
         private void OpenGitFlowMenu(object sender, RoutedEventArgs ev)

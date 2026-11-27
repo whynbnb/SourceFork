@@ -756,4 +756,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">இந்த வாரம்</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">இந்த மாதம்</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">நெடுங்காலத்திற்கு முன்</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">களஞ்சிய கருவிப்பட்டி</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">ஒவ்வொரு செயலும் எங்கு தோன்ற வேண்டும் என்பதைத் தேர்ந்தெடுக்கவும். முகப்புப் பக்கக் கருவிப்பட்டி பாதிக்கப்படாது.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">மறைக்கப்பட்டது</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">மேலும் மெனு</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">இடது மேலும் மெனு</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">நடு மேலும் மெனு</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">வலது மேலும் மெனு</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">இடது</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">நடு</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">வலது</x:String>
 </ResourceDictionary>

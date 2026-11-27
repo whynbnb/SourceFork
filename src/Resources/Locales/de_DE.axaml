@@ -1128,4 +1128,14 @@ $1, $2, … Werte der Eingabe-Steuerelemente</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">Diese Woche</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">Diesen Monat</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Vor langer Zeit</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">Repository-Symbolleiste</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">Wählen Sie, wo jede Aktion erscheint. Die Welcome-Symbolleiste ist nicht betroffen.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">Ausgeblendet</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">Mehr-Menü</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">Mehr-Menü links</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">Mehr-Menü Mitte</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">Mehr-Menü rechts</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">Links</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">Mitte</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">Rechts</x:String>
 </ResourceDictionary>

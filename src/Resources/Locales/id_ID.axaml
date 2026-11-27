@@ -1127,4 +1127,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">Minggu ini</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">Bulan ini</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Sudah lama</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">Bilah alat repositori</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">Pilih tempat setiap tindakan muncul. Bilah alat halaman beranda tidak terpengaruh.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">Tersembunyi</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">Menu lainnya</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">Menu lainnya kiri</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">Menu lainnya tengah</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">Menu lainnya kanan</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">Kiri</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">Tengah</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">Kanan</x:String>
 </ResourceDictionary>

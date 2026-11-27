@@ -1123,4 +1123,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">Αυτή την εβδομάδα</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">Αυτόν τον μήνα</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Πριν από πολύ καιρό</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">Γραμμή εργαλείων αποθετηρίου</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">Επιλέξτε πού εμφανίζεται κάθε ενέργεια. Η γραμμή της αρχικής σελίδας δεν επηρεάζεται.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">Κρυφό</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">Μενού Περισσότερα</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">Μενού Περισσότερα αριστερά</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">Μενού Περισσότερα κέντρο</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">Μενού Περισσότερα δεξιά</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">Αριστερά</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">Κέντρο</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">Δεξιά</x:String>
 </ResourceDictionary>

@@ -1210,4 +1210,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">На этой неделе</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">В этом месяце</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Давно</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">Панель инструментов репозитория</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">Выберите, где отображать каждое действие. Панель главной страницы не затрагивается.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">Скрыто</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">Меню «Ещё»</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">Меню «Ещё» слева</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">Меню «Ещё» в центре</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">Меню «Ещё» справа</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">Слева</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">По центру</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">Справа</x:String>
 </ResourceDictionary>

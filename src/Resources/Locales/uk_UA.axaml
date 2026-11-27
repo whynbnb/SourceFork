@@ -765,4 +765,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">Цього тижня</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">Цього місяця</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Давно</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">Панель інструментів репозиторію</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">Виберіть, де показувати кожну дію. Панель головної сторінки не змінюється.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">Приховано</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">Меню «Ще»</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">Меню «Ще» ліворуч</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">Меню «Ще» по центру</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">Меню «Ще» праворуч</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">Ліворуч</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">По центру</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">Праворуч</x:String>
 </ResourceDictionary>

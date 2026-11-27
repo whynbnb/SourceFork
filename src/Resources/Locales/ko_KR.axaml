@@ -1091,4 +1091,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">이번 주</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">이번 달</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">오래 전</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">저장소 도구 모음</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">각 작업의 표시 위치를 선택하세요. 홈 도구 모음에는 영향을 주지 않습니다.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">숨김</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">더보기 메뉴</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">왼쪽 더보기 메뉴</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">가운데 더보기 메뉴</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">오른쪽 더보기 메뉴</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">왼쪽</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">가운데</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">오른쪽</x:String>
 </ResourceDictionary>

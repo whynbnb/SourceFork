@@ -532,6 +532,52 @@
           <TabControl Margin="0,8,0,0">
             <TabItem>
               <TabItem.Header>
+                <TextBlock Text="{DynamicResource Text.Preferences.RepositoryToolbar}"/>
+              </TabItem.Header>
+              <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Margin="8,8,8,16" Orientation="Vertical">
+                  <StackPanel Orientation="Horizontal">
+                    <Path Width="12" Height="12" Data="{StaticResource Icons.More}"/>
+                    <TextBlock Classes="bold" Margin="4,0,0,0" Text="{DynamicResource Text.Preferences.RepositoryToolbar}"/>
+                  </StackPanel>
+
+                  <TextBlock Margin="0,6,0,0"
+                             FontSize="11"
+                             Foreground="{DynamicResource Brush.FG2}"
+                             TextWrapping="Wrap"
+                             Text="{DynamicResource Text.Preferences.RepositoryToolbar.Tip}"/>
+
+                  <Rectangle Margin="0,8" Fill="{DynamicResource Brush.Border2}" Height=".6" HorizontalAlignment="Stretch"/>
+
+                  <ItemsControl ItemsSource="{Binding RepositoryToolbarSettings}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate DataType="vm:RepositoryToolbarSetting">
+                        <Grid Height="34" Margin="4,0" ColumnDefinitions="Auto,*,160">
+                          <Path Grid.Column="0"
+                                Width="13" Height="13"
+                                Margin="0,0,10,0"
+                                Data="{Binding Icon}"
+                                Fill="{DynamicResource Brush.FG1}"/>
+                          <TextBlock Grid.Column="1"
+                                     VerticalAlignment="Center"
+                                     Text="{Binding Name}"
+                                     TextTrimming="CharacterEllipsis"/>
+                          <ComboBox Grid.Column="2"
+                                    Height="26" MinHeight="26"
+                                    Padding="8,0"
+                                    HorizontalAlignment="Stretch"
+                                    ItemsSource="{Binding Zones}"
+                                    SelectedIndex="{Binding ZoneIndex, Mode=TwoWay}"/>
+                        </Grid>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </ScrollViewer>
+            </TabItem>
+
+            <TabItem>
+              <TabItem.Header>
                 <TextBlock Text="{DynamicResource Text.Preferences.Integration.Terminal}"/>
               </TabItem.Header>
               <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -955,6 +1001,7 @@
           </Grid>
 
             </TabItem>
+
           </TabControl>
         </TabItem>
 

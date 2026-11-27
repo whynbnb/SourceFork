@@ -740,4 +740,14 @@
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">Esta semana</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">Este mês</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Há muito tempo</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">Barra de ferramentas do repositório</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">Escolha onde cada ação aparece. A barra da página inicial não é afetada.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">Oculto</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">Menu Mais</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">Menu Mais esquerdo</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">Menu Mais central</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">Menu Mais direito</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">Esquerda</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">Centro</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">Direita</x:String>
 </ResourceDictionary>

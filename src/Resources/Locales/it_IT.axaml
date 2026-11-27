@@ -1021,4 +1021,14 @@ ${pure_files:N} Come ${files:N}, ma senza cartelle</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinWeek" xml:space="preserve">Questa settimana</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedWithinMonth" xml:space="preserve">Questo mese</x:String>
   <x:String x:Key="Text.Sidebar.UpdatedLongAgo" xml:space="preserve">Molto tempo fa</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar" xml:space="preserve">Barra degli strumenti del repository</x:String>
+  <x:String x:Key="Text.Preferences.RepositoryToolbar.Tip" xml:space="preserve">Scegli dove appare ogni azione. La barra della pagina iniziale non è interessata.</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Hidden" xml:space="preserve">Nascosto</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.More" xml:space="preserve">Menu Altro</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.LeftMore" xml:space="preserve">Menu Altro sinistra</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.MiddleMore" xml:space="preserve">Menu Altro centro</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.RightMore" xml:space="preserve">Menu Altro destra</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Left" xml:space="preserve">Sinistra</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Middle" xml:space="preserve">Centro</x:String>
+  <x:String x:Key="Text.RepositoryToolbar.Right" xml:space="preserve">Destra</x:String>
 </ResourceDictionary>

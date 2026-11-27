@@ -138,6 +138,7 @@ namespace SourceFork.Views
         {
             var pref = ViewModels.Preferences.Instance;
             DataContext = pref;
+            pref.RefreshRepositoryToolbarSettings();
             CloseOnESC = true;
 
             if (pref.IsGitConfigured())

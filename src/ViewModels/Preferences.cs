@@ -549,6 +549,20 @@ namespace SourceFork.ViewModels
             set;
         } = [];
 
+        public List<Models.RepositoryToolbarActionPreference> RepositoryToolbarActions
+        {
+            get;
+            set;
+        } = [];
+
+        [JsonIgnore]
+        public AvaloniaList<RepositoryToolbarSetting> RepositoryToolbarSettings
+        {
+            get;
+        } = [];
+
+        public event EventHandler RepositoryToolbarChanged;
+
         public List<string> RepositoryGroupOrder
         {
             get;
@@ -725,6 +739,41 @@ namespace SourceFork.ViewModels
             var index = RepositoryNodes.IndexOf(target);
             RepositoryNodes.Insert(index < 0 ? RepositoryNodes.Count : index + 1, source);
             Save();
+        }
+
+        public string GetRepositoryToolbarZone(string id)
+        {
+            var entry = RepositoryToolbarActions?.FirstOrDefault(x => x.Id == id);
+            if (entry != null && !string.IsNullOrEmpty(entry.Zone))
+            {
+                // Compatibility with the first version that had a single More menu.
+                return entry.Zone == "More" ? Models.RepositoryToolbarZones.MiddleMore : entry.Zone;
+            }
+
+            return Models.RepositoryToolbarCatalog.Find(id)?.DefaultZone ?? Models.RepositoryToolbarZones.Hidden;
+        }
+
+        public void SetRepositoryToolbarZone(string id, string zone)
+        {
+            RepositoryToolbarActions ??= [];
+
+            var entry = RepositoryToolbarActions.FirstOrDefault(x => x.Id == id);
+            if (entry == null)
+            {
+                entry = new Models.RepositoryToolbarActionPreference { Id = id };
+                RepositoryToolbarActions.Add(entry);
+            }
+
+            entry.Zone = zone;
+            Save();
+            RepositoryToolbarChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void RefreshRepositoryToolbarSettings()
+        {
+            RepositoryToolbarSettings.Clear();
+            foreach (var action in Models.RepositoryToolbarCatalog.Actions)
+                RepositoryToolbarSettings.Add(new RepositoryToolbarSetting(action));
         }
 
         public bool IsRepositoryGroupCollapsed(string key)
